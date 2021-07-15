@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender">
+        <item>select</item>
+        <item>Woman</item>
+        <item>man</item>
+        <item>non-binary</item>
+        <item>prefer not to disclose</item>
+        <item>prefer to self_describe</item>
+    </string-array>
+
+    <string-array name="p_id">
+        <item>15264</item>
+    </string-array>
+</resources>

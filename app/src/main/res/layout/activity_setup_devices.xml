@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Left Armband " />
+    <Button
+        android:id="@+id/connect_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Right Armband " />
+    <Button
+        android:id="@+id/connect_r"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect" />
+    <TextView
+        android:id="@+id/text_device_l_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Left Device State: disconnected" />
+    <TextView
+        android:id="@+id/text_device_r_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Right Device State: disconnected" />
+
+
+    <Button
+        android:id="@+id/get_firmware_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get FirmwareVersion" />
+    <TextView
+        android:id="@+id/text_firmware_version_l"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FirmwareVersion: " />
+
+    <TextView
+        android:id="@+id/text_firmware_version_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FirmwareVersion: " />
+
+    <Button
+        android:id="@+id/set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Data Switch" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Data Notification" />
+    <Button
+        android:id="@+id/btn_grab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test grab" />
+    <Button
+        android:id="@+id/btn_rub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test rub" />
+    <Button
+        android:id="@+id/btn_stroke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test stroke" />
+    <Button
+        android:id="@+id/btn_scrape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test scrape" />
+
+    <Button
+        android:id="@+id/btn_next1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Next" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="quaternion_Left: " />
+    <TextView
+        android:id="@+id/text_quaternion_l"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="W:\nX:\nY:\nZ:\n" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="quaternion_right: " />
+
+    <TextView
+        android:id="@+id/text_quaternion_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="W:\nX:\nY:\nZ:\n" />
+
+
+</LinearLayout>
+
