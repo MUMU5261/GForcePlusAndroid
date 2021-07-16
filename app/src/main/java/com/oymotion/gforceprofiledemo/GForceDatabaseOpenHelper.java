@@ -30,6 +30,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "id integer primary key autoincrement,"
             + "e_id integer NOT NULL,"
             + "p_id integer NOT NULL,"
+            + "state integer NOT NULL,"
             + "img_cloth blob,"
             + "img_label blob,"
             + "c_soft int,"
@@ -43,6 +44,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
             + "e_id integer NOT NULL,"
+            + "clt_id integer NOT NULL,"
             + "type integer NOT NULL,"  //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "state integer default 0," // "0" : setup, "1":doing, "2": finished "3":failed
             + "timestamp text NOT NULL)";
@@ -54,6 +56,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL,"
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "ch_01 real NOT NULL,"
             + "ch_02 real NOT NULL,"
             + "ch_03 real NOT NULL,"
@@ -72,6 +75,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "w real NOT NULL,"
             + "x real NOT NULL,"
             + "y real NOT NULL,"
@@ -86,6 +90,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
@@ -99,6 +104,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
@@ -112,6 +118,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
@@ -125,6 +132,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
+            + "clt_id integer NOT NULL,"
             + "pitch real NOT NULL,"
             + "roll real NOT NULL,"
             + "yaw real NOT NULL,"

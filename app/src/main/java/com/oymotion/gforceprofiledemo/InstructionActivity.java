@@ -12,17 +12,17 @@ import butterknife.OnClick;
 
 public class InstructionActivity extends AppCompatActivity {
 
-    @BindView(R.id.btn_next)
+    @BindView(R.id.bth_next)
     Button nextBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruction);
-        ButterKnife.bind(this);
+        ButterKnife.bind(InstructionActivity.this);
         this.setTitle("Instruction");
     }
-    @OnClick(R.id.btn_next)
+    @OnClick(R.id.bth_next)
     public void OnNextClick(){
         Intent intent = new Intent(InstructionActivity.this, ScanDevicesActivity.class);
         intent.putExtra("test","test");

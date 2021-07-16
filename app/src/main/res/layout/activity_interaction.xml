@@ -57,10 +57,15 @@
         android:text="Start Data Notification" />
 
     <TextView
-        android:id="@+id/tv_countdown"
+        android:id="@+id/tv_countdown_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="quaternion_Left: " />
+        android:text="ready: 3s " />
+    <TextView
+        android:id="@+id/tv_countdown_itr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exploring time: 20S " />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="next" />
-
 
 </LinearLayout>
 

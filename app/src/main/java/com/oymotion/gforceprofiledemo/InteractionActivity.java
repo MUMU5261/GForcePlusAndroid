@@ -39,7 +39,8 @@ public class InteractionActivity extends AppCompatActivity {
 
     private TextView textViewQuaternion_l;
     private TextView textViewQuaternion_r;
-    private TextView tv_countdown;
+    private TextView tv_countdown_start;
+    private TextView tv_countdown_itr;
 
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
@@ -47,10 +48,13 @@ public class InteractionActivity extends AppCompatActivity {
     Handler handler;// if private or not
     //may need two handler, or use other way to listen state change, to improve the data collection rate
     Runnable runnable;
-    Runnable runnable_data_notify;
+//    Runnable runnable_data_notify;
 
     int itr_type;
+    int itr_id;
     int p_id;
+    int e_id;
+    int clt_id;
 
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
@@ -62,28 +66,46 @@ public class InteractionActivity extends AppCompatActivity {
     private boolean notifying = false;
     private MyApplication app;
 
+    private Interaction interaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_interaction);
         ButterKnife.bind(this);
         textViewQuaternion_l = this.findViewById(R.id.tv_quaternion_l);
         textViewQuaternion_r = this.findViewById(R.id.tv_quaternion_r);
-        tv_countdown = this.findViewById(R.id.tv_countdown);
+        tv_countdown_start = this.findViewById(R.id.tv_countdown_start);
+        tv_countdown_itr = this.findViewById(R.id.tv_countdown_itr);
         btn_start_notifying.setEnabled(false);
         btn_next.setEnabled(false);
 
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
-        itr_type = 88;
-        p_id = 2;
+
+        p_id = Participant.getIDFromPreference(this);
         app = (MyApplication) getApplication();
+        itr_type = app.getInteractionType();
+        e_id = app.getExperimentID();
+        clt_id = app.getClothesID();
+        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type);
+        interaction = new Interaction(p_id, e_id, clt_id,itr_type);
+        itr_id = interaction.insertInteraction(db);
+        if(itr_id != -1){
+            Toast.makeText(InteractionActivity.this,"insert interaction success", Toast.LENGTH_LONG).show();
+            Log.i(TAG,"insert interaction fail");
+        }else {
+            Log.e(TAG,"insert interaction fail");
+            Toast.makeText(InteractionActivity.this,"insert interaction fail", Toast.LENGTH_LONG).show();
+        }
+
         try {
             gForceProfile_l = app.getProfileLeft();
             gForceProfile_r = app.getProfileRight();
-        }catch (Exception e){
-            Log.e(TAG,e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
 
         // setup a thread to update status
@@ -109,18 +131,16 @@ public class InteractionActivity extends AppCompatActivity {
             new CountDownTimer(4000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-                    tv_countdown.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    tv_countdown_start.setText("seconds remaining: " + millisUntilFinished / 1000);
                 }
-
                 public void onFinish() {
-                    tv_countdown.setText("done!");
+                    tv_countdown_start.setText("start!");
                     onStartClick();
                     this.cancel();
                 }
             }.start();
 
-
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
 
         }
@@ -130,50 +150,78 @@ public class InteractionActivity extends AppCompatActivity {
     @OnClick(R.id.btn_start)
     public void onStartClick() {
         if (notifying) {
-
             btn_start_notifying.setText("Start Data Notification");
-
             gForceProfile_l.stopDataNotification();
             gForceProfile_r.stopDataNotification();
             notifying = false;
-            handler.removeCallbacks(runnable_data_notify);
-            btn_next.setEnabled(true);
+//            handler.removeCallbacks(runnable_data_notify);
+//            btn_next.setEnabled(true);
         } else {
             if (state_l != GForceProfile.BluetoothDeviceStateEx.ready || state_r != GForceProfile.BluetoothDeviceStateEx.ready) {
                 Toast.makeText(InteractionActivity.this, "not both devices are ready", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-
-            dataNotification(gForceProfile_r, "r");
-            dataNotification(gForceProfile_l, "l");
+            dataNotification(gForceProfile_l, 0);
+            dataNotification(gForceProfile_r, 1);
 
             btn_start_notifying.setText("Stop Data Notification");
             notifying = true;
-            runnable_data_notify = new Runnable() {
-                @Override
-                public void run() {
-                    onStartClick();
+//            runnable_data_notify = new Runnable() {
+//                @Override
+//                public void run() {
+//                    onStartClick();
+//                }
+//            };
+            new CountDownTimer(5000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    tv_countdown_itr.setText("seconds remaining: " + millisUntilFinished / 1000);
                 }
-            };
-            handler.postDelayed(runnable_data_notify, 3000);
+                public void onFinish() {
+                    tv_countdown_itr.setText("done!");
+                    onStartClick();
+                    if(interaction.updateState(db,Interaction.State.FINISHED)){
+                        app.setInteractionState(Interaction.State.FINISHED);
+                    }else{
+                        Toast.makeText(InteractionActivity.this,"Failed Exploration",Toast.LENGTH_LONG).show();
+                    }
+                    btn_next.setEnabled(true);
+                    this.cancel();
+                }
+            }.start();
+//            handler.postDelayed(runnable_data_notify, 5000);
         }
     }
 
     @OnClick(R.id.btn_next)
-    public void onNextClick(){
-        Intent intent = new Intent(InteractionActivity.this, ImagePickerActivity.class);
+    public void onNextClick() {
+//        switch (itr_type) {
+//            case Interaction.Type.FREE:
+//            case Interaction.Type.SMOOTH:
+//            case Interaction.Type.SOFT:
+//            case Interaction.Type.WARMTH:
+//            case Interaction.Type.THICKNESS:
+//        }
+        Intent intent;
+        if (itr_type == Interaction.Type.FREE) {
+            app.setInteractionState(Interaction.State.START);
+            app.setInteractionType(Interaction.Type.SMOOTH);
+            intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+        }else{
+            intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+        }
         startActivity(intent);
-
     }
-    private void dataNotification(GForceProfile gForceProfile, String hand) {
+
+    private void dataNotification(GForceProfile gForceProfile, int hand) {
         gForceProfile.startDataNotification(new DataNotificationCallback() {
             @Override
             public void onData(byte[] data) {
                 Log.i(TAG, "data type: " + data[0] + ", len: " + data.length);
 
                 if (data[0] == GForceProfile.NotifDataType.NTF_QUAT_FLOAT_DATA && data.length == 17) {
-                    Log.i(TAG, "Quat data: " + Arrays.toString(data)+"\nhand use: " + hand);
+                    Log.i(TAG, "Quat data: " + Arrays.toString(data) + "\nhand use: " + hand);
                     Log.i(TAG, "hand use: " + hand);
 
                     byte[] W = new byte[4];
@@ -191,18 +239,19 @@ public class InteractionActivity extends AppCompatActivity {
                     float y = getFloat(Y);
                     float z = getFloat(Z);
 
-                    if (hand.equals("l")) {
+                    if (hand == 0) {
                         Log.i(TAG, "#####LEFT QUAT####" + +w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
-                    } else if (hand.equals("r")) {
+                    } else if (hand == 1) {
                         Log.i(TAG, "****RIGHT QUAT****" + +w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
                     }
 
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", 1);
-                    values.put("itr_id", 1);
+                    values.put("e_id", e_id);
+                    values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
+                    values.put("clt_id", clt_id);
                     values.put("w", w);
                     values.put("x", x);
                     values.put("y", y);
@@ -214,17 +263,16 @@ public class InteractionActivity extends AppCompatActivity {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            if (hand.equals("l")) {
+                            if (hand == 0) {
                                 textViewQuaternion_l.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
-                            } else if (hand.equals("r")) {
+                            } else if (hand == 1) {
                                 textViewQuaternion_r.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);//use fragment to set up the update on sree
                             }
                         }
                     });
 
-
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_EMG_ADC_DATA && data.length == 129) {
-                    Log.i("DeviceActivity", "EMG data: " + Arrays.toString(data)+"hand use: " + hand);
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_EMG_ADC_DATA && data.length == 129) {
+                    Log.i("DeviceActivity", "EMG data: " + Arrays.toString(data) + "hand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
                     ArrayList CH0 = new ArrayList<Byte>(16);
                     ArrayList CH1 = new ArrayList<Byte>(16);
@@ -236,10 +284,10 @@ public class InteractionActivity extends AppCompatActivity {
                     ArrayList CH7 = new ArrayList<Byte>(16);
 
                     byte[] raw_EMG = new byte[128];
-                    System.arraycopy(data,1,raw_EMG,0,128);
+                    System.arraycopy(data, 1, raw_EMG, 0, 128);
                     int count = 0;
-                    for(byte i : raw_EMG){
-                        switch (count){
+                    for (byte i : raw_EMG) {
+                        switch (count) {
                             case 0:
                                 CH0.add(i);
                                 count++;
@@ -276,8 +324,8 @@ public class InteractionActivity extends AppCompatActivity {
 
                     }
 
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_EULER_DATA && data.length == 13) {
-                    Log.i("DeviceActivity", "NTF_EULER_DATA: " + Arrays.toString(data)+"\nhand use: " + hand);
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_EULER_DATA && data.length == 13) {
+                    Log.i("DeviceActivity", "NTF_EULER_DATA: " + Arrays.toString(data) + "\nhand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
                     byte[] b_pitch = new byte[4];
                     byte[] b_roll = new byte[4];
@@ -290,16 +338,17 @@ public class InteractionActivity extends AppCompatActivity {
                     float pitch = getFloat(b_pitch);
                     float roll = getFloat(b_roll);
                     float yaw = getFloat(b_yaw);
-                    Log.i("DeviceActivity", "NTF_EULER_DATA: " + " pitch:" + pitch + " roll:" +roll +" yaw:" +yaw);
+                    Log.i("DeviceActivity", "NTF_EULER_DATA: " + " pitch:" + pitch + " roll:" + roll + " yaw:" + yaw);
 
                     runOnUiThread(new Runnable() {
                         public void run() {
                             ContentValues values = new ContentValues();
                             values.put("p_id", p_id);
-                            values.put("e_id", 1);
-                            values.put("itr_id", 1);
+                            values.put("e_id", e_id);
+                            values.put("itr_id", itr_id);
                             values.put("itr_type", itr_type);
                             values.put("hand", hand);
+                            values.put("clt_id", clt_id);
                             values.put("pitch", pitch);
                             values.put("roll", roll);
                             values.put("yaw", yaw);
@@ -310,9 +359,8 @@ public class InteractionActivity extends AppCompatActivity {
                         }
                     });
 
-
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_GYO_DATA && data.length == 13){
-                    Log.i("DeviceActivity", "NTF_GYO_DATA : " + Arrays.toString(data)+"hand use: " + hand);
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_GYO_DATA && data.length == 13) {
+                    Log.i("DeviceActivity", "NTF_GYO_DATA : " + Arrays.toString(data) + "hand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
                     byte[] b_gyo_x = new byte[4];
                     byte[] b_gyo_y = new byte[4];
@@ -330,13 +378,14 @@ public class InteractionActivity extends AppCompatActivity {
                     long gyo_y = getLong(b_gyo_y);
                     long gyo_z = getLong(b_gyo_z);
 
-                    Log.i("DeviceActivity", " NTF_GYO_DATA:" + " gyo_x:" + gyo_x + " gyo_y:" +gyo_y +" gyo_z:" +gyo_z);
+                    Log.i("DeviceActivity", " NTF_GYO_DATA:" + " gyo_x:" + gyo_x + " gyo_y:" + gyo_y + " gyo_z:" + gyo_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", 1);
-                    values.put("itr_id", 1);
+                    values.put("e_id", p_id);
+                    values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
+                    values.put("clt_id", clt_id);
                     values.put("x", gyo_x);
                     values.put("y", gyo_y);
                     values.put("z", gyo_z);
@@ -345,8 +394,8 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(db.insert("Gyroscope", null, values));
                     values.clear();
 
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_ACC_DATA && data.length == 13){
-                    Log.i("DeviceActivity", "NTF_ACC_DATA : " + Arrays.toString(data)+"hand use: " + hand);
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_ACC_DATA && data.length == 13) {
+                    Log.i("DeviceActivity", "NTF_ACC_DATA : " + Arrays.toString(data) + "hand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
                     byte[] b_acc_x = new byte[4];
                     byte[] b_acc_y = new byte[4];
@@ -364,14 +413,15 @@ public class InteractionActivity extends AppCompatActivity {
                     long acc_y = getLong(b_acc_y);
                     long acc_z = getLong(b_acc_z);
 
-                    Log.i("DeviceActivity", "NTF_ACC_DATA: " + " acc_x:" + acc_x + " acc_y:" +acc_y +" acc_z:" +acc_z);
+                    Log.i("DeviceActivity", "NTF_ACC_DATA: " + " acc_x:" + acc_x + " acc_y:" + acc_y + " acc_z:" + acc_z);
 
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", 1);
-                    values.put("itr_id", 1);
+                    values.put("e_id", e_id);
+                    values.put("itr_id", itr_type);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
+                    values.put("clt_id", clt_id);
                     values.put("x", acc_x);
                     values.put("y", acc_y);
                     values.put("z", acc_z);
@@ -380,9 +430,9 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(db.insert("Acceletor", null, values));
                     values.clear();
 
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_MAG_DATA && data.length == 13){
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_MAG_DATA && data.length == 13) {
                     Log.i("DeviceActivity", "NTF_MAG_DATA : " + Arrays.toString(data));
-                    Log.i("DeviceActivity", "hand use: " + hand+"hand use: " + hand);
+                    Log.i("DeviceActivity", "hand use: " + hand + "hand use: " + hand);
                     byte[] b_mag_x = new byte[4];
                     byte[] b_mag_y = new byte[4];
                     byte[] b_mag_z = new byte[4];
@@ -398,13 +448,14 @@ public class InteractionActivity extends AppCompatActivity {
                     long mag_x = getLong(b_mag_x);
                     long mag_y = getLong(b_mag_y);
                     long mag_z = getLong(b_mag_z);
-                    Log.i("DeviceActivity", "NTF_MAG_DATA: " + " mag_x:" + mag_x + " mag_y:" +mag_y +" mag_z:" +mag_z);
+                    Log.i("DeviceActivity", "NTF_MAG_DATA: " + " mag_x:" + mag_x + " mag_y:" + mag_y + " mag_z:" + mag_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", 1);
-                    values.put("itr_id", 1);
+                    values.put("e_id", e_id);
+                    values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
+                    values.put("clt_id", clt_id);
                     values.put("x", mag_x);
                     values.put("y", mag_y);
                     values.put("z", mag_z);
@@ -412,8 +463,8 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("Magnetometer", null, values));
                     values.clear();
-                }else if(data[0] == GForceProfile.NotifDataType.NTF_ROTA_DATA && data.length == 37){
-                    Log.i("DeviceActivity", "NTF_ROTA_DATA : " + Arrays.toString(data) +"hand use: " + hand);
+                } else if (data[0] == GForceProfile.NotifDataType.NTF_ROTA_DATA && data.length == 37) {
+                    Log.i("DeviceActivity", "NTF_ROTA_DATA : " + Arrays.toString(data) + "hand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
 
                 }
@@ -432,7 +483,6 @@ public class InteractionActivity extends AppCompatActivity {
                 }
             });
             state_l = newState_l;
-
         }
 
         if (state_r != newState_r) {
@@ -450,12 +500,13 @@ public class InteractionActivity extends AppCompatActivity {
                     btn_start_notifying.setEnabled(true);
                 }
             });
-        }else{
+        } else {
             btn_start_notifying.setEnabled(false);
             Toast.makeText(InteractionActivity.this, "lose connection", Toast.LENGTH_LONG).show();
             //restart the project or reconnect and restart this section.
         }
     }
+
     public static float getFloat(byte[] b) {
         int accum = 0;
         accum = accum | (b[0] & 0xff) << 0;
@@ -465,7 +516,6 @@ public class InteractionActivity extends AppCompatActivity {
         System.out.println(accum);
         return Float.intBitsToFloat(accum);
     }
-
 
     //if correct
     public static long getLong(byte[] b) {
@@ -481,14 +531,13 @@ public class InteractionActivity extends AppCompatActivity {
 
     }
 
-
     // when user leave this page,do???
     @Override
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
-        handler.removeCallbacks(runnable_data_notify);
-        // what kind of resources need to be release
+//        handler.removeCallbacks(runnable_data_notify);
+        // callback threads
     }
 
     @Override
@@ -501,7 +550,7 @@ public class InteractionActivity extends AppCompatActivity {
         super.onDestroy();
 
         handler.removeCallbacks(runnable);
-        handler.removeCallbacks(runnable_data_notify);
+//        handler.removeCallbacks(runnable_data_notify);
         Log.i(TAG, "I'm on destroying");
 //        handler.removeCallbacks(runnable);
 //        gForceProfile_l.disconnect();

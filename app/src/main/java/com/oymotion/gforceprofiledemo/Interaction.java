@@ -6,52 +6,70 @@ import android.util.Log;
 
 public class Interaction {
     private static final String TAG = "Interaction";
-    long id;
+    int id;
     int p_id;
     int e_id;
     int type;
+    int clt_id;
 
     ContentValues values = new ContentValues();
-    public Interaction(int p_id, int e_id, int type) {
+    public Interaction(int p_id, int e_id, int clt_id, int type) {
+        this.id = -1;
         this.p_id = p_id;
         this.e_id = e_id;
+        this.e_id = e_id;
+        this.clt_id = clt_id;
         this.type = type;
-
     }
-    public boolean insertInteraction(SQLiteDatabase db) {
+    public int insertInteraction(SQLiteDatabase db) {
         values.put("p_id", p_id);
         values.put("e_id", e_id);
+        values.put("clt_id", e_id);
         values.put("type", type);
-        values.put("state", 0);
+        values.put("state", State.START);
         values.put("timestamp", DatabaseUtil.getTimestamp());
         try {
-            id = db.insert("Interaction", null, values);
+            id = (int) db.insert("Interaction", null, values);
             values.clear();
-            return true;
+            return id;
         } catch (Exception e) {
             values.clear();
             Log.e(TAG, e.getMessage());
-            return false;
+            return id;
         }
 
     }
 
-    public boolean updateExpProgress(SQLiteDatabase db, String state) {
-        values.put("state", state);
-        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
-        db.update("Experiment", values, "id", new String[Integer.parseInt(String.valueOf(id))]);//??
-        return true;
+    public boolean updateState(SQLiteDatabase db, int state) {
+        try {
+            values.put("state", state);
+//        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
+            db.update("Interaction", values, "id=?", new String[]{String.valueOf(id)});
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    public boolean updateExperiment() {
 
-        return true;
-    }
-    public boolean deleteExperiment() {
+    public boolean delete() {
 
         return true;
     }
     public int getState() {
 
         return 99;
+    }
+    public class Type {
+        public static final int FREE = 0;
+        public static final int SMOOTH = 1;
+        public static final int SOFT = 2;
+        public static final int WARMTH = 3;
+        public static final int THICKNESS = 4;
+    }
+    public class State {
+        public static final int START = 0;
+        public static final int FINISHED = 1;
+
     }
 }

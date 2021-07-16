@@ -15,7 +15,7 @@
         android:id="@+id/tv_photo_take"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please take a photo of the first clothes you want to evaluate."
+        android:text="Please take a photo of the clothes you want to explore."
         android:textColor="@color/black" />
 
     <ImageView
@@ -31,12 +31,12 @@
         android:text="take photo"
         android:layout_gravity="center"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/floatingActionButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:clickable="true"-->
+<!--        app:srcCompat="@drawable/ic_launcher_foreground" />-->
     <Button
         android:id="@+id/btn_next"
         android:layout_width="match_parent"

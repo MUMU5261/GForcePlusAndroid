@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class Experiment {
     private static final String TAG = "Experiment";
-    long id;
+    int id;
     int p_id;
     int phone_id;
     int armband_id_l;
@@ -21,7 +21,8 @@ public class Experiment {
         this.armband_id_r = armband_id_r;
     }
 
-    public boolean insertExperiment(SQLiteDatabase db) {
+
+    public int insertExperiment(SQLiteDatabase db) {
         values.put("p_id", p_id);
         values.put("phone_id", phone_id);
         values.put("armband_id_l", armband_id_l);
@@ -29,22 +30,23 @@ public class Experiment {
         values.put("state", 0);
         values.put("timestamp", DatabaseUtil.getTimestamp());
         try {
-            id = db.insert("Experiment", null, values);
+            id = (int) db.insert("Experiment", null, values);
             values.clear();
-            return true;
+            return id;
         } catch (Exception e) {
             values.clear();
             Log.e(TAG, e.getMessage());
-            return false;
+            return -1;
         }
 
     }
-    public boolean updateExpProgress(SQLiteDatabase db, String state) {
+    public void updateExpProgress(SQLiteDatabase db, String state) {
         values.put("state", state);
-        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
+//        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
         db.update("Experiment", values, "id", new String[Integer.parseInt(String.valueOf(id))]);//??
-        return true;
+        values.clear();
     }
+
     public boolean updateExperiment() {
 
         return true;

@@ -8,8 +8,24 @@
         <item>prefer not to disclose</item>
         <item>prefer to self_describe</item>
     </string-array>
-
+<!---->
     <string-array name="p_id">
         <item>15264</item>
     </string-array>
+
+    <!--activities string elements-->
+    <string-array name="free"> <!---->
+        <item>Comfort Evaluation</item>
+        <item>Please explore how soft it is </item>
+        <item>Please explore how soft it is </item>
+    </string-array>
+
+    <string-array name="survey"> <!---->
+        <item>FREE</item>
+        <item>how smooth is this material?</item>
+        <item>how soft is this material?</item>
+        <item>how warm is this material?</item>
+        <item>how thick is this material?</item>
+    </string-array>
+
 </resources>

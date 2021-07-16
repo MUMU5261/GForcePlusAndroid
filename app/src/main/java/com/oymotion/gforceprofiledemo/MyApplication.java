@@ -21,13 +21,28 @@ public class MyApplication extends Application{
     private GForceProfile gForceProfile_r;
     private static final String TAG = "MyApplication";
 
+    private int e_id;
+    private int e_state;
+    private int itr_id;
+    private int itr_type;
+    private int itr_state;
+    private int clt_id;
+    private int clt_state;
 
-
+    private static final int ini = -1;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        e_id = ini;
+        e_state = ini;
+        itr_id = ini;
+        itr_type = ini;
+        itr_state = ini;
+        clt_id = ini;
+        clt_state = ini;
+
         try{
             final GForceProfile gForceProfile_int_l = new GForceProfile(new GForceProfile.GForceErrorCallback() {
                 @Override
@@ -46,6 +61,7 @@ public class MyApplication extends Application{
         }catch (Exception e){
             Log.e("Tag", e.getMessage());
         }
+
 
     }
 
@@ -71,8 +87,65 @@ public class MyApplication extends Application{
         this.gForceProfile_r = gForceProfile;
     }
 
+    //method for experiment
+    public int getExperimentID() {
+        return e_id;
+    }
+
+    public void setExperimentID(int e_id) {
+        this.e_id = e_id;
+    }
+
+    public int getExperimentState() {
+        return e_state;
+    }
+
+    public void setExperimentState(int e_state) {
+        this.e_state = e_state;
+    }
+
+    //method for clothes
+    public int getClothesID() {
+        return clt_id;
+    }
+
+    public void setClothesID(int clt_id) {
+        this.clt_id = clt_id;
+    }
+
+    public int getClothesState() {
+        return clt_state;
+    }
+
+    public void setClothesState(int clt_state) {
+        this.clt_state = clt_state;
+    }
+
+    //method for Interaction
+    public int getInteractionID() {
+        return itr_id;
+    }
+
+    public void setInteractionID(int itr_id) {
+        this.itr_id = itr_id;
+    }
+
+     public int getInteractionType() {
+        return itr_type;
+    }
+
+    public void setInteractionType(int itr_type) {
+        this.itr_type = itr_type;
+    }
 
 
+    public int getInteractionState() {
+        return itr_state;
+    }
+
+    public void setInteractionState(int itr_state) {
+        this.e_state = itr_state;
+    }
 
 
 }

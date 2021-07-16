@@ -63,21 +63,19 @@ public class SetupDevicesActivity extends AppCompatActivity {
     public String extra_mac_address_r;
     private static final String TAG = "SetupDevicesActivity";
 
-    int user_id = 10;
-    String section = "test_section";
-    private GForceProfile gForceProfile;
     GForceDatabaseOpenHelper dbHelper;
     SQLiteDatabase db;
+    Experiment experiment;
     int itr_type;
+    int p_id;
+    int phone_id;
+    int armband_id_l;
+    int armband_id_r;
 
-//    private GForceProfile.BluetoothDeviceStateEx state = GForceProfile.BluetoothDeviceStateEx.disconnected;
 
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
 
-//    private String macAddress;
-
-    //    private TextView textViewState;
     private TextView textViewState_l;
     private TextView textViewState_r;
     private TextView textViewQuaternion_l;
@@ -99,19 +97,19 @@ public class SetupDevicesActivity extends AppCompatActivity {
     @OnClick(R.id.connect_l)
     public void onConnectClickLeft() {
         Log.i(TAG, "[onConnectClick] Before state_l = " + state_l);
-        clickConnectBtn(state_l, gForceProfile_l, extra_mac_address_l, "l");
+        clickConnectBtn(state_l, gForceProfile_l, extra_mac_address_l, 0);
         Log.i(TAG, "[onConnectClick] After state_l = " + state_l);
     }
 
     @OnClick(R.id.connect_r)
     public void onConnectClickRight() {
         Log.i(TAG, "[onConnectClick] Before state_r = " + state_r);
-        clickConnectBtn(state_r, gForceProfile_r, extra_mac_address_r, "r");
+        clickConnectBtn(state_r, gForceProfile_r, extra_mac_address_r, 1);
         Log.i(TAG, "[onConnectClick] After state_r = " + state_r);
 
     }
 
-    private void clickConnectBtn(GForceProfile.BluetoothDeviceStateEx state, GForceProfile gForceProfile, String macAddress, String hand) {
+    private void clickConnectBtn(GForceProfile.BluetoothDeviceStateEx state, GForceProfile gForceProfile, String macAddress, int hand) {
 
         // the phone try to connect the device only when it isn't in three states(connected, connecting and ready)
         if (state != GForceProfile.BluetoothDeviceStateEx.connected &&
@@ -125,9 +123,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
             //connect fail
             if (ret_code != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
                 Log.e(TAG, "Connect failed, ret_code: " + ret_code);
-                if (hand.equals("l")) {
+                if (hand == 0) {
                     textViewState_l.setText("Connect failed, ret_code: " + ret_code);
-                } else if (hand.equals("r")) {
+                } else if (hand == 1) {
                     textViewState_r.setText("Connect failed, ret_code: " + ret_code);
                 }
                 return;
@@ -165,13 +163,13 @@ public class SetupDevicesActivity extends AppCompatActivity {
             return;
         }
 
-        setDataSwitch(gForceProfile_l, "l");
-        setDataSwitch(gForceProfile_r, "r");
+        setDataSwitch(gForceProfile_l, 0);
+        setDataSwitch(gForceProfile_r, 1);
     }
 
     private int response = -1;
 
-    private void setDataSwitch(GForceProfile gForceProfile, String hand) {
+    private void setDataSwitch(GForceProfile gForceProfile, int hand) {
 //        int flags = GForceProfile.DataNotifFlags.DNF_EMG_RAW | GForceProfile.DataNotifFlags.DNF_QUATERNION | GForceProfile.DataNotifFlags.DNF_EULERANGLE;
         int flags = GForceProfile.DataNotifFlags.DNF_EMG_RAW | GForceProfile.DataNotifFlags.DNF_QUATERNION
                 | GForceProfile.DataNotifFlags.DNF_EULERANGLE | GForceProfile.DataNotifFlags.DNF_GYROSCOPE
@@ -197,9 +195,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        if (hand.equals("l")) {
+                        if (hand == 0) {
                             textViewState_l.setText(msg);
-                        } else if (hand.equals("r")) {
+                        } else if (hand == 1) {
                             textViewState_r.setText(msg);
                         }
                     }
@@ -210,9 +208,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
         Log.i(TAG, "setDataNotifSwitch() result:" + result);
 
         if (result != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
-            if (hand.equals("l")) {
+            if (hand==0) {
                 textViewState_l.setText("Device State: " + "setDataNotifSwitch() failed.");
-            } else if (hand.equals("r")) {
+            } else if (hand == 1) {
                 textViewState_r.setText("Device State: " + "setDataNotifSwitch() failed.");
             }
 
@@ -249,9 +247,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
                             if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
                                 btn_start.setEnabled(true);
                             }
-                            if (hand.equals("l")) {
+                            if (hand==0) {
                                 textViewState_l.setText(msg);
-                            } else if (hand.equals("r")) {
+                            } else if (hand==1) {
                                 textViewState_r.setText(msg);
                             }
                         }
@@ -260,9 +258,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
             }, 5000);
 
             if (result != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
-                if (hand.equals("l")) {
+                if (hand==0) {
                     textViewState_l.setText("Device State: " + "setEmgRawDataConfig() failed.");
-                } else if (hand.equals("r")) {
+                } else if (hand==1) {
                     textViewState_r.setText("Device State: " + "setEmgRawDataConfig() failed.");
                 }
 
@@ -286,15 +284,15 @@ public class SetupDevicesActivity extends AppCompatActivity {
             }
 
 
-            dataNotification(gForceProfile_r, "r");
-            dataNotification(gForceProfile_l, "l");
+            dataNotification(gForceProfile_r, 0);
+            dataNotification(gForceProfile_l, 1);
 
             btn_start.setText("Stop Data Notification");
             notifying = true;
         }
     }
 
-    private void dataNotification(GForceProfile gForceProfile, String hand) {
+    private void dataNotification(GForceProfile gForceProfile, int hand) {
         gForceProfile.startDataNotification(new DataNotificationCallback() {
             @Override
             public void onData(byte[] data) {
@@ -319,9 +317,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
                     float y = getFloat(Y);
                     float z = getFloat(Z);
 
-                    if (hand.equals("l")) {
+                    if (hand == 0) {
                         Log.i(TAG, "#####LEFT QUAT####" + +w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
-                    } else if (hand.equals("r")) {
+                    } else if (hand == 1) {
                         Log.i(TAG, "****RIGHT QUAT****" + +w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
                     }
 
@@ -342,9 +340,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            if (hand.equals("l")) {
+                            if (hand == 0) {
                                 textViewQuaternion_l.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
-                            } else if (hand.equals("r")) {
+                            } else if (hand == 1) {
                                 textViewQuaternion_r.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);//use fragment to set up the update on sree
                             }
                         }
@@ -587,20 +585,20 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
     @OnClick(R.id.get_firmware_version)
     public void onGetFirmwareVersionClick() {
-        getFirmwareVersion(gForceProfile_l, "l");
-        getFirmwareVersion(gForceProfile_r, "r");
+        getFirmwareVersion(gForceProfile_l, 0);
+        getFirmwareVersion(gForceProfile_r, 1);
     }
 
-    private void getFirmwareVersion(GForceProfile gForceProfile, String hand) {
+    private void getFirmwareVersion(GForceProfile gForceProfile, int hand) {
         GForceProfile.GF_RET_CODE result = gForceProfile.getControllerFirmwareVersion(new CommandResponseCallback() {
             @Override
             public void onGetControllerFirmwareVersion(int resp, String firmwareVersion) {
                 Log.i(TAG, "\nfirmwareVersion: " + hand + firmwareVersion);
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        if (hand.equals("l")) {
+                        if (hand == 0) {
                             textFirmwareVersion_l.setText("FirmwareVersion: " + firmwareVersion);
-                        } else if (hand.equals("r")) {
+                        } else if (hand == 1) {
                             textFirmwareVersion_r.setText("FirmwareVersion: " + firmwareVersion);
                         }
                     }
@@ -612,9 +610,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
         Log.i(TAG, "getControllerFirmwareVersion() result " + result);
 
         if (result != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
-            if (hand.equals("l")) {
+            if (hand == 0) {
                 textFirmwareVersion_l.setText("FirmwareVersion: Error : " + result);
-            } else if (hand.equals("r")) {
+            } else if (hand == 1) {
                 textFirmwareVersion_r.setText("FirmwareVersion: Error : " + result);
             }
         }
@@ -654,21 +652,19 @@ public class SetupDevicesActivity extends AppCompatActivity {
     }
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
-//        GForceProfileSerializable gForceProfileSerializable_l = new GForceProfileSerializable();
-//        GForceProfileSerializable gForceProfileSerializable_r = new GForceProfileSerializable();
-//        gForceProfileSerializable_l.setProfile(gForceProfile_l);
-//        gForceProfileSerializable_r.setProfile(gForceProfile_r);
         try {
-            Intent intent = new Intent(SetupDevicesActivity.this,InteractionActivity.class);
-//            InteractionActivity.gForceProfile_l = gForceProfile_l;
-//            InteractionActivity.gForceProfile_r = gForceProfile_r;
-//            intent.putExtra("gForceProfile_l", gForceProfileSerializable_l);
-//            intent.putExtra("gForceProfile_r", gForceProfileSerializable_r);
-//            intent.putExtra("gForceProfile_l", gForceProfileSerializable_l);
-//            intent.putExtra("gForceProfile_r", gForceProfileSerializable_r);
-            startActivity(intent);
-            Log.i(TAG, "GO TO INTERACTION");
+            phone_id = 1;
+            armband_id_l = 2;
+            armband_id_r = 3;
+            experiment = new Experiment( p_id, phone_id, armband_id_l, armband_id_r);
+            int e_id =experiment.insertExperiment(db);
+            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
+//            intent.putExtra("e_id", e_id);
+            app.setExperimentID(e_id);
+            app.setExperimentState(0);
 
+            startActivity(intent);
+            Log.i(TAG, "jump to image picker");
         }catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -782,31 +778,16 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 "extra_device_name_r:" + extra_device_name_r +
                 "extra_mac_address_r:" + extra_mac_address_r);
         itr_type = 99;
+        p_id = Participant.getIDFromPreference(this);
+
+        // create a method to get from database;
 
         getSupportActionBar().setSubtitle(getString(R.string.dev_name_with_mac, extra_device_name_l, extra_mac_address_l) +
                 getString(R.string.dev_name_with_mac, extra_device_name_r, extra_mac_address_r));
 
-
         //application pass value
 
-        app = (MyApplication) getApplication(); //获得我们的应用程序MyApplication
-
-//        gForceProfile_l = new GForceProfile(new GForceProfile.GForceErrorCallback() {
-//            @Override
-//            public void onGForceErrorCallback(String errorMsg) {
-//                Toast.makeText(SetupDevicesActivity.this, "L:" + errorMsg, Toast.LENGTH_SHORT).show();
-//                Log.e(TAG, "error in creating instance(left): " + errorMsg);
-//            }
-//        });
-//
-//        gForceProfile_r = new GForceProfile(new GForceProfile.GForceErrorCallback() {
-//            @Override
-//            public void onGForceErrorCallback(String errorMsg) {
-//                Toast.makeText(SetupDevicesActivity.this, "R:" + errorMsg, Toast.LENGTH_SHORT).show();
-//                Log.e(TAG, "error in creating instance(right): " + errorMsg);
-//            }
-//        });
-////
+        app = (MyApplication) getApplication(); //get MyApplication
 
         try{
             gForceProfile_l = app.getProfileLeft();

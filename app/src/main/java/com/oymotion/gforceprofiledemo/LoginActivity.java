@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
 
         updatePreference();
 
-
     }
 
     @OnClick(R.id.btn_login)
@@ -109,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             }else{editor.clear();}
             editor.apply();
 
-            boolean isSuccess = DatabaseUtil.InsertParticipant(db,p_id,gender);
+            boolean isSuccess = DatabaseUtil.InsertParticipant(db,p_id,gender);//refactor to keep consist with the other entity
             if(!isSuccess){
                 Toast.makeText(this, "Login fail.",Toast.LENGTH_LONG).show();
                 return;
@@ -117,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Login success.",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(LoginActivity.this,InstructionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("p_id",p_id);
             startActivity(intent);
             finish();
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         spi_gender.setAdapter(adapter);
     }
 
-    private void updatePreference(){
+    private void updatePreference() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = preferences.getBoolean("isRemember",false);
         if (isRemember){
@@ -153,5 +153,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
 

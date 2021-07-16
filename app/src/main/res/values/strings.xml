@@ -9,9 +9,6 @@
     <string name="stop_noty">Stop Notifying</string>
 
 
-
-
-
     <!--survey questions-->
     <string name="sv_soft">How soft is this clothes feel?</string>
     <string name="sv_smooth">How smooth is this clothes feel?</string>
@@ -20,5 +17,6 @@
     <string name="sv_comf">How comfortable is this clothes feel?</string>
     <string name="photo_label">Please take a photo of the material of the clothes you want to evaluate.</string>
     <string name="photo_cloth">Please take a photo of the label of the clothes you want to evaluate.</string>
+
 
 </resources>
