@@ -1,6 +1,7 @@
 package com.oymotion.gforceprofiledemo;
 
 import android.bluetooth.BluetoothDevice;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.oymotion.gforceprofile.GForceProfile;
 
 import java.util.ArrayList;
 import java.util.Collections;

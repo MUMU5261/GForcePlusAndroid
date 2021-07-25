@@ -1,5 +1,6 @@
 package com.oymotion.gforceprofiledemo;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -37,7 +38,9 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "c_warmth int,"
             + "c_thickness int,"
             + "c_smooth int,"
+            + "c_flexibility int," //added
             + "c_enjoyment int,"
+            + "c_enjoy_touch text,"//added
             + "timestamp text NOT NULL)";
 
     public static final String Create_Interaction = "create table Interaction ("
@@ -57,14 +60,14 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "itr_type integer NOT NULL,"
             + "hand integer NOT NULL," //0: left, 1:right
             + "clt_id integer NOT NULL,"
-            + "ch_01 real NOT NULL,"
-            + "ch_02 real NOT NULL,"
-            + "ch_03 real NOT NULL,"
-            + "ch_04 real NOT NULL,"
-            + "ch_05 real NOT NULL,"
-            + "ch_06 real NOT NULL,"
-            + "ch_07 real NOT NULL,"
-            + "ch_08 real NOT NULL,"
+            + "ch_01 text NOT NULL,"
+            + "ch_02 text NOT NULL,"
+            + "ch_03 text NOT NULL,"
+            + "ch_04 text NOT NULL,"
+            + "ch_05 text NOT NULL,"
+            + "ch_06 text NOT NULL,"
+            + "ch_07 text NOT NULL,"
+            + "ch_08 text NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -144,13 +147,15 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "d_id integer NOT NULL,"
             + "name text NOT NULL,"
             + "mac_address text NOT NULL,"
-            + "type integer NOT NULL)";
+            + "type integer NOT NULL,"
+            + "timestamp text NOT NULL)";
 
 
     private Context mContext;
     public GForceDatabaseOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         mContext = context;
+
     }
 
     @Override
@@ -168,10 +173,19 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(Create_Euler_Angle);
         Toast.makeText(mContext,"create succeed", Toast.LENGTH_SHORT).show();
         Log.i(TAG,"Create database successful");
+
+        String extra_device_name_l = "gForcePro+(6549)";
+        String extra_mac_address_l = "A4:34:F1:89:65:49";
+        String extra_device_name_r = "gForcePro+(529C)";
+        String extra_mac_address_r = "A4:34:F1:89:52:9C";
+        Device.insertDeviceInfo(db, 1, extra_device_name_l, extra_mac_address_l, 0);
+        Device.insertDeviceInfo(db, 2, extra_device_name_r, extra_mac_address_r, 1);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+
 }

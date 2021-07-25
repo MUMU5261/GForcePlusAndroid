@@ -16,7 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Please take a photo of the clothes you want to explore."
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="20dp"/>
+    <TextView
+        android:id="@+id/tv_clt_No"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clothes No: 1"
+        android:textColor="@color/black"
+        android:textSize="20dp"/>
 
     <ImageView
         android:id="@+id/iv_cloth"

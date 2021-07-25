@@ -70,21 +70,42 @@ public class Clothes {
             return false;
         }
     }
-    public void updateQuality(SQLiteDatabase db, int id, int quality){
+    public static void updateQuality(SQLiteDatabase db, int id, int property,int likert){
+        ContentValues values = new ContentValues();
         try {
-            switch (quality){
-                case 0:
-                    values.put("c_smooth", quality);
-                case 1:
-                    values.put("c_soft", quality);
-                case 2:
-                    values.put("c_warmth", quality);
-                case 3:
-                    values.put("c_thickness", quality);
-                case 4:
-                    values.put("c_enjoyment", quality);
+            switch (property){
+                case Interaction.Type.SMOOTH:
+                    values.put("c_smooth", likert);
+                    break;
+                case Interaction.Type.THICKNESS:
+                    values.put("c_thickness", likert);
+                    break;
+                case Interaction.Type.WARMTH:
+                    values.put("c_warmth", likert);
+                    break;
+                case Interaction.Type.FLEXIBILITY:
+                    values.put("c_flexibility", likert);
+                    break;
+                case Interaction.Type.SOFTNESS:
+                    values.put("c_soft", likert);
+                    break;
+                case Interaction.Type.ENJOYMENT:
+                    values.put("c_enjoyment", likert);
+                    break;
             }
 //            values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
+            db.update("Clothes", values, "id=?", new String[]{String.valueOf(id)});//??
+            values.clear();
+        } catch (NumberFormatException e) {
+            values.clear();
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateEnjoyText(SQLiteDatabase db, int id, String str){
+        ContentValues values = new ContentValues();
+        try {
+            values.put("c_enjoy_touch", str);
             db.update("Clothes", values, "id=?", new String[]{String.valueOf(id)});//??
             values.clear();
         } catch (NumberFormatException e) {

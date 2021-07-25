@@ -61,31 +61,31 @@
         android:layout_height="wrap_content"
         android:text="Set Data Switch" />
 
-    <Button
-        android:id="@+id/start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Data Notification" />
-    <Button
-        android:id="@+id/btn_grab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test grab" />
-    <Button
-        android:id="@+id/btn_rub"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test rub" />
-    <Button
-        android:id="@+id/btn_stroke"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test stroke" />
-    <Button
-        android:id="@+id/btn_scrape"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test scrape" />
+<!--    <Button-->
+<!--        android:id="@+id/start"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Start Data Notification" />-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_grab"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="test grab" />-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_rub"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="test rub" />-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_stroke"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="test stroke" />-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_scrape"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="test scrape" />-->
 
     <Button
         android:id="@+id/btn_next1"
@@ -94,26 +94,26 @@
         android:text="Next" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="quaternion_Left: " />
-    <TextView
-        android:id="@+id/text_quaternion_l"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="W:\nX:\nY:\nZ:\n" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="quaternion_Left: " />-->
+<!--    <TextView-->
+<!--        android:id="@+id/text_quaternion_l"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="W:\nX:\nY:\nZ:\n" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="quaternion_right: " />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="quaternion_right: " />-->
 
-    <TextView
-        android:id="@+id/text_quaternion_r"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="W:\nX:\nY:\nZ:\n" />
+<!--    <TextView-->
+<!--        android:id="@+id/text_quaternion_r"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="W:\nX:\nY:\nZ:\n" />-->
 
 
 </LinearLayout>

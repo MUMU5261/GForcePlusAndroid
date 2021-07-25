@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.drjacky.imagepicker.ImagePicker;
 
@@ -42,6 +43,7 @@ public class ImagePickerActivity extends AppCompatActivity {
     Button btn_next;
     TextView tv_title;
     ImageView cover;
+    TextView tv_clt_No;
 //    FloatingActionButton fab;
     Button fab;
     GForceDatabaseOpenHelper dbHelper;
@@ -55,6 +57,7 @@ public class ImagePickerActivity extends AppCompatActivity {
     int p_id;
     int e_id;
     int clt_id = -1;
+    int clt_count = -1;
     byte[] b_image;
     Bitmap imageBitmap = null;
     MyApplication app;
@@ -68,6 +71,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         cover = findViewById(R.id.iv_cloth);
         fab = findViewById(R.id.btn_take_pho);
         tv_title = findViewById(R.id.tv_photo_take);
+        tv_clt_No = findViewById(R.id.tv_clt_No);
+
+//        cover.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.placeholder_image));
         app = (MyApplication) getApplication();
         flag = 0;
         b_image = null;
@@ -86,6 +92,8 @@ public class ImagePickerActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
+        clt_count = app.getClothesCount();
+        tv_clt_No.setText("Clothes No:" + clt_count);
 
         ActivityResultLauncher<Intent> launcher =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
@@ -177,10 +185,11 @@ public class ImagePickerActivity extends AppCompatActivity {
             currentPhotoName = createImageName();
             BitmapHelper.saveBitmap(currentPhotoName,imageBitmap,ImagePickerActivity.this);
             Intent intent = new Intent(ImagePickerActivity.this, InteractionActivity.class);
+//            Intent intent = new Intent(ImagePickerActivity.this, EndActivity.class);
 
             app.setClothesID(clt_id);
             app.setClothesState(Clothes.State.START);
-            app.setInteractionType(Interaction.Type.FREE);
+            app.setInteractionType(Interaction.Type.RELAX);
             startActivity(intent);
             //pass clt_id
         }

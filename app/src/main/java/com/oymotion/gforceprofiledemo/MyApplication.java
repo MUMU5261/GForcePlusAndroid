@@ -28,6 +28,7 @@ public class MyApplication extends Application{
     private int itr_state;
     private int clt_id;
     private int clt_state;
+    private int clt_count;
 
     private static final int ini = -1;
 
@@ -42,6 +43,7 @@ public class MyApplication extends Application{
         itr_state = ini;
         clt_id = ini;
         clt_state = ini;
+        clt_count = 1;
 
         try{
             final GForceProfile gForceProfile_int_l = new GForceProfile(new GForceProfile.GForceErrorCallback() {
@@ -119,6 +121,18 @@ public class MyApplication extends Application{
 
     public void setClothesState(int clt_state) {
         this.clt_state = clt_state;
+    }
+    public int getClothesCount() {
+        return clt_count;
+    }
+
+    public void updateClothesCount(int clt_count) {
+        if(clt_count == 6){
+            this.clt_count = 1;
+        }else{
+            this.clt_count = clt_count + 1;
+            Log.i(TAG, "clt_count:" + this.clt_count);
+        }
     }
 
     //method for Interaction

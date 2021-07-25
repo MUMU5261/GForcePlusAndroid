@@ -24,7 +24,7 @@ public class Interaction {
     public int insertInteraction(SQLiteDatabase db) {
         values.put("p_id", p_id);
         values.put("e_id", e_id);
-        values.put("clt_id", e_id);
+        values.put("clt_id", clt_id);
         values.put("type", type);
         values.put("state", State.START);
         values.put("timestamp", DatabaseUtil.getTimestamp());
@@ -61,11 +61,16 @@ public class Interaction {
         return 99;
     }
     public class Type {
-        public static final int FREE = 0;
-        public static final int SMOOTH = 1;
-        public static final int SOFT = 2;
-        public static final int WARMTH = 3;
+        public static final int RELAX = 0 ;
+        public static final int FIST = 1;
+        public static final int FREE = 2;
+        public static final int SMOOTH = 3;
         public static final int THICKNESS = 4;
+        public static final int WARMTH = 5;
+        public static final int FLEXIBILITY = 6;
+        public static final int SOFTNESS = 7;
+        public static final int ENJOYMENT = 8;
+
     }
     public class State {
         public static final int START = 0;

@@ -29,23 +29,23 @@ public class SetupDevicesActivity extends AppCompatActivity {
     Button btn_connect_l;
     @BindView(R.id.connect_r)
     Button btn_connect_r;
-    @BindView(R.id.start)
-    Button btn_start;
+//    @BindView(R.id.start)
+//    Button btn_start;
     @BindView(R.id.get_firmware_version)
     Button btn_getFirmwareVersion;
     @BindView(R.id.set)
     Button btn_set;
 
 
-    //test buttons
-    @BindView(R.id.btn_grab)
-    Button btn_grab;
-    @BindView(R.id.btn_rub)
-    Button btn_rub;
-    @BindView(R.id.btn_stroke)
-    Button btn_stroke;
-    @BindView(R.id.btn_scrape)
-    Button btn_scrape;
+//    //test buttons
+//    @BindView(R.id.btn_grab)
+//    Button btn_grab;
+//    @BindView(R.id.btn_rub)
+//    Button btn_rub;
+//    @BindView(R.id.btn_stroke)
+//    Button btn_stroke;
+//    @BindView(R.id.btn_scrape)
+//    Button btn_scrape;
 
     public static final String EXTRA_DEVICE_NAME = "extra_device_name";
     public static final String EXTRA_MAC_ADDRESS = "extra_mac_address";
@@ -78,8 +78,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
     private TextView textViewState_l;
     private TextView textViewState_r;
-    private TextView textViewQuaternion_l;
-    private TextView textViewQuaternion_r;
+//    private TextView textViewQuaternion_l;
+//    private TextView textViewQuaternion_r;
     private TextView textFirmwareVersion_l;
     private TextView textFirmwareVersion_r;
     private String textErrorMsg = "";
@@ -142,13 +142,13 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 Log.i(TAG, "disconnect" + hand + ":" + macAddress);
                 btn_getFirmwareVersion.setEnabled(false);
                 btn_set.setEnabled(false);
-                btn_start.setEnabled(false);
+//                btn_start.setEnabled(false);
 
                 notifying = false;
 
-                btn_start.setText("Start Data Notification");
-                textViewQuaternion_l.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
-                textViewQuaternion_r.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
+//                btn_start.setText("Start Data Notification");
+//                textViewQuaternion_l.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
+//                textViewQuaternion_r.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
                 textFirmwareVersion_l.setText("FirmwareVersion: ");
                 textFirmwareVersion_r.setText("FirmwareVersion: ");
             }
@@ -173,8 +173,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 //        int flags = GForceProfile.DataNotifFlags.DNF_EMG_RAW | GForceProfile.DataNotifFlags.DNF_QUATERNION | GForceProfile.DataNotifFlags.DNF_EULERANGLE;
         int flags = GForceProfile.DataNotifFlags.DNF_EMG_RAW | GForceProfile.DataNotifFlags.DNF_QUATERNION
                 | GForceProfile.DataNotifFlags.DNF_EULERANGLE | GForceProfile.DataNotifFlags.DNF_GYROSCOPE
-                | GForceProfile.DataNotifFlags.DNF_ACCELERATE | GForceProfile.DataNotifFlags.DNF_MAGNETOMETER |
-                GForceProfile.DataNotifFlags.DNF_ROTATIONMATRIX ;
+                | GForceProfile.DataNotifFlags.DNF_ACCELERATE | GForceProfile.DataNotifFlags.DNF_MAGNETOMETER;
+//        int flags = GForceProfile.DataNotifFlags.DNF_EMG_RAW | GForceProfile.DataNotifFlags.DNF_QUATERNION
+//                | GForceProfile.DataNotifFlags.DNF_EULERANGLE;
         GForceProfile.GF_RET_CODE result;
 
         response = -1;
@@ -227,7 +228,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
         if (response != GForceProfile.ResponseResult.RSP_CODE_SUCCESS) return;
 
         if ((flags | GForceProfile.DataNotifFlags.DNF_EMG_RAW) == 0) {
-            btn_start.setEnabled(true);
+//            btn_start.setEnabled(true);
         } else {
             result = gForceProfile.setEmgRawDataConfig(500, 0xFF, 128, 8, new CommandResponseCallback() {
                 @Override
@@ -245,7 +246,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
-                                btn_start.setEnabled(true);
+//                                btn_start.setEnabled(true);
                             }
                             if (hand==0) {
                                 textViewState_l.setText(msg);
@@ -267,30 +268,30 @@ public class SetupDevicesActivity extends AppCompatActivity {
             }
         }
     }
-
-    @OnClick(R.id.start)
-    public void onStartClick() {
-        if (notifying) {
-            btn_start.setText("Start Data Notification");
-
-            gForceProfile_l.stopDataNotification();
-            gForceProfile_r.stopDataNotification();
-
-            notifying = false;
-        } else {
-            if (state_l != GForceProfile.BluetoothDeviceStateEx.ready || state_r != GForceProfile.BluetoothDeviceStateEx.ready) {
-                Toast.makeText(SetupDevicesActivity.this, "not both devices are ready", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-            dataNotification(gForceProfile_r, 0);
-            dataNotification(gForceProfile_l, 1);
-
-            btn_start.setText("Stop Data Notification");
-            notifying = true;
-        }
-    }
+//
+//    @OnClick(R.id.start)
+//    public void onStartClick() {
+//        if (notifying) {
+//            btn_start.setText("Start Data Notification");
+//
+//            gForceProfile_l.stopDataNotification();
+//            gForceProfile_r.stopDataNotification();
+//
+//            notifying = false;
+//        } else {
+//            if (state_l != GForceProfile.BluetoothDeviceStateEx.ready || state_r != GForceProfile.BluetoothDeviceStateEx.ready) {
+//                Toast.makeText(SetupDevicesActivity.this, "not both devices are ready", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//
+//            dataNotification(gForceProfile_r, 0);
+//            dataNotification(gForceProfile_l, 1);
+//
+//            btn_start.setText("Stop Data Notification");
+//            notifying = true;
+//        }
+//    }
 
     private void dataNotification(GForceProfile gForceProfile, int hand) {
         gForceProfile.startDataNotification(new DataNotificationCallback() {
@@ -338,15 +339,15 @@ public class SetupDevicesActivity extends AppCompatActivity {
                     System.out.println(db.insert("Quaternion", null, values));
                     values.clear();
 
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            if (hand == 0) {
-                                textViewQuaternion_l.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
-                            } else if (hand == 1) {
-                                textViewQuaternion_r.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);//use fragment to set up the update on sree
-                            }
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            if (hand == 0) {
+//                                textViewQuaternion_l.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);
+//                            } else if (hand == 1) {
+//                                textViewQuaternion_r.setText("W: " + w + "\nX: " + x + "\nY: " + y + "\nZ: " + z);//use fragment to set up the update on sree
+//                            }
+//                        }
+//                    });
 
 
                 }else if(data[0] == GForceProfile.NotifDataType.NTF_EMG_ADC_DATA && data.length == 129) {
@@ -618,38 +619,38 @@ public class SetupDevicesActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    test data
-     */
-    @OnClick(R.id.btn_grab)
-    public void testGrab(){
-        itr_type = 11;
-        onStartClick();
-        Log.i(TAG, "test grab start");
-
-    }
-    @OnClick(R.id.btn_rub)
-    public void testRub(){
-        itr_type = 12;
-        onStartClick();
-        Log.i(TAG, "test rub start");
-
-    }
-
-    @OnClick(R.id.btn_stroke)
-    public void testStroke(){
-        itr_type = 13;
-        onStartClick();
-        Log.i(TAG, "test stroke start");
-
-    }
-    @OnClick(R.id.btn_scrape)
-    public void testScrape(){
-        itr_type = 14;
-        onStartClick();
-        Log.i(TAG, "test scrape start");
-
-    }
+//    /*
+//    test data
+//     */
+//    @OnClick(R.id.btn_grab)
+//    public void testGrab(){
+//        itr_type = 11;
+//        onStartClick();
+//        Log.i(TAG, "test grab start");
+//
+//    }
+//    @OnClick(R.id.btn_rub)
+//    public void testRub(){
+//        itr_type = 12;
+//        onStartClick();
+//        Log.i(TAG, "test rub start");
+//
+//    }
+//
+//    @OnClick(R.id.btn_stroke)
+//    public void testStroke(){
+//        itr_type = 13;
+//        onStartClick();
+//        Log.i(TAG, "test stroke start");
+//
+//    }
+//    @OnClick(R.id.btn_scrape)
+//    public void testScrape(){
+//        itr_type = 14;
+//        onStartClick();
+//        Log.i(TAG, "test scrape start");
+//
+//    }
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
         try {
@@ -798,14 +799,14 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
         textViewState_l = this.findViewById(R.id.text_device_l_state);
         textViewState_r = this.findViewById(R.id.text_device_r_state);
-        textViewQuaternion_l = this.findViewById(R.id.text_quaternion_l);
-        textViewQuaternion_r = this.findViewById(R.id.text_quaternion_r);
+//        textViewQuaternion_l = this.findViewById(R.id.text_quaternion_l);
+//        textViewQuaternion_r = this.findViewById(R.id.text_quaternion_r);
         textFirmwareVersion_l = this.findViewById(R.id.text_firmware_version_l);
         textFirmwareVersion_r = this.findViewById(R.id.text_firmware_version_r);
 
         btn_getFirmwareVersion.setEnabled(false);
         btn_set.setEnabled(false);
-        btn_start.setEnabled(false);
+//        btn_start.setEnabled(false);
 
 
         // setup a thread to update status

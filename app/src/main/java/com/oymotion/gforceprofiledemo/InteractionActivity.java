@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -41,6 +42,7 @@ public class InteractionActivity extends AppCompatActivity {
     private TextView textViewQuaternion_r;
     private TextView tv_countdown_start;
     private TextView tv_countdown_itr;
+    private TextView tv_itr_statement;
 
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
@@ -49,6 +51,9 @@ public class InteractionActivity extends AppCompatActivity {
     //may need two handler, or use other way to listen state change, to improve the data collection rate
     Runnable runnable;
 //    Runnable runnable_data_notify;
+
+    Resources res;
+    String[] statementList;
 
     int itr_type;
     int itr_id;
@@ -79,8 +84,9 @@ public class InteractionActivity extends AppCompatActivity {
         textViewQuaternion_r = this.findViewById(R.id.tv_quaternion_r);
         tv_countdown_start = this.findViewById(R.id.tv_countdown_start);
         tv_countdown_itr = this.findViewById(R.id.tv_countdown_itr);
+        tv_itr_statement = this.findViewById(R.id.tv_itr_statement);
         btn_start_notifying.setEnabled(false);
-        btn_next.setEnabled(false);
+//        btn_next.setEnabled(false);
 
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
@@ -90,12 +96,17 @@ public class InteractionActivity extends AppCompatActivity {
         itr_type = app.getInteractionType();
         e_id = app.getExperimentID();
         clt_id = app.getClothesID();
-        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type);
+        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type+"clt_id"+clt_id);
+
+        res = getResources();
+        statementList = res.getStringArray(R.array.itr_statement);
+        tv_itr_statement.setText(statementList[itr_type]);
+
         interaction = new Interaction(p_id, e_id, clt_id,itr_type);
         itr_id = interaction.insertInteraction(db);
         if(itr_id != -1){
+            Log.i(TAG,"insert interaction success");
             Toast.makeText(InteractionActivity.this,"insert interaction success", Toast.LENGTH_LONG).show();
-            Log.i(TAG,"insert interaction fail");
         }else {
             Log.e(TAG,"insert interaction fail");
             Toast.makeText(InteractionActivity.this,"insert interaction fail", Toast.LENGTH_LONG).show();
@@ -173,7 +184,7 @@ public class InteractionActivity extends AppCompatActivity {
 //                    onStartClick();
 //                }
 //            };
-            new CountDownTimer(5000, 1000) {
+            new CountDownTimer(10000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
                     tv_countdown_itr.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -204,12 +215,29 @@ public class InteractionActivity extends AppCompatActivity {
 //            case Interaction.Type.THICKNESS:
 //        }
         Intent intent;
-        if (itr_type == Interaction.Type.FREE) {
-            app.setInteractionState(Interaction.State.START);
-            app.setInteractionType(Interaction.Type.SMOOTH);
-            intent = new Intent(InteractionActivity.this, InteractionActivity.class);
-        }else{
-            intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+        switch (itr_type){
+            case Interaction.Type.RELAX:
+                app.setInteractionState(Interaction.State.START);
+                app.setInteractionType(Interaction.Type.FIST);
+                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+                break;
+            case Interaction.Type.FIST:
+                app.setInteractionState(Interaction.State.START);
+                app.setInteractionType(Interaction.Type.FREE);
+                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+                break;
+            case Interaction.Type.FREE:
+                app.setInteractionState(Interaction.State.START);
+                app.setInteractionType(Interaction.Type.SMOOTH);
+                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+                break;
+            case Interaction.Type.ENJOYMENT:
+                intent = new Intent(InteractionActivity.this, SurveyEnjoymentActivity.class);//WENT TO ENJOYMENT SURVEY PAGE
+                break;
+            default:
+                intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+                break;
+
         }
         startActivity(intent);
     }
@@ -274,14 +302,14 @@ public class InteractionActivity extends AppCompatActivity {
                 } else if (data[0] == GForceProfile.NotifDataType.NTF_EMG_ADC_DATA && data.length == 129) {
                     Log.i("DeviceActivity", "EMG data: " + Arrays.toString(data) + "hand use: " + hand);
                     Log.i("DeviceActivity", "hand use: " + hand);
-                    ArrayList CH0 = new ArrayList<Byte>(16);
-                    ArrayList CH1 = new ArrayList<Byte>(16);
-                    ArrayList CH2 = new ArrayList<Byte>(16);
-                    ArrayList CH3 = new ArrayList<Byte>(16);
-                    ArrayList CH4 = new ArrayList<Byte>(16);
-                    ArrayList CH5 = new ArrayList<Byte>(16);
-                    ArrayList CH6 = new ArrayList<Byte>(16);
-                    ArrayList CH7 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH0 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH1 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH2 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH3 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH4 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH5 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH6 = new ArrayList<Byte>(16);
+                    ArrayList<Byte> CH7 = new ArrayList<Byte>(16);
 
                     byte[] raw_EMG = new byte[128];
                     System.arraycopy(data, 1, raw_EMG, 0, 128);
@@ -323,6 +351,35 @@ public class InteractionActivity extends AppCompatActivity {
                         }
 
                     }
+                    ContentValues values = new ContentValues();
+                    values.put("p_id", p_id);
+                    values.put("e_id", e_id);
+                    values.put("itr_id", itr_id);
+                    values.put("itr_type", itr_type);
+                    values.put("hand", hand);
+                    values.put("clt_id", clt_id);
+                    values.put("ch_01", getEMGList(CH0).toString());
+                    values.put("ch_02", getEMGList(CH1).toString());
+                    values.put("ch_03", getEMGList(CH2).toString());
+                    values.put("ch_04", getEMGList(CH3).toString());
+                    values.put("ch_05", getEMGList(CH4).toString());
+                    values.put("ch_06", getEMGList(CH5).toString());
+                    values.put("ch_07", getEMGList(CH6).toString());
+                    values.put("ch_08", getEMGList(CH7).toString());
+                    values.put("state", 0);
+                    values.put("timestamp", DatabaseUtil.getTimestamp());
+                    System.out.println(db.insert("EMG", null, values));
+                    values.clear();
+
+
+                    Log.i(TAG, "CH0" +getEMGList(CH0).toString());
+                    Log.i(TAG, "CH1" +getEMGList(CH1).toString());
+                    Log.i(TAG, "CH2" +getEMGList(CH2).toString());
+                    Log.i(TAG, "CH3" +getEMGList(CH3).toString());
+                    Log.i(TAG, "CH4" +getEMGList(CH4).toString());
+                    Log.i(TAG, "CH5" +getEMGList(CH5).toString());
+                    Log.i(TAG, "CH6" +getEMGList(CH6).toString());
+                    Log.i(TAG, "CH7" +getEMGList(CH7).toString());
 
                 } else if (data[0] == GForceProfile.NotifDataType.NTF_EULER_DATA && data.length == 13) {
                     Log.i("DeviceActivity", "NTF_EULER_DATA: " + Arrays.toString(data) + "\nhand use: " + hand);
@@ -517,7 +574,7 @@ public class InteractionActivity extends AppCompatActivity {
         return Float.intBitsToFloat(accum);
     }
 
-    //if correct
+// if correct
     public static long getLong(byte[] b) {
 
         long accum = 0;
@@ -530,7 +587,34 @@ public class InteractionActivity extends AppCompatActivity {
         return accum;
 
     }
+//    public static long getLong(byte[] b) {
+//
+//        int accum = (b[0] & 0xff) << 0 | (b[1] & 0xff) | (b[2] & 0xff) << 16 | (b[3] & 0xff) << 24;
+//
+//        System.out.println(accum);
+//        return accum;
+//
+//    }
 
+    public static int getInt(byte b) {
+        int accum = 0;
+        accum = accum | b;
+
+        return  accum;
+    }
+
+
+    public static ArrayList<Integer> getEMGList( ArrayList<Byte> b) {
+        ArrayList<Integer> EMGList = new ArrayList<Integer>();
+        for(Byte data: b){
+            EMGList.add(toUnsignedInt(data));
+        }
+        return EMGList;
+    }
+
+    public static int toUnsignedInt(byte x) {
+        return ((int) x) & 0xff;
+    }
     // when user leave this page,do???
     @Override
     protected void onPause() {

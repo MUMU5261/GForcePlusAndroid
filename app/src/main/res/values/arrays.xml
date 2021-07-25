@@ -20,12 +20,58 @@
         <item>Please explore how soft it is </item>
     </string-array>
 
+
+    <!--survey questions-->
     <string-array name="survey"> <!---->
+        <item>RELAX</item>
+        <item>FIST</item>
         <item>FREE</item>
-        <item>how smooth is this material?</item>
-        <item>how soft is this material?</item>
-        <item>how warm is this material?</item>
-        <item>how thick is this material?</item>
+        <item>How smooth is this material?</item>
+        <item>How thick is this material?</item>
+        <item>How warm is this material?</item>
+        <item>How flexible/elastic is this material?</item>
+        <item>How soft is this material?</item>
+        <item>How do you like to touch this material?</item>
+        <item>How much do you enjoy touching it that way?</item>
     </string-array>
+
+    <!--survey questions-->
+    <string-array name="itr_statement">
+        <item>Please lay your both arms in front on the table,and keep relax with hands open and do not move.</item>
+        <item>Please lay your both arms in front on the table, and make fist with maximum contractions of the muscles.</item>
+        <item>Please explore the material freely.</item>
+        <item>Please explore how smooth the material is.</item>
+        <item>Please explore how thick the material is.</item>
+        <item>Please explore how warm the material is.</item>
+        <item>Please explore how flexible/elastic the material is.</item>
+        <item>Please explore how soft the material is.</item>
+        <item>What is the most enjoyable way  to touch this material? Can you now touch it in the way you enjoy it the most? </item>
+    </string-array>
+
+    <string-array name="smooth">
+        <item>Very Rough</item>
+        <item>Very Smooth</item>
+    </string-array>
+
+    <string-array name="thick">
+        <item>Very Thin</item>
+        <item>Very Thick</item>
+    </string-array>
+
+    <string-array name="warm">
+        <item>Very Cold</item>
+        <item>Very Warm</item>
+    </string-array>
+
+    <string-array name="flexible">
+        <item>Very inflexible</item>
+        <item>Very flexible</item>
+    </string-array>
+
+    <string-array name="soft">
+        <item>Very Thin</item>
+        <item>Very Thick</item>
+    </string-array>
+
 
 </resources>

@@ -19,4 +19,6 @@ public class test2 extends AppCompatActivity {
         ButterKnife.bind(this);
         btn_Login.setText("text...");
     }
+
+
 }

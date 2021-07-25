@@ -59,4 +59,8 @@ public class Experiment {
 
         return 99;
     }
+    public class State {
+        public static final int START = 0;
+        public static final int FINISHED = 1;
+    }
 }

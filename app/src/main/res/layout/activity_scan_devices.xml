@@ -27,6 +27,35 @@
         android:layout_height="wrap_content"
         android:text="@string/next"/>
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:id="@+id/tv_left_select"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="@color/grey"
+            android:text="Left Armband"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/tv_right_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Right Armband"
+            android:layout_marginLeft="50dp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:background="@color/grey"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scan_results"
         android:layout_width="match_parent"

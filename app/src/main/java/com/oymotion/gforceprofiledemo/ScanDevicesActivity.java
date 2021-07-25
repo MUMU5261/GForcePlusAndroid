@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +42,14 @@ public class ScanDevicesActivity extends AppCompatActivity {
     Button nextButton;
     @BindView(R.id.scan_results)
     RecyclerView recyclerView;
+    TextView leftSelected;
+    TextView rightSelected;
     private ScanResultsAdapter resultsAdapter;
+
+
+    private GForceDatabaseOpenHelper dbHelper;
+    private SQLiteDatabase db;
+
 
     private final static String TAG = ScanDevicesActivity.class.getSimpleName();
     private BluetoothAdapter bluetoothAdapter;
@@ -93,9 +103,17 @@ public class ScanDevicesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_devices);
         ButterKnife.bind(this);
+        leftSelected = findViewById(R.id.tv_left_select);
+        rightSelected = findViewById(R.id.tv_right_select);
         configureResultList();
         getPermission();
 
+        try {
+            dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
+            db = dbHelper.getWritableDatabase();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
         /*
         initialized the data
          */
@@ -280,7 +298,13 @@ public class ScanDevicesActivity extends AppCompatActivity {
         //test for save bluetooth devices info and transfer
         String extra_device_name = scanResults.getBluetoothDevice().getName();
         String extra_mac_address = scanResults.getBluetoothDevice().getAddress();
+        int hand = Device.checkDeviceLR(db, extra_mac_address);
         if(!isExist(extra_mac_address)) {
+            if (hand == 0){
+                leftSelected.setBackgroundColor(itemBackgroundColor);
+            }else if(hand == 1){
+                rightSelected.setBackgroundColor(itemBackgroundColor);
+            }
             btList.add(new Bluetooth(extra_device_name,extra_mac_address));
             count_selected ++;
         }
@@ -302,5 +326,7 @@ public class ScanDevicesActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
 
 }
