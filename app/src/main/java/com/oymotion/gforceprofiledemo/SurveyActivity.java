@@ -30,12 +30,15 @@ public class SurveyActivity extends AppCompatActivity {
 
 
     TextView tv_question;
+    TextView tv_low;
+    TextView tv_high;
 
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
     Resources res;
     String[] questionList;
+    String[] wordPairList;
     MyApplication app;
 
     int itr_type;
@@ -50,6 +53,8 @@ public class SurveyActivity extends AppCompatActivity {
         ButterKnife.bind(SurveyActivity.this);
         tv_question = findViewById(R.id.tv_question);
         rg_liker = findViewById(R.id.rg_likert);
+        tv_low = findViewById(R.id.tv_low);
+        tv_high = findViewById(R.id.tv_high);
 
 
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
@@ -65,6 +70,29 @@ public class SurveyActivity extends AppCompatActivity {
         res = getResources();
         questionList = res.getStringArray(R.array.survey);
         tv_question.setText(questionList[itr_type]);
+        String low = "low";
+        String high = "high";
+        switch (itr_type){
+            case Interaction.Type.SMOOTH:
+                wordPairList = res.getStringArray(R.array.smooth);
+            case Interaction.Type.THICKNESS:
+                wordPairList = res.getStringArray(R.array.thick);
+                break;
+            case Interaction.Type.WARMTH:
+                wordPairList = res.getStringArray(R.array.warm);
+                break;
+            case Interaction.Type.FLEXIBILITY:
+                wordPairList = res.getStringArray(R.array.flexible);
+                break;
+            case Interaction.Type.SOFTNESS:
+                wordPairList = res.getStringArray(R.array.soft);
+                break;
+            case Interaction.Type.ENJOYMENT:
+                wordPairList = new String[]{"a", "b"};
+                break;
+        }
+        tv_low.setText(wordPairList[0]);
+        tv_high.setText(wordPairList[1]);
 
         Log.i(TAG, "Initial Information: " + "clt_id:" + clt_id +  "itr_type:" + itr_type);
         btn_next.setEnabled(false);
@@ -76,16 +104,11 @@ public class SurveyActivity extends AppCompatActivity {
         radioButton = findViewById(radioButtonID);
         Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
         Clothes.updateQuality(db,clt_id,itr_type,likert);
-        Intent intentImg;
         Intent intentItr;
-        Intent intentEnd;
-        intentImg = new Intent(SurveyActivity.this,ImagePickerActivity.class);
         intentItr = new Intent(SurveyActivity.this,InteractionActivity.class);
-        intentEnd = new Intent(SurveyActivity.this,EndActivity.class);
 
         clt_count = app.getClothesCount();
         app.setInteractionState(Interaction.State.START);
-
 
         switch (itr_type) {
             case Interaction.Type.SMOOTH:

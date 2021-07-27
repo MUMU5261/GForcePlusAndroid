@@ -32,15 +32,15 @@
         <activity android:name=".InstructionActivity" />
         <activity android:name=".test2" />
         <activity android:name=".SurveyActivity" />
-        <activity android:name=".ImagePickerActivity" />
+        <activity android:name=".SurveyEnjoymentActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".SetupDevicesActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ImagePickerActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.GForceProfileDemo.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

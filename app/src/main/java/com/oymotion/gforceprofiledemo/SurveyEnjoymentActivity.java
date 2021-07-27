@@ -50,8 +50,6 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
-    Resources res;
-    String[] questionList;
     MyApplication app;
 
     int itr_type;
@@ -71,16 +69,11 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
 
-
-
         app = (MyApplication) getApplication();
         itr_type = app.getInteractionType();
         clt_id = app.getClothesID();
         likert = -1;
 
-        res = getResources();
-        questionList = res.getStringArray(R.array.survey);
-        tv_question.setText(questionList[itr_type]);
 
         Log.i(TAG, "Initial Information: " + "clt_id:" + clt_id +  "itr_type:" + itr_type);
         btn_next.setEnabled(false);
@@ -91,12 +84,20 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
             public void run() {
                 String enjoy_touch_str = et_enjoy_touch.getText().toString();
                 int radioButtonID = rg_liker.getCheckedRadioButtonId();
+                Log.i(TAG,et_enjoy_touch+String.valueOf(radioButtonID));
                 if (!enjoy_touch_str.isEmpty() && radioButtonID!= -1){
-                    btn_next.setEnabled(true);
+                   runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           btn_next.setEnabled(true);
+                       }
+                   });
+
                 }
                 handler.postDelayed(this, 1000);
             }
         };
+        handler.post(runnable);
 
     }
     @OnClick(R.id.btn_next)
@@ -145,7 +146,5 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
-//        gForceProfile_l.disconnect();
-//        gForceProfile_r.disconnect();
     }
 }

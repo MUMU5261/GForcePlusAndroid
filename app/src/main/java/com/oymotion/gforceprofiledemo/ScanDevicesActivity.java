@@ -103,6 +103,8 @@ public class ScanDevicesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_devices);
         ButterKnife.bind(this);
+        this.setTitle("Search for Armbands");
+
         leftSelected = findViewById(R.id.tv_left_select);
         rightSelected = findViewById(R.id.tv_right_select);
         configureResultList();

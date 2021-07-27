@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--圆角-->
+    <corners android:radius="4dp"/>
+
+    <!--边线-->
+    <stroke android:width="1dp" android:color="@color/grey"/>
+
+    <!--填充色-->
+    <solid android:color="@color/grey"/>
+    <padding android:left="@dimen/padding_tv" android:right="@dimen/padding_tv"
+        android:top="@dimen/padding_tv" android:bottom="@dimen/padding_tv" />
+</shape>

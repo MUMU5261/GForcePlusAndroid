@@ -2,6 +2,17 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="next_margin_big">100dp</dimen>
 
     <dimen name="sv_left_margin">20dp</dimen>
+    <dimen name="et_login_height">45dp</dimen>
+    <dimen name="et_login_width">250dp</dimen>
+    <dimen name="padding_tv">3dp</dimen>
+    <dimen name="next_width">250dp</dimen>
+    <dimen name="margin_within_group">5dp</dimen>
+    <dimen name="connect_width">150dp</dimen>
+    <dimen name="state_tv_width">55dp</dimen>
+
+            <!--    text size-->
+    <dimen name="state_size">20dp</dimen>
 </resources>

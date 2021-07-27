@@ -10,8 +10,9 @@
 
     <Button
         android:id="@+id/bth_next"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/next_width"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Next" />
 
 

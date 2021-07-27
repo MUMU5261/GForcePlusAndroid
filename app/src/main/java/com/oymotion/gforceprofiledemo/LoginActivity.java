@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        this.setTitle("Login");
         dbOpenHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbOpenHelper.getReadableDatabase();
 

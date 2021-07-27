@@ -11,6 +11,30 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clothes No: "
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+        <TextView
+            android:id="@+id/tv_clt_No"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"/>
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/tv_photo_take"
         android:layout_width="match_parent"
@@ -18,26 +42,39 @@
         android:text="Please take a photo of the clothes you want to explore."
         android:textColor="@color/black"
         android:textSize="20dp"/>
-    <TextView
-        android:id="@+id/tv_clt_No"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clothes No: 1"
-        android:textColor="@color/black"
-        android:textSize="20dp"/>
 
     <ImageView
         android:id="@+id/iv_cloth"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:layout_gravity="center"
+        tools:srcCompat="@drawable/placeholder_image"/>
 
     <Button
         android:id="@+id/btn_take_pho"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/next_width"
         android:layout_height="wrap_content"
         android:text="take photo"
+
         android:layout_gravity="center"/>
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/next_width"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="next" />
+
+    <TextView
+        android:id="@+id/tv_exa_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IMAGE EXAMPLE"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/margin_within_group"
+        android:textColor="@color/black"
+        android:textSize="20dp"/>
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--        android:id="@+id/floatingActionButton"-->
@@ -45,10 +82,12 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:clickable="true"-->
 <!--        app:srcCompat="@drawable/ic_launcher_foreground" />-->
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="next" />
+    <ImageView
+        android:id="@+id/iv_example"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
 
 </LinearLayout>

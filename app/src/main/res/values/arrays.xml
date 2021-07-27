@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="gender">
-        <item>select</item>
+        <item>Touch to select...</item>
         <item>Woman</item>
         <item>man</item>
         <item>non-binary</item>
@@ -40,12 +40,12 @@
         <item>Please lay your both arms in front on the table,and keep relax with hands open and do not move.</item>
         <item>Please lay your both arms in front on the table, and make fist with maximum contractions of the muscles.</item>
         <item>Please explore the material freely.</item>
-        <item>Please explore how smooth the material is.</item>
-        <item>Please explore how thick the material is.</item>
+        <item>Please explore how <b>smooth</b> the material is.</item>
+        <item>Please explore how <b>thick</b> the material is.</item>
         <item>Please explore how warm the material is.</item>
         <item>Please explore how flexible/elastic the material is.</item>
         <item>Please explore how soft the material is.</item>
-        <item>What is the most enjoyable way  to touch this material? Can you now touch it in the way you enjoy it the most? </item>
+        <item>What is the most enjoyable way to touch this material? Can you now touch it in the way you enjoy it the most? </item>
     </string-array>
 
     <string-array name="smooth">
@@ -64,13 +64,13 @@
     </string-array>
 
     <string-array name="flexible">
-        <item>Very inflexible</item>
-        <item>Very flexible</item>
+        <item>Not flexible At All</item>
+        <item>Very Flexible</item>
     </string-array>
 
     <string-array name="soft">
-        <item>Very Thin</item>
-        <item>Very Thick</item>
+        <item>Very Hard</item>
+        <item>Very Soft</item>
     </string-array>
 
 

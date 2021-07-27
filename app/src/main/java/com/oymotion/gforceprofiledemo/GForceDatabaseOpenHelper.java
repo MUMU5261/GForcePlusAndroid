@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "GForceDatabaseOpenHelpe";
+    private static final String TAG = "GForceDatabaseOpenHelper";
     public static final String Create_Participant = "create table Participant ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
@@ -68,6 +68,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "ch_06 text NOT NULL,"
             + "ch_07 text NOT NULL,"
             + "ch_08 text NOT NULL,"
+            + "raw_data blob NOT NULL," // STORE RAW DATA
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -83,6 +84,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
+            + "raw_data blob NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -97,6 +99,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
+            + "raw_data blob NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -111,6 +114,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
+            + "raw_data blob NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -125,6 +129,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "x real NOT NULL,"
             + "y real NOT NULL,"
             + "z real NOT NULL,"
+            + "raw_data blob NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -139,6 +144,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "pitch real NOT NULL,"
             + "roll real NOT NULL,"
             + "yaw real NOT NULL,"
+            + "raw_data blob NOT NULL,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 

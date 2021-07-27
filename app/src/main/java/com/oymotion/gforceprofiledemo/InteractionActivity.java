@@ -33,7 +33,9 @@ public class InteractionActivity extends AppCompatActivity {
     TextView tv_device_state_l;
     @BindView(R.id.tv_device_state_r)
     TextView tv_device_state_r;
-    @BindView(R.id.btn_start)
+//    @BindView(R.id.btn_start)
+//    Button btn_start_notifying;
+    @BindView(R.id.btn_start_notifying)
     Button btn_start_notifying;
     @BindView(R.id.btn_next)
     Button btn_next;
@@ -130,7 +132,7 @@ public class InteractionActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
-    @OnClick(R.id.btn_update_state)
+    @OnClick(R.id.btn_start_notifying)
     public void onStartNotify() {
         try {
 //            state_l = gForceProfile_l.getState();
@@ -158,10 +160,10 @@ public class InteractionActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_start)
+//    @OnClick(R.id.btn_start)
     public void onStartClick() {
         if (notifying) {
-            btn_start_notifying.setText("Start Data Notification");
+            btn_start_notifying.setText("Start");
             gForceProfile_l.stopDataNotification();
             gForceProfile_r.stopDataNotification();
             notifying = false;
@@ -176,7 +178,7 @@ public class InteractionActivity extends AppCompatActivity {
             dataNotification(gForceProfile_l, 0);
             dataNotification(gForceProfile_r, 1);
 
-            btn_start_notifying.setText("Stop Data Notification");
+            btn_start_notifying.setText("Stop");
             notifying = true;
 //            runnable_data_notify = new Runnable() {
 //                @Override
@@ -233,6 +235,7 @@ public class InteractionActivity extends AppCompatActivity {
                 break;
             case Interaction.Type.ENJOYMENT:
                 intent = new Intent(InteractionActivity.this, SurveyEnjoymentActivity.class);//WENT TO ENJOYMENT SURVEY PAGE
+                Log.i(TAG, String.valueOf(itr_type));
                 break;
             default:
                 intent = new Intent(InteractionActivity.this, SurveyActivity.class);
@@ -284,6 +287,7 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("x", x);
                     values.put("y", y);
                     values.put("z", z);
+                    values.put("raw_data", data);//store raw data
                     values.put("state", 0);
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("Quaternion", null, values));
@@ -366,6 +370,7 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("ch_06", getEMGList(CH5).toString());
                     values.put("ch_07", getEMGList(CH6).toString());
                     values.put("ch_08", getEMGList(CH7).toString());
+                    values.put("raw_data", data);//store raw data
                     values.put("state", 0);
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("EMG", null, values));
@@ -409,6 +414,7 @@ public class InteractionActivity extends AppCompatActivity {
                             values.put("pitch", pitch);
                             values.put("roll", roll);
                             values.put("yaw", yaw);
+                            values.put("raw_data", data);//store raw data
                             values.put("state", 0);
                             values.put("timestamp", DatabaseUtil.getTimestamp());
                             db.insert("Euler_Angle", null, values);
@@ -431,9 +437,9 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(Arrays.toString(b_gyo_y));
                     System.out.println(Arrays.toString(b_gyo_z));
 
-                    long gyo_x = getLong(b_gyo_x);
-                    long gyo_y = getLong(b_gyo_y);
-                    long gyo_z = getLong(b_gyo_z);
+                    float gyo_x = getFloat2(b_gyo_x);
+                    float gyo_y = getFloat2(b_gyo_y);
+                    float gyo_z = getFloat2(b_gyo_z);
 
                     Log.i("DeviceActivity", " NTF_GYO_DATA:" + " gyo_x:" + gyo_x + " gyo_y:" + gyo_y + " gyo_z:" + gyo_z);
                     ContentValues values = new ContentValues();
@@ -446,6 +452,7 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("x", gyo_x);
                     values.put("y", gyo_y);
                     values.put("z", gyo_z);
+                    values.put("raw_data", data);//store raw data
                     values.put("state", 0);
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("Gyroscope", null, values));
@@ -466,9 +473,9 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(Arrays.toString(b_acc_y));
                     System.out.println(Arrays.toString(b_acc_z));
 
-                    long acc_x = getLong(b_acc_x);
-                    long acc_y = getLong(b_acc_y);
-                    long acc_z = getLong(b_acc_z);
+                    float acc_x = getFloat2(b_acc_x);
+                    float acc_y = getFloat2(b_acc_y);
+                    float acc_z = getFloat2(b_acc_z);
 
                     Log.i("DeviceActivity", "NTF_ACC_DATA: " + " acc_x:" + acc_x + " acc_y:" + acc_y + " acc_z:" + acc_z);
 
@@ -482,6 +489,7 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("x", acc_x);
                     values.put("y", acc_y);
                     values.put("z", acc_z);
+                    values.put("raw_data", data);//store raw data
                     values.put("state", 0);
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("Acceletor", null, values));
@@ -502,9 +510,9 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(Arrays.toString(b_mag_y));
                     System.out.println(Arrays.toString(b_mag_z));
 
-                    long mag_x = getLong(b_mag_x);
-                    long mag_y = getLong(b_mag_y);
-                    long mag_z = getLong(b_mag_z);
+                    float mag_x =getFloat2(b_mag_x);
+                    float mag_y =getFloat2(b_mag_y);
+                    float mag_z =getFloat2(b_mag_z);
                     Log.i("DeviceActivity", "NTF_MAG_DATA: " + " mag_x:" + mag_x + " mag_y:" + mag_y + " mag_z:" + mag_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
@@ -516,6 +524,7 @@ public class InteractionActivity extends AppCompatActivity {
                     values.put("x", mag_x);
                     values.put("y", mag_y);
                     values.put("z", mag_z);
+                    values.put("raw_data", data);//store raw data
                     values.put("state", 0);
                     values.put("timestamp", DatabaseUtil.getTimestamp());
                     System.out.println(db.insert("Magnetometer", null, values));
@@ -575,18 +584,32 @@ public class InteractionActivity extends AppCompatActivity {
     }
 
 // if correct
+    /*
+     The data stream in is coded in in q15 format,
+      so we should divide the long value by 65536.0f to get real value in float format.
+     */
+    public static float getFloat2(byte[] b) {
+
+        float value = 0;
+        long va_l = getLong(b);
+        value = va_l/65536.0f;
+        return value;
+
+    }
+
     public static long getLong(byte[] b) {
 
         long accum = 0;
-        accum = accum | (b[0] & 0xffL) << 0;
-        accum = accum | (b[1] & 0xffL) << 8;
-        accum = accum | (b[2] & 0xffL) << 16;
-        accum = accum | (b[3] & 0xffL) << 24;
+        accum = accum | (b[0] & 0xff) << 0;//不加0xffL看起来正常点
+        accum = accum | (b[1] & 0xff) << 8;
+        accum = accum | (b[2] & 0xff) << 16;
+        accum = accum | (b[3] & 0xff) << 24;
 
         System.out.println(accum);
         return accum;
 
     }
+
 //    public static long getLong(byte[] b) {
 //
 //        int accum = (b[0] & 0xff) << 0 | (b[1] & 0xff) | (b[2] & 0xff) << 16 | (b[3] & 0xff) << 24;

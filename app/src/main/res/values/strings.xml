@@ -18,4 +18,8 @@
     <string name="photo_label">Please take a photo of the material of the clothes you want to evaluate.</string>
     <string name="photo_cloth">Please take a photo of the label of the clothes you want to evaluate.</string>
 
+    <!--    Image Examples-->
+    <string name="ie_clothes">Image Example</string>
+    <string name="ie_label">Image Example</string>
+
 </resources>

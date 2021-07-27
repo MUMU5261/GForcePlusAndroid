@@ -31,8 +31,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
     Button btn_connect_r;
 //    @BindView(R.id.start)
 //    Button btn_start;
-    @BindView(R.id.get_firmware_version)
-    Button btn_getFirmwareVersion;
+//    @BindView(R.id.get_firmware_version)
+//    Button btn_getFirmwareVersion;
     @BindView(R.id.set)
     Button btn_set;
 
@@ -140,7 +140,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
             // if disconnect success, reset the view and stop notifying
             if (success) {
                 Log.i(TAG, "disconnect" + hand + ":" + macAddress);
-                btn_getFirmwareVersion.setEnabled(false);
+//                btn_getFirmwareVersion.setEnabled(false);
                 btn_set.setEnabled(false);
 //                btn_start.setEnabled(false);
 
@@ -189,9 +189,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 String msg;
 
                 if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
-                    msg = "Device State: " + "Set Data Switch succeeded";
+                    msg = "Set Data Switch succeeded";
                 } else {
-                    msg = "Device State: " + "Set Data Switch failed, resp code: " + resp;
+                    msg = "Set Data Switch failed, resp code: " + resp;
                 }
 
                 runOnUiThread(new Runnable() {
@@ -210,9 +210,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
         if (result != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
             if (hand==0) {
-                textViewState_l.setText("Device State: " + "setDataNotifSwitch() failed.");
+                textViewState_l.setText("setDataNotifSwitch() failed.");
             } else if (hand == 1) {
-                textViewState_r.setText("Device State: " + "setDataNotifSwitch() failed.");
+                textViewState_r.setText("setDataNotifSwitch() failed.");
             }
 
         }
@@ -238,9 +238,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
                     String msg;
 
                     if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
-                        msg = "Device State: " + "Set EMG Config succeeded";
+                        msg = "Set EMG Config succeeded";
                     } else {
-                        msg = "Device State: " + "Set EMG Config failed, resp code: " + resp;
+                        msg = "Set EMG Config failed, resp code: " + resp;
                     }
 
                     runOnUiThread(new Runnable() {
@@ -260,9 +260,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
             if (result != GForceProfile.GF_RET_CODE.GF_SUCCESS) {
                 if (hand==0) {
-                    textViewState_l.setText("Device State: " + "setEmgRawDataConfig() failed.");
+                    textViewState_l.setText("setEmgRawDataConfig failed.");
                 } else if (hand==1) {
-                    textViewState_r.setText("Device State: " + "setEmgRawDataConfig() failed.");
+                    textViewState_r.setText("setEmgRawDataConfig failed.");
                 }
 
             }
@@ -584,11 +584,11 @@ public class SetupDevicesActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.get_firmware_version)
-    public void onGetFirmwareVersionClick() {
-        getFirmwareVersion(gForceProfile_l, 0);
-        getFirmwareVersion(gForceProfile_r, 1);
-    }
+//    @OnClick(R.id.get_firmware_version)
+//    public void onGetFirmwareVersionClick() {
+//        getFirmwareVersion(gForceProfile_l, 0);
+//        getFirmwareVersion(gForceProfile_r, 1);
+//    }
 
     private void getFirmwareVersion(GForceProfile gForceProfile, int hand) {
         GForceProfile.GF_RET_CODE result = gForceProfile.getControllerFirmwareVersion(new CommandResponseCallback() {
@@ -619,38 +619,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
         }
     }
 
-//    /*
-//    test data
-//     */
-//    @OnClick(R.id.btn_grab)
-//    public void testGrab(){
-//        itr_type = 11;
-//        onStartClick();
-//        Log.i(TAG, "test grab start");
-//
-//    }
-//    @OnClick(R.id.btn_rub)
-//    public void testRub(){
-//        itr_type = 12;
-//        onStartClick();
-//        Log.i(TAG, "test rub start");
-//
-//    }
-//
-//    @OnClick(R.id.btn_stroke)
-//    public void testStroke(){
-//        itr_type = 13;
-//        onStartClick();
-//        Log.i(TAG, "test stroke start");
-//
-//    }
-//    @OnClick(R.id.btn_scrape)
-//    public void testScrape(){
-//        itr_type = 14;
-//        onStartClick();
-//        Log.i(TAG, "test scrape start");
-//
-//    }
+
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
         try {
@@ -704,7 +673,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
         if (state_l != newState_l) {
             runOnUiThread(new Runnable() {
                 public void run() {
-                    textViewState_l.setText("Left Device State: " + newState_l.toString());
+                    textViewState_l.setText(newState_l.toString());
                 }
             });
             state_l = newState_l;
@@ -716,7 +685,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 public void run() {
 //                    textViewState.setText("Device State: " + newState.toString());
 //                    state_r = newState_l;
-                    textViewState_r.setText("Left Device State: " + newState_r.toString());
+                    textViewState_r.setText(newState_r.toString());
                 }
             });
             state_r = newState_r;
@@ -754,7 +723,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     button.setText("Disconnect");
-                    btn_getFirmwareVersion.setEnabled(true);
+//                    btn_getFirmwareVersion.setEnabled(true);
                     btn_set.setEnabled(true);
                     // btn_start.setEnabled(true);
                 }
@@ -767,6 +736,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_devices);
         ButterKnife.bind(this);
+        this.setTitle("Setup Devices");
+
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
         // devices info
@@ -783,8 +754,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
         // create a method to get from database;
 
-        getSupportActionBar().setSubtitle(getString(R.string.dev_name_with_mac, extra_device_name_l, extra_mac_address_l) +
-                getString(R.string.dev_name_with_mac, extra_device_name_r, extra_mac_address_r));
+//        getSupportActionBar().setSubtitle(getString(R.string.dev_name_with_mac, extra_device_name_l, extra_mac_address_l) +
+//                getString(R.string.dev_name_with_mac, extra_device_name_r, extra_mac_address_r));
 
         //application pass value
 
@@ -801,10 +772,10 @@ public class SetupDevicesActivity extends AppCompatActivity {
         textViewState_r = this.findViewById(R.id.text_device_r_state);
 //        textViewQuaternion_l = this.findViewById(R.id.text_quaternion_l);
 //        textViewQuaternion_r = this.findViewById(R.id.text_quaternion_r);
-        textFirmwareVersion_l = this.findViewById(R.id.text_firmware_version_l);
-        textFirmwareVersion_r = this.findViewById(R.id.text_firmware_version_r);
+//        textFirmwareVersion_l = this.findViewById(R.id.text_firmware_version_l);
+//        textFirmwareVersion_r = this.findViewById(R.id.text_firmware_version_r);
 
-        btn_getFirmwareVersion.setEnabled(false);
+//        btn_getFirmwareVersion.setEnabled(false);
         btn_set.setEnabled(false);
 //        btn_start.setEnabled(false);
 

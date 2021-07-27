@@ -3,6 +3,7 @@ package com.oymotion.gforceprofiledemo;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ public class ImagePickerActivity extends AppCompatActivity {
     Button btn_next;
     TextView tv_title;
     ImageView cover;
+    ImageView example_image;
+//    @BindView(R.id.tv_clt_No)
     TextView tv_clt_No;
 //    FloatingActionButton fab;
     Button fab;
@@ -68,7 +71,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_picker);
         ButterKnife.bind(this);
+        this.setTitle("Taking Images");
         cover = findViewById(R.id.iv_cloth);
+        example_image =  findViewById(R.id.iv_example);
         fab = findViewById(R.id.btn_take_pho);
         tv_title = findViewById(R.id.tv_photo_take);
         tv_clt_No = findViewById(R.id.tv_clt_No);
@@ -93,7 +98,11 @@ public class ImagePickerActivity extends AppCompatActivity {
             Log.e(TAG, e.getMessage());
         }
         clt_count = app.getClothesCount();
-        tv_clt_No.setText("Clothes No:" + clt_count);
+        tv_clt_No.setText(String.valueOf(clt_count));
+
+        cover.setImageResource(R.mipmap.placeholder_image);
+        example_image.setImageResource(R.mipmap.example_clothes);
+
 
         ActivityResultLauncher<Intent> launcher =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (ActivityResult result) -> {
@@ -177,7 +186,9 @@ public class ImagePickerActivity extends AppCompatActivity {
             Log.i(TAG, "clt_id" + clt_id);
             currentPhotoName = createImageName();
             BitmapHelper.saveBitmap(currentPhotoName,imageBitmap,ImagePickerActivity.this);
+            example_image.setImageResource(R.mipmap.example_label);
             setToLabelPicker();
+            cover.setImageResource(R.mipmap.placeholder_image);
         }else if (flag == 1) {
             // insert the image of the label of the clothes
             Log.i(TAG, "image of label");
