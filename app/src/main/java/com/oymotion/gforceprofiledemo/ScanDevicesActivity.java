@@ -209,6 +209,7 @@ public class ScanDevicesActivity extends AppCompatActivity {
             editor.putString("extra_mac_address_r", btList.get(1).getName());
             editor.putString("extra_device_name_r",  btList.get(1).getMacAddress());
             editor.apply();
+            editor.clear();
 
         }else{
             Log.i(TAG,"wrong devices number");
@@ -303,9 +304,10 @@ public class ScanDevicesActivity extends AppCompatActivity {
         int hand = Device.checkDeviceLR(db, extra_mac_address);
         if(!isExist(extra_mac_address)) {
             if (hand == 0){
-                leftSelected.setBackgroundColor(itemBackgroundColor);
+
+                leftSelected.setBackground(getDrawable(R.drawable.round_purple));
             }else if(hand == 1){
-                rightSelected.setBackgroundColor(itemBackgroundColor);
+                rightSelected.setBackground(getDrawable(R.drawable.round_purple));
             }
             btList.add(new Bluetooth(extra_device_name,extra_mac_address));
             count_selected ++;

@@ -3,12 +3,14 @@ package com.oymotion.gforceprofiledemo;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -77,7 +79,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         fab = findViewById(R.id.btn_take_pho);
         tv_title = findViewById(R.id.tv_photo_take);
         tv_clt_No = findViewById(R.id.tv_clt_No);
-
+        tv_title.setText(Html.fromHtml("Take a photo of the <font color='#EE0000'><b>CLOTHES</b></font> (see the example below)F.", Typeface.BOLD));
 //        cover.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.placeholder_image));
         app = (MyApplication) getApplication();
         flag = 0;
@@ -144,6 +146,7 @@ public class ImagePickerActivity extends AppCompatActivity {
                                 launcher.launch(it);
                             }
                         }));
+                fab.setText("Retake");
 
             }
         });
@@ -189,6 +192,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             example_image.setImageResource(R.mipmap.example_label);
             setToLabelPicker();
             cover.setImageResource(R.mipmap.placeholder_image);
+            fab.setText("Take photo");
         }else if (flag == 1) {
             // insert the image of the label of the clothes
             Log.i(TAG, "image of label");
@@ -200,7 +204,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
             app.setClothesID(clt_id);
             app.setClothesState(Clothes.State.START);
-            app.setInteractionType(Interaction.Type.RELAX);
+            app.setInteractionType(Interaction.Type.FREE);
             startActivity(intent);
             //pass clt_id
         }
@@ -212,7 +216,8 @@ public class ImagePickerActivity extends AppCompatActivity {
         imageBitmap = null;
         b_image = null;
         cover.setImageBitmap(null);
-        tv_title.setText("Take a photo of the label on the clothes");
+        tv_title.setText(Html.fromHtml("Take a photo of the <font color='#EE0000'><b>COMPOSITION LABEL</b></font> on the clothes " +
+                "(see the example below).", Typeface.BOLD));
         btn_next.setEnabled(false);
     }
 

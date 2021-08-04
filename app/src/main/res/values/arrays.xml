@@ -26,13 +26,14 @@
         <item>RELAX</item>
         <item>FIST</item>
         <item>FREE</item>
-        <item>How smooth is this material?</item>
-        <item>How thick is this material?</item>
-        <item>How warm is this material?</item>
-        <item>How flexible/elastic is this material?</item>
-        <item>How soft is this material?</item>
+<!--        <item>How &lt;font color=&apos;#EE0000&apos;&gt;&lt;b&gt;smooth&lt;/b&gt;&lt;/font&gt; is this material?</item>-->
+        <item>How &lt;b&gt;SMOOTH&lt;/b&gt; is this material?</item>
+        <item>How &lt;b&gt;THICK&lt;/b&gt; is this material?</item>
+        <item>How &lt;b&gt;WARM&lt;/b&gt; is this material?</item>
+        <item>How &lt;b&gt;FLEXIBLE/ELASTIC&lt;/b&gt; is this material?</item>
+        <item>How &lt;b&gt;SOFT&lt;/b&gt; is this material?</item>
         <item>How do you like to touch this material?</item>
-        <item>How much do you enjoy touching it that way?</item>
+        <item>How much do you &lt;b&gt;ENJOY&lt;/b&gt; touching it that way?</item>
     </string-array>
 
     <!--survey questions-->
@@ -40,12 +41,12 @@
         <item>Please lay your both arms in front on the table,and keep relax with hands open and do not move.</item>
         <item>Please lay your both arms in front on the table, and make fist with maximum contractions of the muscles.</item>
         <item>Please explore the material freely.</item>
-        <item>Please explore how <b>smooth</b> the material is.</item>
-        <item>Please explore how <b>thick</b> the material is.</item>
-        <item>Please explore how warm the material is.</item>
-        <item>Please explore how flexible/elastic the material is.</item>
-        <item>Please explore how soft the material is.</item>
-        <item>What is the most enjoyable way to touch this material? Can you now touch it in the way you enjoy it the most? </item>
+        <item>Please explore how &lt;b&gt;SMOOTH&lt;/b&gt; the material is.</item>
+        <item>Please explore how &lt;b&gt;THICK&lt;/b&gt; the material is.</item>
+        <item>Please explore how &lt;b&gt;WARM&lt;/b&gt; the material is.</item>
+        <item>Please explore how &lt;b&gt;FLEXIBLE/ELASTIC&lt;/b&gt; the material is.</item>
+        <item>Please explore how &lt;b&gt;SOFT&lt;/b&gt; the material is.</item>
+        <item>What is the &lt;b&gt;MOST ENJOYABLE&lt;/b&gt; way to touch this material? Can you now touch it in the way you &lt;b&gt;enjoy&lt;/b&gt; it the most? </item>
     </string-array>
 
     <string-array name="smooth">
@@ -64,7 +65,7 @@
     </string-array>
 
     <string-array name="flexible">
-        <item>Not flexible At All</item>
+        <item>Not Flexible At All</item>
         <item>Very Flexible</item>
     </string-array>
 
@@ -72,6 +73,5 @@
         <item>Very Hard</item>
         <item>Very Soft</item>
     </string-array>
-
 
 </resources>

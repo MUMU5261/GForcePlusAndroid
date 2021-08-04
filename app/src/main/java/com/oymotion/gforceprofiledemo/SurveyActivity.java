@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.SurfaceTexture;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +54,7 @@ public class SurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         ButterKnife.bind(SurveyActivity.this);
+        this.setTitle("Feedback");
         tv_question = findViewById(R.id.tv_question);
         rg_liker = findViewById(R.id.rg_likert);
         tv_low = findViewById(R.id.tv_low);
@@ -69,7 +73,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         res = getResources();
         questionList = res.getStringArray(R.array.survey);
-        tv_question.setText(questionList[itr_type]);
+        tv_question.setText(Html.fromHtml(questionList[itr_type], Typeface.BOLD));
         String low = "low";
         String high = "high";
         switch (itr_type){

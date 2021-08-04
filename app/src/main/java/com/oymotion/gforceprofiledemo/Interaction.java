@@ -75,6 +75,7 @@ public class Interaction {
     public class State {
         public static final int START = 0;
         public static final int FINISHED = 1;
+        public static final int FAILED = 2;
 
     }
 }

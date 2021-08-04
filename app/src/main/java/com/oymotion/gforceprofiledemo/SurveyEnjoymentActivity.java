@@ -34,8 +34,8 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
     @BindView(R.id.btn_next)
     Button btn_next;
 
-    @BindView(R.id.et_enjoy_touch)
-    EditText et_enjoy_touch;
+//    @BindView(R.id.et_enjoy_touch)
+//    EditText et_enjoy_touch;
 
     RadioGroup rg_liker;
     //    RadioButton nan,nv ;
@@ -44,8 +44,8 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
 
     TextView tv_question;
 
-    Runnable runnable;
-    Handler handler;
+//    Runnable runnable;
+//    Handler handler;
 
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
@@ -62,6 +62,7 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_enjoy);
         ButterKnife.bind(SurveyEnjoymentActivity.this);
+        this.setTitle("Feedback");
         tv_question = findViewById(R.id.tv_question);
         rg_liker = findViewById(R.id.rg_likert);
 
@@ -78,35 +79,35 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
         Log.i(TAG, "Initial Information: " + "clt_id:" + clt_id +  "itr_type:" + itr_type);
         btn_next.setEnabled(false);
 
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                String enjoy_touch_str = et_enjoy_touch.getText().toString();
-                int radioButtonID = rg_liker.getCheckedRadioButtonId();
-                Log.i(TAG,et_enjoy_touch+String.valueOf(radioButtonID));
-                if (!enjoy_touch_str.isEmpty() && radioButtonID!= -1){
-                   runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           btn_next.setEnabled(true);
-                       }
-                   });
-
-                }
-                handler.postDelayed(this, 1000);
-            }
-        };
-        handler.post(runnable);
+//        handler = new Handler();
+//        runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                String enjoy_touch_str = et_enjoy_touch.getText().toString();
+//                int radioButtonID = rg_liker.getCheckedRadioButtonId();
+//                Log.i(TAG,et_enjoy_touch+String.valueOf(radioButtonID));
+//                if (!enjoy_touch_str.isEmpty() && radioButtonID!= -1){
+//                   runOnUiThread(new Runnable() {
+//                       @Override
+//                       public void run() {
+//                           btn_next.setEnabled(true);
+//                       }
+//                   });
+//
+//                }
+//                handler.postDelayed(this, 1000);
+//            }
+//        };
+//        handler.post(runnable);
 
     }
     @OnClick(R.id.btn_next)
     public void onNextClick() {
-        String enjoy_touch_str = et_enjoy_touch.getText().toString();
-        if(enjoy_touch_str.isEmpty()){
-            Toast.makeText(this, "The answer can not be null." + radioButton.getText(), Toast.LENGTH_LONG).show();
-            return;
-        }
+//        String enjoy_touch_str = et_enjoy_touch.getText().toString();
+//        if(enjoy_touch_str.isEmpty()){
+//            Toast.makeText(this, "The answer can not be null." + radioButton.getText(), Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         int radioButtonID = rg_liker.getCheckedRadioButtonId();
         if(radioButtonID == -1){
@@ -116,7 +117,7 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
 //        radioButton = findViewById(radioButtonID);
 //        Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
         Clothes.updateQuality(db,clt_id,itr_type,likert);
-        Clothes.updateEnjoyText(db,clt_id,enjoy_touch_str);
+//        Clothes.updateEnjoyText(db,clt_id,enjoy_touch_str);
         Intent intentImg;
         Intent intentEnd;
         intentImg = new Intent(SurveyEnjoymentActivity.this,ImagePickerActivity.class);
@@ -139,12 +140,12 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
         String likertStr = (String) radioButton.getText();;
         likert = Integer.valueOf(likertStr);
         Log.i(TAG, "Selected Radio Button: " + radioButton.getText());
-//        btn_next.setEnabled(true);
+        btn_next.setEnabled(true);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable);
+//        handler.removeCallbacks(runnable);
     }
 }

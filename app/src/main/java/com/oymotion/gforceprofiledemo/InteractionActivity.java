@@ -6,9 +6,11 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,16 +35,24 @@ public class InteractionActivity extends AppCompatActivity {
     TextView tv_device_state_l;
     @BindView(R.id.tv_device_state_r)
     TextView tv_device_state_r;
-//    @BindView(R.id.btn_start)
+    //    @BindView(R.id.btn_start)
 //    Button btn_start_notifying;
     @BindView(R.id.btn_start_notifying)
     Button btn_start_notifying;
     @BindView(R.id.btn_next)
     Button btn_next;
+    @BindView(R.id.btn_reConnect)
+    Button btn_reConnect;
+    @BindView(R.id.btn_reStart)
+    Button btn_reStart;
 
+    private CountDownTimer countDownTimerPre;
+    private boolean countPre = false;
+    private CountDownTimer countDownTimerExplore;
+    private boolean countExplore = false;
     private TextView textViewQuaternion_l;
     private TextView textViewQuaternion_r;
-    private TextView tv_countdown_start;
+    //    private TextView tv_countdown_start;
     private TextView tv_countdown_itr;
     private TextView tv_itr_statement;
 
@@ -82,13 +92,17 @@ public class InteractionActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_interaction);
         ButterKnife.bind(this);
+        this.setTitle("Data Gathering");
+
         textViewQuaternion_l = this.findViewById(R.id.tv_quaternion_l);
         textViewQuaternion_r = this.findViewById(R.id.tv_quaternion_r);
-        tv_countdown_start = this.findViewById(R.id.tv_countdown_start);
+//        tv_countdown_start = this.findViewById(R.id.tv_countdown_start);
         tv_countdown_itr = this.findViewById(R.id.tv_countdown_itr);
         tv_itr_statement = this.findViewById(R.id.tv_itr_statement);
         btn_start_notifying.setEnabled(false);
-//        btn_next.setEnabled(false);
+        btn_next.setEnabled(false);
+        btn_reStart.setEnabled(false);
+        btn_reConnect.setEnabled(false);
 
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
@@ -98,21 +112,21 @@ public class InteractionActivity extends AppCompatActivity {
         itr_type = app.getInteractionType();
         e_id = app.getExperimentID();
         clt_id = app.getClothesID();
-        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type+"clt_id"+clt_id);
-
+        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type + "clt_id" + clt_id);
         res = getResources();
         statementList = res.getStringArray(R.array.itr_statement);
-        tv_itr_statement.setText(statementList[itr_type]);
-
-        interaction = new Interaction(p_id, e_id, clt_id,itr_type);
+        String html = statementList[itr_type];
+        tv_itr_statement.setText(Html.fromHtml(html, Typeface.BOLD));
+        interaction = new Interaction(p_id, e_id, clt_id, itr_type);
         itr_id = interaction.insertInteraction(db);
-        if(itr_id != -1){
-            Log.i(TAG,"insert interaction success");
-            Toast.makeText(InteractionActivity.this,"insert interaction success", Toast.LENGTH_LONG).show();
-        }else {
-            Log.e(TAG,"insert interaction fail");
-            Toast.makeText(InteractionActivity.this,"insert interaction fail", Toast.LENGTH_LONG).show();
+        if (itr_id != -1) {
+            Log.i(TAG, "insert interaction success");
+            Toast.makeText(InteractionActivity.this, "insert interaction success", Toast.LENGTH_LONG).show();
+        } else {
+            Log.e(TAG, "insert interaction fail");
+            Toast.makeText(InteractionActivity.this, "insert interaction fail", Toast.LENGTH_LONG).show();
         }
+
 
         try {
             gForceProfile_l = app.getProfileLeft();
@@ -130,40 +144,64 @@ public class InteractionActivity extends AppCompatActivity {
             }
         };
         handler.post(runnable);
+
+
     }
 
     @OnClick(R.id.btn_start_notifying)
     public void onStartNotify() {
-        try {
+        // not work;
+        if(countPre == true) {
+            countDownTimerPre.cancel();
+            countPre = false;
+        }
+        if(countExplore == true){
+            countDownTimerExplore.cancel();
+            countExplore = false;
+        }
+
+
+        if (notifying) {
+            onStartClick();
+        } else {
+//            btn_start_notifying.setEnabled(false);
+            try {
 //            state_l = gForceProfile_l.getState();
 //            state_r = gForceProfile_r.getState();
 //            tv_device_state_l.setText(state_l.toString());
 //            tv_device_state_r.setText(state_r.toString());
 //            handler.removeCallbacks(runnable);
 //            handler.postDelayed(runnable, 1000);
-            new CountDownTimer(4000, 1000) {
+                countDownTimerPre =  new CountDownTimer(3000, 1000) {
 
-                public void onTick(long millisUntilFinished) {
-                    tv_countdown_start.setText("seconds remaining: " + millisUntilFinished / 1000);
-                }
-                public void onFinish() {
-                    tv_countdown_start.setText("start!");
-                    onStartClick();
-                    this.cancel();
-                }
-            }.start();
+                    public void onTick(long millisUntilFinished) {
+                        btn_start_notifying.setText(String.valueOf(millisUntilFinished / 1000));
+                        countPre = true;
+//                    tv_countdown_start.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    }
 
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+                    public void onFinish() {
+//                    tv_countdown_start.setText("start!");
+                        onStartClick();
+                        countPre = false;
+                        this.cancel();
+                    }
+                }.start();
 
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+
+            }
         }
+
 
     }
 
-//    @OnClick(R.id.btn_start)
+    //    @OnClick(R.id.btn_start)
     public void onStartClick() {
         if (notifying) {
             btn_start_notifying.setText("Start");
+            btn_start_notifying.setEnabled(true);
             gForceProfile_l.stopDataNotification();
             gForceProfile_r.stopDataNotification();
             notifying = false;
@@ -178,6 +216,7 @@ public class InteractionActivity extends AppCompatActivity {
             dataNotification(gForceProfile_l, 0);
             dataNotification(gForceProfile_r, 1);
 
+            btn_start_notifying.setEnabled(true);
             btn_start_notifying.setText("Stop");
             notifying = true;
 //            runnable_data_notify = new Runnable() {
@@ -186,20 +225,19 @@ public class InteractionActivity extends AppCompatActivity {
 //                    onStartClick();
 //                }
 //            };
-            new CountDownTimer(10000, 1000) {
+            countDownTimerExplore= new CountDownTimer(20000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-                    tv_countdown_itr.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    tv_countdown_itr.setText(String.valueOf(millisUntilFinished / 1000));
+                    countExplore = true;
                 }
+
                 public void onFinish() {
-                    tv_countdown_itr.setText("done!");
+                    tv_countdown_itr.setText("Done!");
                     onStartClick();
-                    if(interaction.updateState(db,Interaction.State.FINISHED)){
-                        app.setInteractionState(Interaction.State.FINISHED);
-                    }else{
-                        Toast.makeText(InteractionActivity.this,"Failed Exploration",Toast.LENGTH_LONG).show();
-                    }
                     btn_next.setEnabled(true);
+                    btn_reStart.setEnabled(true);
+                    countExplore = false;
                     this.cancel();
                 }
             }.start();
@@ -216,17 +254,23 @@ public class InteractionActivity extends AppCompatActivity {
 //            case Interaction.Type.WARMTH:
 //            case Interaction.Type.THICKNESS:
 //        }
+        if (interaction.updateState(db, Interaction.State.FINISHED)) {
+            app.setInteractionState(Interaction.State.FINISHED);
+        } else {
+            Toast.makeText(InteractionActivity.this, "Failed Exploration", Toast.LENGTH_LONG).show();
+        }
+
         Intent intent;
-        switch (itr_type){
+        switch (itr_type) {
             case Interaction.Type.RELAX:
                 app.setInteractionState(Interaction.State.START);
                 app.setInteractionType(Interaction.Type.FIST);
                 intent = new Intent(InteractionActivity.this, InteractionActivity.class);
                 break;
             case Interaction.Type.FIST:
-                app.setInteractionState(Interaction.State.START);
-                app.setInteractionType(Interaction.Type.FREE);
-                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+//                app.setInteractionState(Interaction.State.START);
+//                app.setInteractionType(Interaction.Type.FREE);
+                intent = new Intent(InteractionActivity.this, ImagePickerActivity.class);
                 break;
             case Interaction.Type.FREE:
                 app.setInteractionState(Interaction.State.START);
@@ -242,6 +286,21 @@ public class InteractionActivity extends AppCompatActivity {
                 break;
 
         }
+        startActivity(intent);
+    }
+    @OnClick(R.id.btn_reStart)
+    public void setBtn_reStart(){
+        if (interaction.updateState(db, Interaction.State.FAILED)) {
+            app.setInteractionState(Interaction.State.FAILED);
+        } else {
+            Toast.makeText(InteractionActivity.this, "Fail to update state failed ", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent = new Intent(InteractionActivity.this,InteractionActivity.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id.btn_reConnect)
+    public void setBtn_reConnect(){
+        Intent intent = new Intent(InteractionActivity.this, SetupDevicesActivity.class);
         startActivity(intent);
     }
 
@@ -377,14 +436,14 @@ public class InteractionActivity extends AppCompatActivity {
                     values.clear();
 
 
-                    Log.i(TAG, "CH0" +getEMGList(CH0).toString());
-                    Log.i(TAG, "CH1" +getEMGList(CH1).toString());
-                    Log.i(TAG, "CH2" +getEMGList(CH2).toString());
-                    Log.i(TAG, "CH3" +getEMGList(CH3).toString());
-                    Log.i(TAG, "CH4" +getEMGList(CH4).toString());
-                    Log.i(TAG, "CH5" +getEMGList(CH5).toString());
-                    Log.i(TAG, "CH6" +getEMGList(CH6).toString());
-                    Log.i(TAG, "CH7" +getEMGList(CH7).toString());
+                    Log.i(TAG, "CH0" + getEMGList(CH0).toString());
+                    Log.i(TAG, "CH1" + getEMGList(CH1).toString());
+                    Log.i(TAG, "CH2" + getEMGList(CH2).toString());
+                    Log.i(TAG, "CH3" + getEMGList(CH3).toString());
+                    Log.i(TAG, "CH4" + getEMGList(CH4).toString());
+                    Log.i(TAG, "CH5" + getEMGList(CH5).toString());
+                    Log.i(TAG, "CH6" + getEMGList(CH6).toString());
+                    Log.i(TAG, "CH7" + getEMGList(CH7).toString());
 
                 } else if (data[0] == GForceProfile.NotifDataType.NTF_EULER_DATA && data.length == 13) {
                     Log.i("DeviceActivity", "NTF_EULER_DATA: " + Arrays.toString(data) + "\nhand use: " + hand);
@@ -510,9 +569,9 @@ public class InteractionActivity extends AppCompatActivity {
                     System.out.println(Arrays.toString(b_mag_y));
                     System.out.println(Arrays.toString(b_mag_z));
 
-                    float mag_x =getFloat2(b_mag_x);
-                    float mag_y =getFloat2(b_mag_y);
-                    float mag_z =getFloat2(b_mag_z);
+                    float mag_x = getFloat2(b_mag_x);
+                    float mag_y = getFloat2(b_mag_y);
+                    float mag_z = getFloat2(b_mag_z);
                     Log.i("DeviceActivity", "NTF_MAG_DATA: " + " mag_x:" + mag_x + " mag_y:" + mag_y + " mag_z:" + mag_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
@@ -568,7 +627,28 @@ public class InteractionActivity extends AppCompatActivity {
             });
         } else {
             btn_start_notifying.setEnabled(false);
+            //LOSE connect, cancel countDownTimer
+//            countDownTimerPre.cancel();
+//            countDownTimerExplore.cancel();
             Toast.makeText(InteractionActivity.this, "lose connection", Toast.LENGTH_LONG).show();
+
+            // update interaction fail
+            if (interaction.updateState(db, Interaction.State.FAILED)) {
+                app.setInteractionState(Interaction.State.FAILED);
+            } else {
+                Toast.makeText(InteractionActivity.this, "Fail to update state failed ", Toast.LENGTH_SHORT).show();
+            }
+            btn_reConnect.setEnabled(true);
+            if(countPre == true){
+                countDownTimerPre.cancel();
+                countPre = false;
+            }
+            if(countExplore == true){
+                countDownTimerExplore.cancel();
+                countPre = false;
+            }
+            gForceProfile_r.stopDataNotification();
+            gForceProfile_l.stopDataNotification();
             //restart the project or reconnect and restart this section.
         }
     }
@@ -583,7 +663,7 @@ public class InteractionActivity extends AppCompatActivity {
         return Float.intBitsToFloat(accum);
     }
 
-// if correct
+    // if correct
     /*
      The data stream in is coded in in q15 format,
       so we should divide the long value by 65536.0f to get real value in float format.
@@ -592,7 +672,7 @@ public class InteractionActivity extends AppCompatActivity {
 
         float value = 0;
         long va_l = getLong(b);
-        value = va_l/65536.0f;
+        value = va_l / 65536.0f;
         return value;
 
     }
@@ -623,13 +703,13 @@ public class InteractionActivity extends AppCompatActivity {
         int accum = 0;
         accum = accum | b;
 
-        return  accum;
+        return accum;
     }
 
 
-    public static ArrayList<Integer> getEMGList( ArrayList<Byte> b) {
+    public static ArrayList<Integer> getEMGList(ArrayList<Byte> b) {
         ArrayList<Integer> EMGList = new ArrayList<Integer>();
-        for(Byte data: b){
+        for (Byte data : b) {
             EMGList.add(toUnsignedInt(data));
         }
         return EMGList;
@@ -638,6 +718,7 @@ public class InteractionActivity extends AppCompatActivity {
     public static int toUnsignedInt(byte x) {
         return ((int) x) & 0xff;
     }
+
     // when user leave this page,do???
     @Override
     protected void onPause() {

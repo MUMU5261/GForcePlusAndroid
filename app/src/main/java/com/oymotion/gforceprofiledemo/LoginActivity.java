@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private int gender_pos;
     private int p_id; //participant ID
     private List<Integer> p_ids = new ArrayList<Integer>();
-    private Integer[] list = new Integer[] {123456,234567,345678};
+    private Integer[] list = new Integer[] {123456,234567,345678,456789};
 
 
     @BindView(R.id.et_p_id)
@@ -61,9 +61,17 @@ public class LoginActivity extends AppCompatActivity {
 
         gender = "select";
         loadSpinnerIdTypes();
-        p_ids.add(123456);
-        p_ids.add(234567);
-        p_ids.add(345678);
+        p_ids.add(1);
+        p_ids.add(2);
+        p_ids.add(3);
+        p_ids.add(4);
+        p_ids.add(5);
+        p_ids.add(6);
+        p_ids.add(7);
+        p_ids.add(8);
+        p_ids.add(9);
+        p_ids.add(10);
+        p_ids.add(11);
         gender_pos = 0;
         p_id = 0;
         gender = "";
@@ -116,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             Toast.makeText(this, "Login success.",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(LoginActivity.this,InstructionActivity.class);
+            Intent intent = new Intent(LoginActivity.this,ScanDevicesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("p_id",p_id);
             startActivity(intent);

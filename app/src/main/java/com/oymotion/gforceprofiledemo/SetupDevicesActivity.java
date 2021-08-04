@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,6 +37,15 @@ public class SetupDevicesActivity extends AppCompatActivity {
 //    Button btn_getFirmwareVersion;
     @BindView(R.id.set)
     Button btn_set;
+
+    @BindView(R.id.btn_next1)
+    Button btn_next;
+
+    boolean set_left = false;
+    boolean set_right = false;
+
+    private SharedPreferences preferences;
+    private SharedPreferences .Editor editor;
 
 
 //    //test buttons
@@ -149,8 +160,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
 //                btn_start.setText("Start Data Notification");
 //                textViewQuaternion_l.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
 //                textViewQuaternion_r.setText("W: " + "\nX: " + "\nY: " + "\nZ: ");
-                textFirmwareVersion_l.setText("FirmwareVersion: ");
-                textFirmwareVersion_r.setText("FirmwareVersion: ");
+//                textFirmwareVersion_l.setText("FirmwareVersion: ");
+//                textFirmwareVersion_r.setText("FirmwareVersion: ");
             }
         }
     }
@@ -165,6 +176,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
         setDataSwitch(gForceProfile_l, 0);
         setDataSwitch(gForceProfile_r, 1);
+        btn_next.setEnabled(true);
     }
 
     private int response = -1;
@@ -190,12 +202,23 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
                 if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
                     msg = "Set Data Switch succeeded";
+
+                    if (hand == 0) {
+                        set_left = true;
+                    } else if (hand == 1) {
+                        set_right = true;
+                    }
                 } else {
                     msg = "Set Data Switch failed, resp code: " + resp;
+
                 }
+
 
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        if(set_left && set_right){
+                            btn_next.setEnabled(true);
+                        }
                         if (hand == 0) {
                             textViewState_l.setText(msg);
                         } else if (hand == 1) {
@@ -239,12 +262,20 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
                     if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
                         msg = "Set EMG Config succeeded";
+                        if (hand == 0) {
+                            set_left = true;
+                        } else if (hand == 1) {
+                            set_right = true;
+                        }
                     } else {
                         msg = "Set EMG Config failed, resp code: " + resp;
                     }
 
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            if(set_left && set_right){
+                                btn_next.setEnabled(true);
+                            }
                             if (resp == GForceProfile.ResponseResult.RSP_CODE_SUCCESS) {
 //                                btn_start.setEnabled(true);
                             }
@@ -622,22 +653,31 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
-        try {
-            phone_id = 1;
-            armband_id_l = 2;
-            armband_id_r = 3;
-            experiment = new Experiment( p_id, phone_id, armband_id_l, armband_id_r);
-            int e_id =experiment.insertExperiment(db);
-            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
-//            intent.putExtra("e_id", e_id);
-            app.setExperimentID(e_id);
-            app.setExperimentState(0);
-
+        if(app.getInteractionType() != -1){
+            Intent intent = new Intent(SetupDevicesActivity.this,InteractionActivity.class);
             startActivity(intent);
-            Log.i(TAG, "jump to image picker");
-        }catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+        }else{
+            try {
+                phone_id = 1;
+                armband_id_l = 2;
+                armband_id_r = 3;
+                experiment = new Experiment( p_id, phone_id, armband_id_l, armband_id_r);
+                int e_id =experiment.insertExperiment(db);
+//            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
+                Intent intent = new Intent(SetupDevicesActivity.this,InteractionActivity.class);
+//            intent.putExtra("e_id", e_id);
+                app.setExperimentID(e_id);
+                app.setExperimentState(Experiment.State.START);
+
+                app.setInteractionType(Interaction.Type.RELAX);
+
+                startActivity(intent);
+                Log.i(TAG, "jump to image picker");
+            }catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
+
 
     }
 
@@ -724,7 +764,12 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 public void run() {
                     button.setText("Disconnect");
 //                    btn_getFirmwareVersion.setEnabled(true);
-                    btn_set.setEnabled(true);
+                    if(state_l == GForceProfile.BluetoothDeviceStateEx.ready
+                            && state_r == GForceProfile.BluetoothDeviceStateEx.ready){
+                        btn_set.setEnabled(true);
+                    }
+
+
                     // btn_start.setEnabled(true);
                 }
             });
@@ -737,14 +782,32 @@ public class SetupDevicesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup_devices);
         ButterKnife.bind(this);
         this.setTitle("Setup Devices");
+        app = (MyApplication) getApplication();
+        if (app.getInteractionType() != -1){
+            btn_next.setText("BACK");
+        }
+        btn_next.setEnabled(false);
 
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
         // devices info
-        extra_device_name_l = getIntent().getStringExtra(EXTRA_DEVICE_NAME_L);
-        extra_mac_address_l = getIntent().getStringExtra(EXTRA_MAC_ADDRESS_L);
-        extra_device_name_r = getIntent().getStringExtra(EXTRA_DEVICE_NAME_R);
-        extra_mac_address_r = getIntent().getStringExtra(EXTRA_MAC_ADDRESS_R);
+//        extra_device_name_l = getIntent().getStringExtra(EXTRA_DEVICE_NAME_L);
+//        extra_mac_address_l = getIntent().getStringExtra(EXTRA_MAC_ADDRESS_L);
+//        extra_device_name_r = getIntent().getStringExtra(EXTRA_DEVICE_NAME_R);
+//        extra_mac_address_r = getIntent().getStringExtra(EXTRA_MAC_ADDRESS_R);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        extra_device_name_l = preferences.getString("extra_device_name_l",null);
+        extra_mac_address_l = preferences.getString("extra_mac_address_l",null);
+        extra_device_name_r = preferences.getString("extra_mac_address_r",null);
+        extra_mac_address_r = preferences.getString("extra_device_name_r",null);
+
+        if(extra_mac_address_l == null || extra_mac_address_r == null){
+            Toast.makeText(this,"faill to get devices information, exit App",Toast.LENGTH_LONG).show();
+            this.finish();
+            System.exit(0);
+        }
+
         Log.i(TAG, "extra_device_name_l:" + extra_device_name_l +
                 "extra_mac_address_l:" + extra_mac_address_l +
                 "extra_device_name_r:" + extra_device_name_r +
@@ -759,7 +822,7 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
         //application pass value
 
-        app = (MyApplication) getApplication(); //get MyApplication
+         //get MyApplication
 
         try{
             gForceProfile_l = app.getProfileLeft();
@@ -790,6 +853,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
             }
         };
     }
+
+
 
     @Override
     protected void onStop() {

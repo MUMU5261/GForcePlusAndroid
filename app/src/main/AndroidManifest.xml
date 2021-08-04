@@ -28,15 +28,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GForceProfileDemo">
         <activity android:name=".EndActivity"></activity>
-        <activity android:name=".InteractionActivity" />
+        <activity android:name=".ImagePickerActivity" />
         <activity android:name=".InstructionActivity" />
         <activity android:name=".test2" />
         <activity android:name=".SurveyActivity" />
         <activity android:name=".SurveyEnjoymentActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".InteractionActivity" />
         <activity android:name=".SetupDevicesActivity" />
         <activity
-            android:name=".ImagePickerActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.GForceProfileDemo.NoActionBar">
             <intent-filter>

@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Connection State"
             android:textSize="20dp"
+            android:layout_gravity="center"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/margin_within_group"/>
         <LinearLayout
@@ -32,12 +33,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="left"
+                android:layout_marginStart="@dimen/margin_within_group"
                 android:background="@drawable/round_corners_bg">
                 <TextView
                     android:layout_width="@dimen/state_tv_width"
                     android:layout_height="wrap_content"
-
                     android:text="Left: "
                     android:gravity="right"
                     android:textSize="@dimen/state_size"/>
@@ -54,7 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/margin_within_group"
+                android:layout_marginStart="@dimen/margin_within_group"
                 android:background="@drawable/round_corners_bg">
                 <TextView
                     android:layout_width="@dimen/state_tv_width"
@@ -205,7 +206,7 @@
         android:text="Next" />
 
 
-<!--    <TextView-->
+    <!--    <TextView-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text="quaternion_Left: " />-->

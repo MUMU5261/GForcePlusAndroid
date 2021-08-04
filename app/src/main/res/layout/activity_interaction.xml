@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Connection State"
+            android:layout_gravity="center"
             android:textStyle="bold"
             android:textSize="20dp"/>
 
@@ -32,6 +33,7 @@
                 android:orientation="horizontal"
                 android:layout_gravity="left"
                 android:background="@drawable/round_corners_bg"
+                android:layout_marginStart="@dimen/margin_within_group"
                 android:layout_marginTop="@dimen/margin_within_group">
                 <TextView
                     android:layout_width="@dimen/state_tv_width"
@@ -54,7 +56,9 @@
                 android:orientation="horizontal"
                 android:layout_gravity="left"
                 android:background="@drawable/round_corners_bg"
-                android:layout_marginTop="@dimen/margin_within_group">
+                android:layout_marginStart="@dimen/margin_within_group"
+                android:layout_marginTop="@dimen/margin_within_group"
+                android:layout_marginBottom="@dimen/margin_within_group">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,11 +80,13 @@
 
     <TextView
         android:id="@+id/tv_itr_statement"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="Please explore how soft is the material?"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:background="@drawable/linearlayout"
+        android:textColor="@color/black"/>
     <Button
         android:id="@+id/btn_start_notifying"
         android:layout_width="128dip"
@@ -88,7 +94,7 @@
         android:layout_gravity="center"
         android:background="@drawable/start_round"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:textSize="@dimen/state_size"
+        android:textSize="25dp"
         android:textStyle="bold"
         android:text="Start" />
 
@@ -99,20 +105,38 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text="Test" />-->
 
-    <TextView
-        android:id="@+id/tv_countdown_start"
+<!--    <TextView-->
+<!--        android:id="@+id/tv_countdown_start"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Ready: 3s "-->
+<!--        android:textSize="30dp"/>-->
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Ready: 3s "
-        android:textSize="30dp"/>
-    <TextView
-        android:id="@+id/tv_countdown_itr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exploring Time: 20S "
-        android:layout_gravity="center"
-        android:textSize="30dp"/>
+        android:layout_gravity="left"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exploring Time: "
+            android:layout_gravity="center"
+            android:textSize="30dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_countdown_itr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20S "
+            android:layout_gravity="center"
+            android:textSize="30dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -126,7 +150,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="quaternion_Left: " />
+                android:text="Quaternion_Left: " />
             <TextView
                 android:id="@+id/tv_quaternion_l"
                 android:layout_width="wrap_content"
@@ -142,7 +166,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="quaternion_right: " />
+                android:text="Quaternion_Right: " />
 
             <TextView
                 android:id="@+id/tv_quaternion_r"
@@ -161,6 +185,21 @@
         android:text="next"
         android:layout_gravity="center"
         android:layout_width="@dimen/next_width"/>
+    <Button
+        android:id="@+id/btn_reStart"
+        android:layout_height="wrap_content"
+        android:text="RESTART"
+        android:layout_gravity="center"
+        android:layout_width="@dimen/next_width"
+        android:enabled="false"/>
+    <Button
+        android:id="@+id/btn_reConnect"
+        android:layout_height="wrap_content"
+        android:text="RECONNECT"
+        android:layout_gravity="center"
+        android:layout_width="@dimen/next_width"
+        android:enabled="false"/>
+
 
 </LinearLayout>
 

@@ -5,35 +5,27 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text= "Feedback"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textSize="30dp"/>
-    <TextView
-        android:id="@+id/tv_question_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text= "How do you like to touch this material?(...)"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="@dimen/sv_left_margin"
-        android:textSize="20dp"/>
-    <EditText
-        android:id="@+id/et_enjoy_touch"
-        android:layout_width="match_parent"
-        android:hint="Typing....."
-        android:gravity="top"
-        android:layout_height="110dp"
-        android:layout_marginLeft ="@dimen/sv_left_margin"
-        android:layout_marginRight="@dimen/sv_left_margin"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/round_corners_bg"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_question_open"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text= "How do you like to touch this material?(...)"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:layout_marginLeft="@dimen/sv_left_margin"-->
+<!--        android:textSize="20dp"/>-->
+<!--    <EditText-->
+<!--        android:id="@+id/et_enjoy_touch"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:hint="Typing....."-->
+<!--        android:gravity="top"-->
+<!--        android:layout_height="110dp"-->
+<!--        android:layout_marginLeft ="@dimen/sv_left_margin"-->
+<!--        android:layout_marginRight="@dimen/sv_left_margin"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:background="@drawable/round_corners_bg"-->
+<!--        />-->
 <!--    make some to pick up,-->
 
 

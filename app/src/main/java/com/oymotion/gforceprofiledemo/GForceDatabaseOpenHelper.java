@@ -180,12 +180,25 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
         Toast.makeText(mContext,"create succeed", Toast.LENGTH_SHORT).show();
         Log.i(TAG,"Create database successful");
 
-        String extra_device_name_l = "gForcePro+(6549)";
-        String extra_mac_address_l = "A4:34:F1:89:65:49";
-        String extra_device_name_r = "gForcePro+(529C)";
-        String extra_mac_address_r = "A4:34:F1:89:52:9C";
+        String extra_device_name_r = "gForcePro+(6549)";
+        String extra_mac_address_r = "A4:34:F1:89:65:49";
+        String extra_device_name_l = "gForcePro+(529C)";
+        String extra_mac_address_l = "A4:34:F1:89:52:9C";
         Device.insertDeviceInfo(db, 1, extra_device_name_l, extra_mac_address_l, 0);
         Device.insertDeviceInfo(db, 2, extra_device_name_r, extra_mac_address_r, 1);
+
+
+        String extra_device_name_l1 = "gForcePro+(622A)";
+        String extra_mac_address_l1 = "A4:34:F1:89:62:2A";
+        String extra_device_name_r1 = "gForcePro+(64F0)";
+        String extra_mac_address_r1 = "A4:34:F1:89:64:F0";
+        Device.insertDeviceInfo(db, 3, extra_device_name_l1, extra_mac_address_l1, 0);
+        Device.insertDeviceInfo(db, 4, extra_device_name_r1, extra_mac_address_r1, 1);
+
+
+
+        //extra_device_name_l:gForcePro+(622A)extra_mac_address_l:A4:34:F1:89:62:2A
+        //extra_device_name_r:gForcePro+(64F0)extra_mac_address_r:A4:34:F1:89:64:F0
     }
 
     @Override
