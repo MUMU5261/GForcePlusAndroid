@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="70dp"
+            android:outlineAmbientShadowColor="@color/grey">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log in as Researcher"
+                android:layout_gravity="center"
+                android:textSize="25dp"
+                android:textColor="@color/purple_700"
+                android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_password"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Password"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="@dimen/et_login_width"
+                android:layout_height="@dimen/et_login_height"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/round_corners_bg"
+                android:inputType="number" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="@dimen/next_width"
+                android:layout_height="@dimen/et_login_height"
+                android:layout_gravity="center"
+                android:text="LogIn" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

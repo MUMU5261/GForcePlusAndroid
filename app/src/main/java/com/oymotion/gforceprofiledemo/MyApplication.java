@@ -23,6 +23,7 @@ public class MyApplication extends Application{
 
     private int e_id;
     private int e_state;
+    private int prj_id;
     private int itr_id;
     private int itr_type;
     private int itr_state;

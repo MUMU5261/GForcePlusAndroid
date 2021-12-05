@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_participant"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+<!--    <ImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="32dp"-->
+<!--        android:scaleType="center"-->
+<!--        android:background="#8833FF"-->
+<!--        android:contentDescription="Please enter participant ID." />-->
+    <TextView
+        android:id="@+id/tv_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter participant ID."
+        android:textSize="@dimen/state_size"
+        android:textColor="@color/black"/>
+    <EditText
+        android:id="@+id/et_participant_id"
+        android:inputType="phone"
+        android:digits="1234567890"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="Participant ID" />
+
+<!--    <EditText-->
+<!--        android:id="@+id/et_gender"-->
+<!--        android:inputType="textPassword"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:layout_marginLeft="4dp"-->
+<!--        android:layout_marginRight="4dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:hint="Gender"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_add"-->
+<!--        android:layout_width="@dimen/next_width"-->
+<!--        android:layout_height="@dimen/et_login_height"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Add" />-->
+
+</LinearLayout>
+

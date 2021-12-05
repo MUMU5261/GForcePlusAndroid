@@ -658,13 +658,13 @@ public class SetupDevicesActivity extends AppCompatActivity {
             startActivity(intent);
         }else{
             try {
-                phone_id = 1;
-                armband_id_l = 2;
-                armband_id_r = 3;
+                phone_id = 2;
+                armband_id_l = 5;
+                armband_id_r = 6;
                 experiment = new Experiment( p_id, phone_id, armband_id_l, armband_id_r);
                 int e_id =experiment.insertExperiment(db);
 //            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
-                Intent intent = new Intent(SetupDevicesActivity.this,InteractionActivity.class);
+                Intent intent = new Intent(SetupDevicesActivity.this,Interaction.class);
 //            intent.putExtra("e_id", e_id);
                 app.setExperimentID(e_id);
                 app.setExperimentState(Experiment.State.START);

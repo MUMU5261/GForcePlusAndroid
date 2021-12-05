@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rv_item_height"
+    android:layout_marginTop="@dimen/rv_item_margin">
+    <TextView
+        android:id="@+id/tv_item_open_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/rv_left_margin"
+        android:layout_gravity="left"
+        android:textSize="20dp"
+        tools:text="open question"/>
+</LinearLayout>

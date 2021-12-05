@@ -79,7 +79,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         fab = findViewById(R.id.btn_take_pho);
         tv_title = findViewById(R.id.tv_photo_take);
         tv_clt_No = findViewById(R.id.tv_clt_No);
-        tv_title.setText(Html.fromHtml("Take a photo of the <font color='#EE0000'><b>CLOTHES</b></font> (see the example below)F.", Typeface.BOLD));
+        tv_title.setText(Html.fromHtml("Take a photo of the <font color='#EE0000'><b>CLOTHES</b></font> (see the example below).", Typeface.BOLD));
 //        cover.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.placeholder_image));
         app = (MyApplication) getApplication();
         flag = 0;
@@ -184,7 +184,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             // create an instance of clothes and store image of clothes
             Log.i(TAG, "image of clothes");
 
-            clothes = new Clothes(p_id, e_id, b_image);
+            clothes = new Clothes(-1,e_id, p_id, Clothes.State.START);
             clt_id = clothes.insertClothes(db);
             Log.i(TAG, "clt_id" + clt_id);
             currentPhotoName = createImageName();

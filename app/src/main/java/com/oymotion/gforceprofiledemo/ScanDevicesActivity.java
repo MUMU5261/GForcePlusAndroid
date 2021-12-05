@@ -286,7 +286,6 @@ public class ScanDevicesActivity extends AppCompatActivity {
             final int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
             final ScanResult itemAtPosition = resultsAdapter.getItemAtPosition(childAdapterPosition);
             onAdapterItemClick(itemAtPosition);
-
             //when selected, item view is highlighted
             view.setBackgroundColor(itemBackgroundColor);
         });

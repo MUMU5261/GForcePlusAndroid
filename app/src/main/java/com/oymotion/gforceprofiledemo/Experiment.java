@@ -12,7 +12,7 @@ public class Experiment {
     int phone_id;
     int armband_id_l;
     int armband_id_r;
-    ContentValues values = new ContentValues();
+
 
     public Experiment(int p_id, int phone_id, int armband_id_l, int armband_id_r) {
         this.p_id = p_id;
@@ -23,6 +23,7 @@ public class Experiment {
 
 
     public int insertExperiment(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
         values.put("p_id", p_id);
         values.put("phone_id", phone_id);
         values.put("armband_id_l", armband_id_l);
@@ -40,10 +41,11 @@ public class Experiment {
         }
 
     }
-    public void updateExpProgress(SQLiteDatabase db, String state) {
+    public static void updateExpProgress(SQLiteDatabase db, int id, int state) {
+        ContentValues values = new ContentValues();
         values.put("state", state);
 //        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
-        db.update("Experiment", values, "id", new String[Integer.parseInt(String.valueOf(id))]);//??
+        db.update("Experiment", values, "id=?", new String[]{String.valueOf(id)});
         values.clear();
     }
 

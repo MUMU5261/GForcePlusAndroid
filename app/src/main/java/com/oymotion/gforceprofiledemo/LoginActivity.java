@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     Spinner spi_gender;
     @BindView(R.id.btn_login)
     Button btn_login;
+    @BindView(R.id.btn_login_as_researcher)
+    Button btn_login_as_researcher;
     @BindView(R.id.cb_remember)
     CheckBox cb_remember;
 
@@ -104,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        if(gender.equals("select")){
+        if(gender.equals("Touch to select...")){
             Toast.makeText(this, "Please Select your gender.",Toast.LENGTH_LONG).show();
             return;
         }
@@ -114,7 +116,11 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putBoolean("isRemember",true);
                 editor.putInt("p_id",p_id);
                 editor.putInt("gender_pos",gender_pos);
-            }else{editor.clear();}
+            }else{
+                editor.putBoolean("isRemember",false);
+                editor.putInt("p_id",p_id);
+                editor.putInt("gender_pos",gender_pos);
+            }
             editor.apply();
 
             boolean isSuccess = DatabaseUtil.InsertParticipant(db,p_id,gender);//refactor to keep consist with the other entity
@@ -134,6 +140,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    @OnClick(R.id.btn_login_as_researcher)
+    public void onLoginResearcherClick() {
+        Intent intent = new Intent(LoginActivity.this,ExperimentSettingMenuActivity.class);
+//        what is set flag
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.putExtra("p_id",p_id);
+        startActivity(intent);
+        finish();
+    }
+
+
 
     @OnItemSelected(R.id.spi_gender)
     public void onGenderSelected(int position) {

@@ -16,31 +16,58 @@ import java.util.Random;
 
 public class Test {
     public static void main(String[] args) {
-        byte[] b = new byte[4];
-        new Random(0).nextBytes(b);
+//        for (int i = 1; i <= 1; i++) {
+//            for (int j = 1; j <= 1; j++) {
+////                String path = "D:\\participant_data\\participant0".concat(String.valueOf(i)).concat("\\experiment").concat(String.valueOf(j));
+////                String readPath = path.concat("\\emg.csv");
+////                String writePath = path.concat("\\emg_processed.csv");
+//                String readPath1 = "D:\\participant_data\\participant01\\experiment1\\emg.csv";
+//                String writePath1 = "D:\\participant_data\\participant01\\experiment1\\emg_processed.csv";
+////                System.out.println(readPath);
+//                System.out.println(readPath1);
+////                System.out.println(writePath);
+//                System.out.println(writePath1);
+//                processEMG(readPath1, writePath1);
+//            }
+//
+//        }
+        String readPath1 = "D:\\participant_data\\participant01\\experiment1\\emg.csv";
+        String writePath1 = "D:\\participant_data\\participant01\\experiment1\\emg_processed.csv";
+        System.out.println(readPath1);
+        System.out.println(writePath1);
+        processEMG(readPath1, writePath1);
+    }
 
-
-//        System.out.println("1");
-        System.out.println(byteToInt(b));
-        System.out.println(getLong(b));
+    public static void processEMG(String readPath, String writePath){
+//        byte[] b = new byte[4];
+//        new Random(0).nextBytes(b);
+//
+//
+////        System.out.println("1");
+//        System.out.println(byteToInt(b));
+//        System.out.println(getLong(b));
 
 //        File csv = new File("G:\\FileSave\\dataFile\\read.csv");
-        File csv = new File("C:\\Users\\lilil\\GforceData\\queryResult\\emgf.csv");
+        File csv = new File("D:\\participant_data\\participant01\\experiment1\\emg.csv");
+//        File csv = new File(readPath);
 
-        File writeFile = new File("C:\\Users\\lilil\\GforceData\\rawData\\emg_processed.csv");
+//        File writeFile = new File("C:\\Users\\lilil\\GforceData\\rawData\\emg_processed.csv");
+        File writeFile = new File("D:\\participant_data\\participant01\\experiment1\\emg_processed.csv");
+//        File writeFile = new File(writePath);
+
 
         try{
             BufferedReader textFile = new BufferedReader(new FileReader(csv));
             BufferedWriter writeText = new BufferedWriter(new FileWriter(writeFile));
-            writeText.write("id,itr_type,hand," +
-                    "ch01," +
-                    "ch02," +
-                    "ch03," +
-                    "ch04," +
-                    "ch05," +
-                    "ch06," +
-                    "ch07," +
-                    "ch08," +
+            writeText.write("id,p_id,e_id,itr_id,itr_type,hand,clt_id," +
+                    "ch_01," +
+                    "ch_02," +
+                    "ch_03," +
+                    "ch_04," +
+                    "ch_05," +
+                    "ch_06," +
+                    "ch_07," +
+                    "ch_08," +
                     "timestamp");
             String lineDta = "";
 
@@ -89,17 +116,22 @@ public class Test {
 
         try {
             int id = Integer.parseInt(splitFields[0]);
-            int itr_type = Integer.parseInt(splitFields[1]);
-            int hand = Integer.parseInt(splitFields[2]);
-            String timestamp = splitFields[11];
-            List<String> ch01 = getEMGArray(writeText, id, itr_type, hand, 1, splitFields[3], timestamp);
-            List<String> ch02 = getEMGArray(writeText, id, itr_type, hand, 2, splitFields[4], timestamp);
-            List<String> ch03 = getEMGArray(writeText, id, itr_type, hand, 3, splitFields[5], timestamp);
-            List<String> ch04 = getEMGArray(writeText, id, itr_type, hand, 4, splitFields[6], timestamp);
-            List<String> ch05 = getEMGArray(writeText, id, itr_type, hand, 5, splitFields[7], timestamp);
-            List<String> ch06 = getEMGArray(writeText, id, itr_type, hand, 6, splitFields[8], timestamp);
-            List<String> ch07 = getEMGArray(writeText, id, itr_type, hand, 7, splitFields[9], timestamp);
-            List<String> ch08 = getEMGArray(writeText, id, itr_type, hand, 8, splitFields[10], timestamp);
+            int p_id = Integer.parseInt(splitFields[1]);
+            int e_id = Integer.parseInt(splitFields[2]);
+            int itr_id = Integer.parseInt(splitFields[3]);
+            int itr_type = Integer.parseInt(splitFields[4]);
+            int hand = Integer.parseInt(splitFields[5]);
+            int clt_id = Integer.parseInt(splitFields[6]);
+            int state = Integer.parseInt(splitFields[15]);
+            String timestamp = splitFields[16];
+            List<String> ch01 = getEMGArray(writeText, id, itr_type, hand, 1, splitFields[7], timestamp);
+            List<String> ch02 = getEMGArray(writeText, id, itr_type, hand, 2, splitFields[8], timestamp);
+            List<String> ch03 = getEMGArray(writeText, id, itr_type, hand, 3, splitFields[9], timestamp);
+            List<String> ch04 = getEMGArray(writeText, id, itr_type, hand, 4, splitFields[10], timestamp);
+            List<String> ch05 = getEMGArray(writeText, id, itr_type, hand, 5, splitFields[11], timestamp);
+            List<String> ch06 = getEMGArray(writeText, id, itr_type, hand, 6, splitFields[12], timestamp);
+            List<String> ch07 = getEMGArray(writeText, id, itr_type, hand, 7, splitFields[13], timestamp);
+            List<String> ch08 = getEMGArray(writeText, id, itr_type, hand, 8, splitFields[14], timestamp);
             ArrayList<String> emgCsv = new ArrayList<String>(16);
 
         } catch (Exception e) {
@@ -115,20 +147,25 @@ public class Test {
 
         try {
             int id = Integer.parseInt(splitFields[0]);
-            int itr_type = Integer.parseInt(splitFields[1]);
-            int hand = Integer.parseInt(splitFields[2]);
-            String timestamp = splitFields[11];
-            String[] ch01= getEMGArr(splitFields[3]);
-            String[] ch02= getEMGArr(splitFields[4]);
-            String[] ch03= getEMGArr(splitFields[5]);
-            String[] ch04= getEMGArr(splitFields[6]);
-            String[] ch05= getEMGArr(splitFields[7]);
-            String[] ch06= getEMGArr(splitFields[8]);
-            String[] ch07= getEMGArr(splitFields[9]);
-            String[] ch08= getEMGArr(splitFields[10]);
+            int p_id = Integer.parseInt(splitFields[1]);
+            int e_id = Integer.parseInt(splitFields[2]);
+            int itr_id = Integer.parseInt(splitFields[3]);
+            int itr_type = Integer.parseInt(splitFields[4]);
+            int hand = Integer.parseInt(splitFields[5]);
+            int clt_id = Integer.parseInt(splitFields[6]);
+            int state = Integer.parseInt(splitFields[15]);
+            String timestamp = splitFields[16];
+            String[] ch01= getEMGArr(splitFields[7]);
+            String[] ch02= getEMGArr(splitFields[8]);
+            String[] ch03= getEMGArr(splitFields[9]);
+            String[] ch04= getEMGArr(splitFields[10]);
+            String[] ch05= getEMGArr(splitFields[11]);
+            String[] ch06= getEMGArr(splitFields[12]);
+            String[] ch07= getEMGArr(splitFields[13]);
+            String[] ch08= getEMGArr(splitFields[14]);
             ArrayList<String> emgCsv = new ArrayList<String>(16);
             for (int i =0; i <16;i++) {
-                String strCom = (id*100+i)+","+itr_type+","+hand+","+
+                String strCom = (id*100+i)+","+p_id+","+e_id +","+itr_id +","+itr_type+","+hand+","+clt_id+","+
                         ch01[i]+","+
                         ch02[i]+","+
                         ch03[i]+","+

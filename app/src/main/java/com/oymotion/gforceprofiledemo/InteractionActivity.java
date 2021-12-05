@@ -114,10 +114,10 @@ public class InteractionActivity extends AppCompatActivity {
         clt_id = app.getClothesID();
         Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type + "clt_id" + clt_id);
         res = getResources();
-        statementList = res.getStringArray(R.array.itr_statement);
+        statementList = res.getStringArray(R.array.itr_statement2);
         String html = statementList[itr_type];
         tv_itr_statement.setText(Html.fromHtml(html, Typeface.BOLD));
-        interaction = new Interaction(p_id, e_id, clt_id, itr_type);
+        interaction = new Interaction(-99, p_id, clt_id, itr_type);
         itr_id = interaction.insertInteraction(db);
         if (itr_id != -1) {
             Log.i(TAG, "insert interaction success");
@@ -503,7 +503,7 @@ public class InteractionActivity extends AppCompatActivity {
                     Log.i("DeviceActivity", " NTF_GYO_DATA:" + " gyo_x:" + gyo_x + " gyo_y:" + gyo_y + " gyo_z:" + gyo_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", p_id);
+                    values.put("e_id", e_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
@@ -541,7 +541,7 @@ public class InteractionActivity extends AppCompatActivity {
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
                     values.put("e_id", e_id);
-                    values.put("itr_id", itr_type);
+                    values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
                     values.put("clt_id", clt_id);

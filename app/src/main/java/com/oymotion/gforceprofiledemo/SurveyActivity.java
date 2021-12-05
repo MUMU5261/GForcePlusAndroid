@@ -54,7 +54,7 @@ public class SurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         ButterKnife.bind(SurveyActivity.this);
-        this.setTitle("Feedback");
+        this.setTitle("");
         tv_question = findViewById(R.id.tv_question);
         rg_liker = findViewById(R.id.rg_likert);
         tv_low = findViewById(R.id.tv_low);
@@ -72,13 +72,14 @@ public class SurveyActivity extends AppCompatActivity {
         likert = -1;
 
         res = getResources();
-        questionList = res.getStringArray(R.array.survey);
+        questionList = res.getStringArray(R.array.survey2);
         tv_question.setText(Html.fromHtml(questionList[itr_type], Typeface.BOLD));
         String low = "low";
         String high = "high";
         switch (itr_type){
             case Interaction.Type.SMOOTH:
                 wordPairList = res.getStringArray(R.array.smooth);
+                break;
             case Interaction.Type.THICKNESS:
                 wordPairList = res.getStringArray(R.array.thick);
                 break;
@@ -95,8 +96,9 @@ public class SurveyActivity extends AppCompatActivity {
                 wordPairList = new String[]{"a", "b"};
                 break;
         }
-        tv_low.setText(wordPairList[0]);
-        tv_high.setText(wordPairList[1]);
+//        hide for version2
+//        tv_low.setText(wordPairList[0]);
+//        tv_high.setText(wordPairList[1]);
 
         Log.i(TAG, "Initial Information: " + "clt_id:" + clt_id +  "itr_type:" + itr_type);
         btn_next.setEnabled(false);
@@ -120,21 +122,23 @@ public class SurveyActivity extends AppCompatActivity {
                 startActivity(intentItr);
                 break;
             case Interaction.Type.THICKNESS:
-                app.setInteractionType(Interaction.Type.WARMTH);
-                startActivity(intentItr);
-                break;
-            case Interaction.Type.WARMTH:
-                app.setInteractionType(Interaction.Type.FLEXIBILITY);
-                startActivity(intentItr);
-                break;
-            case Interaction.Type.FLEXIBILITY:
-                app.setInteractionType(Interaction.Type.SOFTNESS);
-                startActivity(intentItr);
-                break;
-            case Interaction.Type.SOFTNESS:
                 app.setInteractionType(Interaction.Type.ENJOYMENT);
                 startActivity(intentItr);
                 break;
+//            case Interaction.Type.WARMTH:
+//                app.setInteractionType(Interaction.Type.FLEXIBILITY);
+//                startActivity(intentItr);
+//                break;
+//            case Interaction.Type.FLEXIBILITY:
+//                app.setInteractionType(Interaction.Type.SOFTNESS);
+//                startActivity(intentItr);
+//                break;
+//            case Interaction.Type.SOFTNESS:
+//                app.setInteractionType(Interaction.Type.ENJOYMENT);
+//                startActivity(intentItr);
+//                break;
+//
+
 //            case Interaction.Type.ENJOYMENT://move this to another activity;
 //                app.setClothesState(Clothes.State.FINISHED);
 //                if(clt_count == 6){

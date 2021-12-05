@@ -22,4 +22,12 @@
     <string name="ie_clothes">Image Example</string>
     <string name="ie_label">Image Example</string>
 
+    <string name="add">add</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="save">Save</string>
+    <string name="edit">edit</string>
+
+
+
 </resources>
