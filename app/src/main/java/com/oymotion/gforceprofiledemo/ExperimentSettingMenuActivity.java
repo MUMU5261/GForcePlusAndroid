@@ -60,18 +60,26 @@ public class ExperimentSettingMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(ExperimentSettingMenuActivity.this,ParticipantManageActivity.class);
         intent.putExtra("prj_id", prj_id);
         startActivity(intent);
-        finish();
     }
 
     @OnClick(R.id.btn_experiment)
-    public void onLoginResearcherClick() {
+    public void onExperimentClick() {
         Intent intent = new Intent(ExperimentSettingMenuActivity.this,ExperimentSettingActivity.class);
 //        what is set flag
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);//set this when back to home
+//        intent.putExtra("p_id",p_id);
+        intent.putExtra("prj_id", prj_id);
+        Log.i(TAG, "onExperimentClick: prj_id->" +prj_id);
+        startActivity(intent);
+    }
+
+    private void setIntent() {
+        Intent intent = new Intent(ExperimentSettingMenuActivity.this,ExperimentSettingActivity.class);
+//        what is set flag
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);//set this when back to home
 //        intent.putExtra("p_id",p_id);
         intent.putExtra("prj_id", prj_id);
         startActivity(intent);
-        finish();
     }
 
 

@@ -31,14 +31,22 @@ public class AddParticipantDialog extends DialogFragment {
     Activity context;
 
 //    @BindView(R.id.et_participant_id)
-    private EditText et_p_id;
+    EditText et_p_id;
     private TextView tv_prompt;
+
+
 
     GForceDatabaseOpenHelper dbHelper;
     SQLiteDatabase db;
+    int mode; //0:add;1:
+    int p_id;
+    int prj_id;
 
-    public AddParticipantDialog() {
+    public AddParticipantDialog( int prj_id, int p_id ) {
         super();
+        this.p_id = p_id;
+        this.prj_id = prj_id;
+        mode = (p_id == -1)? AddProjectDialog.Mode.ADD : AddProjectDialog.Mode.EDIT;
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -78,6 +86,7 @@ public class AddParticipantDialog extends DialogFragment {
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
+
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View rootView = inflater.inflate(R.layout.dialog_add_participant, null);
@@ -85,23 +94,32 @@ public class AddParticipantDialog extends DialogFragment {
         tv_prompt = (TextView)rootView.findViewById(R.id.tv_prompt);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout\
-
+        if (mode == AddParticipantDialog.Mode.EDIT) {
+            Participant participant = Participant.getParticipant(db,p_id);
+            fillEditText(participant);
+        }
         builder.setView(rootView)
                 // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton((mode == AddProjectDialog.Mode.ADD)? "add":"save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
                         String id_str = et_p_id.getText().toString();
                         if (!id_str.isEmpty()) {
                             int p_id = Integer.valueOf(id_str);
-                            if(Participant.isIDExist(db,p_id)){
+                            if(Participant.isIDExist(db,p_id) && mode == AddProjectDialog.Mode.ADD){
                                 Toast.makeText(context, "Participant ID Exist.", Toast.LENGTH_LONG).show();
                                 AddParticipantDialog.this.getDialog().show();
                             }else{
-                                Participant participant = new Participant(p_id,0);
+                                Participant participant = new Participant(p_id,prj_id,0);
                                 Log.i(TAG, "onClick: "+p_id);
-                                participant.insertParticipant(db);
+
+                                if(mode == AddProjectDialog.Mode.ADD){
+                                    participant.insertParticipant(db);
+                                }else{
+                                    participant.updateParticipant(db,p_id);
+                                }
+
                                 listener.onDialogPositiveClick(AddParticipantDialog.this, p_id);
                                 AddParticipantDialog.this.getDialog().dismiss();
                             }
@@ -120,10 +138,25 @@ public class AddParticipantDialog extends DialogFragment {
 
         return builder.create();
     }
+    public void fillEditText(Participant participant) {
+//        int id = participant.getId();
+        int prj_id = participant.getPrj_id();
+        int p_id = participant.getP_id();
+        int state = participant.getState();
+
+        et_p_id.setText(String.valueOf(p_id));
+
+    }
+
 
     @Override
     public void onStart() {
         super.onStart();
 //        getDialog().setCanceledOnTouchOutside(false);
+    }
+
+    public class Mode {
+        public static final int ADD = 0;
+        public static final int EDIT = 1;
     }
 }

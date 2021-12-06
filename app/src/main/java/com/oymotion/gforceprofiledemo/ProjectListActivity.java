@@ -52,7 +52,6 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
     private ProjectListAdapter projectListAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private GestureDetector gestureDetector;
     private AddProjectDialog addProjectDialog;
     private PopupDialog popupDialog;
     private ChangeCurrentProjectDialog changeCurrentProjectDialog;
@@ -90,8 +89,6 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
 
         }
     };
-
-
 
 
 

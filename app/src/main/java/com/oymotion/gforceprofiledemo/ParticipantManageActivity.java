@@ -1,5 +1,6 @@
 package com.oymotion.gforceprofiledemo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -33,7 +35,7 @@ import butterknife.OnClick;
  * Time: 15:20
  * Description:
  */
-public class ParticipantManageActivity extends AppCompatActivity implements AddParticipantDialog.NoticeDialogListener {
+public class ParticipantManageActivity extends AppCompatActivity implements AddParticipantDialog.NoticeDialogListener,PopupDialog.PopupDialogListener {
     private static final String TAG = "ParticipantManageActivity";
 
     @BindView(R.id.btn_add_participant)
@@ -44,11 +46,38 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
     private RecyclerView.LayoutManager layoutManager;
 
     private AddParticipantDialog addParticipantDialog;
+    private PopupDialog popupDialog;
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
     int prj_id = -1;
+    int p_id_clicked;
+    ArrayList<Participant> participantList;
 
+    private ParticipantListAdapter.OnItemListener onItemListener = new ParticipantListAdapter.OnItemListener() {
+        @Override
+        public void OnItemClickListener(View view, int position) {
+            int childAdapterPosition = rv_participantList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemClickListener: " +position+"child position:"+childAdapterPosition);
+//            Intent intent = new Intent(ParticipantManageActivity.this, ExperimentSettingMenuActivity.class);
+////            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//            p_id_clicked = participantList.get(childAdapterPosition).getPid();
+//            intent.putExtra("p_id", p_id_clicked);
+//            startActivity(intent);
+        }
+
+        @Override
+        public void OnItemLongClickListener(View view, int position) {
+            int childAdapterPosition = rv_participantList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemLongClickListener: "+childAdapterPosition);
+            p_id_clicked = participantList.get(childAdapterPosition).getP_id();
+            Log.i(TAG, "OnItemLongClickListener: " +"pid: "+p_id_clicked);
+            FragmentManager fm = getSupportFragmentManager();
+            popupDialog = new PopupDialog();
+            popupDialog.show(fm,"fragment_edit_delete_participant");
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,30 +89,25 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
             db = dbHelper.getWritableDatabase();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
 
+        Intent intent = this.getIntent();
+        prj_id = intent.getIntExtra("prj_id", -1);
+
+        Log.i(TAG, "onCreate: "+prj_id);
         btn_add = findViewById(R.id.btn_add_participant);
         initData();
         initView();
-
-//        btn_add.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btn_add.setText("testtttt");
-//            }
-//        });
-
-
-//        itemBackgroundColor = ContextCompat.getColor(ParticipantManageActivity.this, R.color.selected);
-//        configureResultList();
     }
-
 
     private void initData() {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        participantListAdapter = new ParticipantListAdapter(getData());
+        participantList = getData();
+        participantListAdapter = new ParticipantListAdapter(participantList);
+        participantListAdapter.setOnItemListener(onItemListener);
+
     }
 
     private void initView() {
@@ -104,54 +128,10 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
     @OnClick(R.id.btn_add_participant)
     public void onAddClick() {
         FragmentManager fm = getSupportFragmentManager();
-        addParticipantDialog = new AddParticipantDialog();
+        addParticipantDialog = new AddParticipantDialog(prj_id,-1);
         addParticipantDialog.show(fm,"fragment_add_participant");
 
     }
-
-
-//    private void configureResultList() {
-//        rv_participantList.setHasFixedSize(true);
-//        rv_participantList.setItemAnimator(null);
-//        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
-//        rv_participantList.setLayoutManager(recyclerLayoutManager);
-//        participantListAdapter = new ParticipantListAdapter();
-//        rv_participantList.setAdapter(participantListAdapter);
-//        rv_participantList.setOnAdapterItemClickListener(view -> {
-//            final int childAdapterPosition = rv_participantList.getChildAdapterPosition(view);
-//            final ScanResult itemAtPosition = participantListAdapter.getItemAtPosition(childAdapterPosition);
-//            onAdapterItemClick(itemAtPosition);
-//
-//            //when selected, item view is highlighted
-//            view.setBackgroundColor(itemBackgroundColor);
-//        });
-//    }
-//
-//    private void onAdapterItemClick(ScanResult scanResults) {
-////        final Intent intent = new Intent(this, DeviceActivity.class);
-////        intent.putExtra(DeviceActivity.EXTRA_DEVICE_NAME, scanResults.getBluetoothDevice().getName());
-////        intent.putExtra(DeviceActivity.EXTRA_MAC_ADDRESS, scanResults.getBluetoothDevice().getAddress());
-////        startActivity(intent);
-//
-//        //test for save bluetooth devices info and transfer
-//        String extra_device_name = scanResults.getBluetoothDevice().getName();
-//        String extra_mac_address = scanResults.getBluetoothDevice().getAddress();
-//        int hand = Device.checkDeviceLR(db, extra_mac_address);
-//        if(!isExist(extra_mac_address)) {
-//            if (hand == 0){
-//
-//                leftSelected.setBackground(getDrawable(R.drawable.round_purple));
-//            }else if(hand == 1){
-//                rightSelected.setBackground(getDrawable(R.drawable.round_purple));
-//            }
-//            btList.add(new Bluetooth(extra_device_name,extra_mac_address));
-//            count_selected ++;
-//        }
-//        if(count_selected == 2){
-//            nextButton.setEnabled(true);
-//        }
-//
-//    }
 
 
     @Override
@@ -166,11 +146,7 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
     protected void onDestroy() {
         super.onDestroy();
     }
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//    }
+
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int p_id) {
@@ -182,5 +158,37 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
     public void onDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
 
+    }
+
+
+
+    @Override
+    public void onDialogEditClick(DialogFragment dialog) {
+        FragmentManager fm = getSupportFragmentManager();
+        //reuse add dialog to update
+        Log.i(TAG, "onDialogEditClick: "+prj_id+"-"+p_id_clicked);
+        addParticipantDialog = new AddParticipantDialog(prj_id, p_id_clicked);
+        addParticipantDialog.show(fm,"fragment_add_participant");
+    }
+
+    @Override
+    public void onDialogDeleteClick(DialogFragment dialog) {
+        new AlertDialog.Builder(this).setTitle("Delete Participant " +p_id_clicked+"?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Participant.deleteParticipant(db, p_id_clicked);
+                        Log.i(TAG, "delete participant: "+p_id_clicked);
+                        participantList = getData();
+                        participantListAdapter.updateData(participantList);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 }
