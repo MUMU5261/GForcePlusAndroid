@@ -21,7 +21,7 @@ public class DatabaseUtil {
         return timestamp;
     }
 
-    public static boolean InsertParticipant(SQLiteDatabase db, int p_id, String gender){
+    public static boolean InsertParticipant(SQLiteDatabase db, int p_id){
        Cursor cursor = db.query("Participant",new String[]{"p_id"},null,null,null,null,null,null);
        while (cursor.moveToNext()){
            int id = cursor.getInt(cursor.getColumnIndex("p_id"));
@@ -31,7 +31,7 @@ public class DatabaseUtil {
        }
         ContentValues values = new ContentValues();
         values.put("p_id", p_id);
-        values.put("gender", gender);
+//        values.put("gender", gender);
         values.put("timestamp", DatabaseUtil.getTimestamp());
         try {
             db.insert("Participant", null, values);

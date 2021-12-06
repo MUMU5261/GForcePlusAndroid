@@ -47,6 +47,7 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
 
     private AddParticipantDialog addParticipantDialog;
     private PopupDialog popupDialog;
+
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 

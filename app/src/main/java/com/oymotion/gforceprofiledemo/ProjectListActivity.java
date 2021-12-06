@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,7 +61,7 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
     private SharedPreferences preferences;
     private SharedPreferences .Editor editor;
 
-    int prj_id;
+    int prj_id_current;
     int prj_id_clicked;
     ArrayList<Project> projectList;
 
@@ -100,7 +99,7 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
         setTitle("Manage Projects");
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        prj_id = preferences.getInt("prj_id", -1);
+        prj_id_current = preferences.getInt("prj_id", -1);
 
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
@@ -148,13 +147,24 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
     @OnClick(R.id.btn_change_current_project)
     public void onChangeProjectClick() {
         FragmentManager fm = getSupportFragmentManager();
-        changeCurrentProjectDialog = new ChangeCurrentProjectDialog(projectList,prj_id);
+        changeCurrentProjectDialog = new ChangeCurrentProjectDialog(projectList, prj_id_current);
         changeCurrentProjectDialog.show(fm,"fragment_add_project");
 
     }
 
+
+    @OnClick(R.id.btn_back_to_home)
+    public void onBackHomeClick() {
+        Intent intent = new Intent(ProjectListActivity.this,LoginActivity.class);
+//        intent.putExtra("prj_id", prj_id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.i(TAG, "onExperimentClick: prj_id->" + prj_id_current);
+        startActivity(intent);
+    }
+
+
     public void updateCurrentProject(){
-        Project project = Project.getProject(db,prj_id);
+        Project project = Project.getProject(db, prj_id_current);
         if(project != null) {
             tv_prj_id.setText(String.valueOf(project.getPrj_id()));
             tv_prj_name.setText(project.getPrj_name());
@@ -180,9 +190,11 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
 
     @Override
     public void onChangeDialogPositiveClick(DialogFragment dialog, int prj_id) {
-        this.prj_id = prj_id;
+        this.prj_id_current = prj_id;
         editor = preferences.edit();
         editor.putInt("prj_id", prj_id);
+        editor.apply();
+        editor.clear();
         updateCurrentProject();
     }
 
@@ -191,6 +203,7 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
         dialog.getDialog().cancel();
 
     }
+
 
 
     @Override

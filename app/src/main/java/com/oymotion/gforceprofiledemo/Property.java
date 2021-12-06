@@ -40,6 +40,7 @@ public class Property {
         this.property = property;
         this.polarLow = low;
         this.polarHigh = high;
+
     }
 
     public String getProperty() {
@@ -56,9 +57,10 @@ public class Property {
 
     public int insertProperty(SQLiteDatabase db){
         values.put("prj_id", prj_id);
-        values.put("property", property);
+        values.put("ppt_name", property);
         values.put("polar_low", polarLow);
         values.put("polar_high", polarHigh);
+        values.put("state", 0);
         values.put("timestamp", DatabaseUtil.getTimestamp());
         try {
             id = (int) db.insert("Property", null, values);
@@ -74,10 +76,10 @@ public class Property {
     public static boolean updateValue(SQLiteDatabase db, int id, String property, String low, String high){
         ContentValues values = new ContentValues();
         try {
-            values.put("property", property);
+            values.put("ppt_name", property);
             values.put("polar_low", low);
             values.put("polar_high", high);
-            db.update("Property", values, "id=?", new String[]{String.valueOf(id)});//
+            db.update("Property", values, "id=? and state != ?", new String[]{String.valueOf(id),"2"});//
             values.clear();
             return true;
         } catch (NumberFormatException e) {
@@ -100,21 +102,32 @@ public class Property {
         }
     }
 
-    public static boolean deleteProperty(SQLiteDatabase db, int ppt_id) {
 
-        ContentValues values = new ContentValues();
+    static Property getProperty(SQLiteDatabase db, int id) {
+        Property property = new Property(-1,null,null,null);
+        Cursor result = null;
         try {
-            values.put("state", Participant.State.DELETED);
-            db.update("Property", values, "id=?", new String[]{String.valueOf(ppt_id)});//
-            db.update("Exploration", values, "ppt_id=?", new String[]{String.valueOf(ppt_id)});//
-//            db.update("Interaction", values, "p_id=?", new String[]{String.valueOf(prj_id)});
-            values.clear();
-            return true;
+            result = db.query("Property",null," id = ?",new String[]{String.valueOf(id)},null,null,null);
+
         } catch (NumberFormatException e) {
             Log.e(TAG, e.getMessage());
-            values.clear();
-            return false;
         }
+        if(result.getCount() == 0){
+            return null;
+        }else{
+            result.moveToNext();
+            int mId = result.getInt(0);
+            int prj_id = result.getInt(1);
+            String ppt_name = result.getString(2);
+            String polar_low = result.getString(3);
+            String polar_high = result.getString(4);
+            String state = result.getString(5);
+            property = new Property(mId,prj_id,ppt_name,polar_low,polar_high);
+            result.close();
+            return property;
+
+        }
+
     }
     static ArrayList<Property> getPropertyList(SQLiteDatabase db, int prj_id) {
         ArrayList<Property> propertyList = new ArrayList<>();
@@ -136,6 +149,38 @@ public class Property {
         return propertyList;
     }
 
+    public boolean updateProperty(SQLiteDatabase db, int id) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put("ppt_name", property);
+            values.put("polar_low", polarLow);
+            values.put("polar_high", polarHigh);
+            db.update("Property", values, "id=?", new String[]{String.valueOf(id)});//
+            values.clear();
+            return true;
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+            values.clear();
+            return false;
+        }
+    }
+    public static boolean deleteProperty(SQLiteDatabase db, int ppt_id) {
+
+
+        ContentValues values = new ContentValues();
+        try {
+            values.put("state", State.DELETED);
+            db.update("Property", values, "id=?", new String[]{String.valueOf(ppt_id)});//
+            db.update("Exploration", values, "ppt_id=?", new String[]{String.valueOf(ppt_id)});//
+//            db.update("Interaction", values, "p_id=?", new String[]{String.valueOf(prj_id)});
+            values.clear();
+            return true;
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+            values.clear();
+            return false;
+        }
+    }
     public class State {
         public static final int START = 0;
         public static final int COMPLETE = 1;

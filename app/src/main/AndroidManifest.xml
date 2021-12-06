@@ -48,11 +48,12 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".DeviceActivity" />
         <activity android:name=".ExperimentSettingMenuActivity" />
-<!--        <activity android:name=".ParticiProjectListActivitypantManageActivity" android:label="Manage Participant"/>-->
         <activity android:name=".ExperimentSettingActivity" android:label="Experiment Setting" />
-        <activity android:name=".ParticipantManageActivity" android:label="Experiment Setting" />
-<!--        <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />-->
-<!--        <activity android:name=".EditOpenQuestionsActivity" android:label="Manage Question" />-->
+        <activity android:name=".ParticipantManageActivity" android:label="Manage Participants" />
+        <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />
+        <activity android:name=".EditOpenQuestionsActivity" android:label="Manage Question" />
+        <activity android:name=".LoginActivity" android:label="LogIn" />
+        <activity android:name=".LoginAsResearcherActivity" android:label="Researcher Login" />
     </application>
 
 </manifest>

@@ -39,9 +39,15 @@ public class AddPropertyDialog extends DialogFragment{
     SQLiteDatabase db;
 
     int prj_id = -1;
+    int id;
+    int mode; //0:add;1:
 
-    public AddPropertyDialog() {
+
+    public AddPropertyDialog(int prj_id, int id) {
         super();
+        this.prj_id = prj_id;
+        this.id = id;
+        mode = (id == -1)? AddProjectDialog.Mode.ADD : AddProjectDialog.Mode.EDIT;
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -89,12 +95,19 @@ public class AddPropertyDialog extends DialogFragment{
         et_polar_low = (EditText)rootView.findViewById(R.id.et_polar_low);
         et_polar_high = (EditText)rootView.findViewById(R.id.et_polar_high);
         tv_prompt = (TextView) rootView.findViewById(R.id.tv_prompt);
+
+        if (mode == AddPropertyDialog.Mode.EDIT) {
+            Property property =  Property.getProperty(db,id);
+            fillEditText(property);
+        }
+
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout\
 
+
         builder.setView(rootView)
                 // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton((mode == AddProjectDialog.Mode.ADD)? "add":"save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
@@ -105,11 +118,18 @@ public class AddPropertyDialog extends DialogFragment{
                                 Toast.makeText(context, "Fields can't be empty", Toast.LENGTH_LONG).show();
                             }else{
                                 Property property = new Property(prj_id,property_name,polarLow,polarHigh);
-                                int id_new = property.insertProperty(db);
-                                Log.i(TAG, "onClick: "+ id_new);
+
+                                if(mode == AddPropertyDialog.Mode.ADD){
+                                    int id_new = property.insertProperty(db);
+                                    Log.i(TAG, "onClick: "+ id_new);
+                                }else{
+                                    property.updateProperty(db,id);
+                                }
                                 listener.onDialogPositiveClick(AddPropertyDialog.this);
                                 AddPropertyDialog.this.getDialog().dismiss();
                             }
+
+                        Log.i(TAG, "onClick: "+id);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -120,10 +140,27 @@ public class AddPropertyDialog extends DialogFragment{
 
         return builder.create();
     }
+    public void fillEditText(Property property) {
+        int id = property.getId();
+        String mproperty = property.getProperty();
+        String polar_low = property.getPolarLow();
+        String polar_high = property.getPolarHigh();
+
+        et_property.setText(mproperty);
+        et_polar_low.setText(polar_low);
+        et_polar_high.setText(polar_high);
+
+    }
+
 
     @Override
     public void onStart() {
         super.onStart();
         getDialog().setCanceledOnTouchOutside(false);
+    }
+
+    public class Mode {
+        public static final int ADD = 0;
+        public static final int EDIT = 1;
     }
 }

@@ -44,31 +44,31 @@
                 <!--                    />-->
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+<!--            <LinearLayout-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
 
 
-                <TextView
-                    android:id="@+id/tv_cloth_number"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="Clothes No"
-                    android:textColor="@color/black"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_cloth_number"-->
+<!--                    android:layout_width="100dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="right"-->
+<!--                    android:text="Clothes No"-->
+<!--                    android:textColor="@color/black"/>-->
 
-                <EditText
-                    android:id="@+id/et_cloth_number"
-                    android:layout_width="@dimen/et_login_width"
-                    android:layout_height="@dimen/et_login_height"
-                    android:focusable="false"
-                    android:layout_marginStart="20dp"
-                    android:text="3"
+<!--                <EditText-->
+<!--                    android:id="@+id/et_cloth_number"-->
+<!--                    android:layout_width="@dimen/et_login_width"-->
+<!--                    android:layout_height="@dimen/et_login_height"-->
+<!--                    android:focusable="false"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:text="3"-->
 
-                    android:background="@drawable/round_corners_bg"
-                    android:inputType="number" />
-            </LinearLayout>
+<!--                    android:background="@drawable/round_corners_bg"-->
+<!--                    android:inputType="number" />-->
+<!--            </LinearLayout>-->
 
 
             <LinearLayout

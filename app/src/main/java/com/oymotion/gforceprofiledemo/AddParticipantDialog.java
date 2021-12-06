@@ -107,7 +107,7 @@ public class AddParticipantDialog extends DialogFragment {
                         String id_str = et_p_id.getText().toString();
                         if (!id_str.isEmpty()) {
                             int p_id = Integer.valueOf(id_str);
-                            if(Participant.isIDExist(db,p_id) && mode == AddProjectDialog.Mode.ADD){
+                            if(Participant.isIDExist(db,prj_id,p_id) && mode == AddProjectDialog.Mode.ADD){
                                 Toast.makeText(context, "Participant ID Exist.", Toast.LENGTH_LONG).show();
                                 AddParticipantDialog.this.getDialog().show();
                             }else{

@@ -41,6 +41,24 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/next_margin_big"
+                android:background="@drawable/round_corners_bg"
+                android:orientation="vertical"
+                android:outlineAmbientShadowColor="@color/black"
+                android:padding="@dimen/activity_vertical_margin">
+                <Button
+                    android:id="@+id/btn_back_to_home"
+                    android:layout_width="@dimen/next_width"
+                    android:layout_height="@dimen/et_login_height"
+                    android:layout_gravity="center"
+                    android:text="Back to Log in" />
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

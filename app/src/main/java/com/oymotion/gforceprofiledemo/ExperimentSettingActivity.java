@@ -25,8 +25,8 @@ public class ExperimentSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "ExperimentSettingActivi";
 
-    @BindView(R.id.et_cloth_number)
-    EditText et_cloth_number;
+//    @BindView(R.id.et_cloth_number)
+//    EditText et_cloth_number;
     @BindView(R.id.et_explore_time)
     EditText et_explore_time;
     @BindView(R.id.et_rating_scale)
@@ -40,9 +40,12 @@ public class ExperimentSettingActivity extends AppCompatActivity {
     Button btn_open_question_edit;
 
     boolean isEditing = false;
+    int prj_id;
+
+    Intent intent;
 
 
-    int clothesNo;
+//    int clothesNo;
     int exploreTime;
     int rating;
 
@@ -56,9 +59,12 @@ public class ExperimentSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_experiment_setting);
         ButterKnife.bind(this);
         this.setTitle("Experiment Setting");
-        et_cloth_number.setFocusable(false);
+////        et_cloth_number.setFocusable(false);
         et_explore_time.setFocusable(false);
         et_rating_scale.setFocusable(false);
+
+        intent = getIntent();
+        prj_id = intent.getIntExtra("prj_id", -1);
 
         updatePreference();
 
@@ -67,14 +73,14 @@ public class ExperimentSettingActivity extends AppCompatActivity {
     private void updatePreference() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        clothesNo = preferences.getInt("clothes_no", 3);
+//        clothesNo = preferences.getInt("clothes_no", 3);
         exploreTime = preferences.getInt("explore_time", 15);
         rating = preferences.getInt("rating", 7);
 
-        et_cloth_number.setFocusableInTouchMode(false);
+//        et_cloth_number.setFocusableInTouchMode(false);
         et_explore_time.setFocusableInTouchMode(false);
         et_rating_scale.setFocusableInTouchMode(false);
-        et_cloth_number.setFocusable(false);
+//        et_cloth_number.setFocusable(false);
         et_explore_time.setFocusable(false);
         et_rating_scale.setFocusable(false);
 
@@ -87,61 +93,64 @@ public class ExperimentSettingActivity extends AppCompatActivity {
 
             editor = preferences.edit();
 
-            String clothesNo_str = et_cloth_number.getText().toString();
+//            String clothesNo_str = et_cloth_number.getText().toString();
             String exploreTime_str = et_explore_time.getText().toString();
             String rating_str = et_rating_scale.getText().toString();
-            if(clothesNo_str.isEmpty() || exploreTime_str.isEmpty()||rating_str.isEmpty()){
+            if(exploreTime_str.isEmpty()||rating_str.isEmpty()){
                 Toast.makeText(this, "Field can't be empty",Toast.LENGTH_LONG).show();
                 return;
             }else{
                 isEditing = false;
                 btn_edit.setText("Edit");
-                et_cloth_number.setFocusableInTouchMode(false);
+//                et_cloth_number.setFocusableInTouchMode(false);
                 et_explore_time.setFocusableInTouchMode(false);
                 et_rating_scale.setFocusableInTouchMode(false);
 
-                et_cloth_number.setFocusable(false);
+//                et_cloth_number.setFocusable(false);
                 et_explore_time.setFocusable(false);
                 et_rating_scale.setFocusable(false);
-                clothesNo = Integer.valueOf(clothesNo_str);
+//                clothesNo = Integer.valueOf(clothesNo_str);
                 exploreTime = Integer.valueOf(exploreTime_str);
                 rating = Integer.valueOf(rating_str);
-                editor.putInt("clothes_no",clothesNo);
-                editor.putInt("explore_time",exploreTime);
+//                editor.putInt("clothes_no",clothesNo);
+                editor.putInt("explore_time",exploreTime);//later mapping to projects
                 editor.putInt("rating",rating);
                 editor.apply();
+                editor.clear();
             }
         }else{
             isEditing = true;
             btn_edit.setText("Save");
-            et_cloth_number.setFocusableInTouchMode(true);
+//            et_cloth_number.setFocusableInTouchMode(true);
             et_explore_time.setFocusableInTouchMode(true);
             et_rating_scale.setFocusableInTouchMode(true);
 
-            et_cloth_number.setFocusable(true);
+//            et_cloth_number.setFocusable(true);
             et_explore_time.setFocusable(true);
             et_rating_scale.setFocusable(true);
 
-            et_cloth_number.requestFocus();
+//            et_cloth_number.requestFocus();
             et_explore_time.requestFocus();
             et_rating_scale.requestFocus();
         }
 
     }
 
-//    @OnClick(R.id.btn_properties_edit)
-//    public void onEditPropertyClick() {
-//        Intent intent = new Intent(ExperimentSettingActivity.this,EditPropertiesActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
-//
-//    @OnClick(R.id.btn_open_question_edit)
-//    public void onEditOpenQuestionClick() {
-//        Intent intent = new Intent(ExperimentSettingActivity.this,EditOpenQuestionsActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
+    @OnClick(R.id.btn_properties_edit)
+    public void onEditPropertyClick() {
+        intent = new Intent(ExperimentSettingActivity.this,EditPropertiesActivity.class);
+        intent.putExtra("prj_id", prj_id);
+        startActivity(intent);
+        finish();
+    }
+
+    @OnClick(R.id.btn_open_question_edit)
+    public void onEditOpenQuestionClick() {
+        intent = new Intent(ExperimentSettingActivity.this,EditOpenQuestionsActivity.class);
+        intent.putExtra("prj_id", prj_id);
+        startActivity(intent);
+        finish();
+    }
 
 
 

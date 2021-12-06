@@ -51,8 +51,7 @@
                 android:layout_width="@dimen/et_login_width"
                 android:layout_height="@dimen/et_login_height"
                 android:layout_marginStart="20dp"
-                android:background="@drawable/round_corners_bg"
-                android:inputType="number" />
+                android:background="@drawable/round_corners_bg" />
         </LinearLayout>
 
 

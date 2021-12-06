@@ -73,6 +73,15 @@ public class ExperimentSettingMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.btn_back_to_home)
+    public void onBackHomeClick() {
+        Intent intent = new Intent(ExperimentSettingMenuActivity.this,LoginActivity.class);
+//        intent.putExtra("prj_id", prj_id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.i(TAG, "onExperimentClick: prj_id->" +prj_id);
+        startActivity(intent);
+    }
+
     private void setIntent() {
         Intent intent = new Intent(ExperimentSettingMenuActivity.this,ExperimentSettingActivity.class);
 //        what is set flag

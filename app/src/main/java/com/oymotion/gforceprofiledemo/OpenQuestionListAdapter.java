@@ -25,6 +25,7 @@ public class OpenQuestionListAdapter extends RecyclerView.Adapter<OpenQuestionLi
     private static final String TAG = "OpenQuestionListAdapter";
 
     private List<Question> questionList;
+    private OpenQuestionListAdapter.OnItemListener onItemListener;
 
     public OpenQuestionListAdapter(ArrayList<Question> data) {
         this.questionList = data;
@@ -42,6 +43,10 @@ public class OpenQuestionListAdapter extends RecyclerView.Adapter<OpenQuestionLi
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_open_question_list_item, parent, false);
         // 实例化viewholder
         OpenQuestionListAdapter.ViewHolder viewHolder = new OpenQuestionListAdapter.ViewHolder(v);
+
+        v.setOnClickListener(new OpenQuestionListAdapter.OnItemTouchListener());
+        v.setOnLongClickListener(new OpenQuestionListAdapter.OnItemTouchListener());
+
         return viewHolder;
     }
 
@@ -68,4 +73,33 @@ public class OpenQuestionListAdapter extends RecyclerView.Adapter<OpenQuestionLi
             tv_question = (TextView) itemView.findViewById(R.id.tv_item_open_question);
         }
     }
+
+    public void setOnItemListener(OpenQuestionListAdapter.OnItemListener listener){
+        this.onItemListener = listener;
+    }
+
+
+    class OnItemTouchListener implements View.OnClickListener,View.OnLongClickListener{
+
+        @Override
+        public void onClick(View v) {
+            if (onItemListener != null){
+                onItemListener.OnItemClickListener(v, v.getId());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (onItemListener != null){
+                onItemListener.OnItemLongClickListener(v,v.getId());
+            }
+            return true;
+        }
+    }
+
+    public interface OnItemListener{
+        void OnItemClickListener(View view, int position);
+        void OnItemLongClickListener(View view, int position);
+    }
+
 }

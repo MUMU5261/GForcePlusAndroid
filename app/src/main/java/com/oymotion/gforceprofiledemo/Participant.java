@@ -181,9 +181,10 @@ public class Participant {
         return p_id;
     }
 
-    static boolean isIDExist(SQLiteDatabase db, int p_id){
+    static boolean isIDExist(SQLiteDatabase db, int prj_id,int p_id){
         try {
-            Cursor result = db.query("Participant",new String[]{"p_id"},"p_id = ? and state != ?",new String[]{String.valueOf(p_id),String.valueOf(State.DELETED)},null,null,null);
+            Cursor result = db.query("Participant",new String[]{"p_id"},"prj_id = ? and p_id = ? and state != ?",
+                    new String[]{String.valueOf(prj_id),String.valueOf(p_id),String.valueOf(State.DELETED)},null,null,null);
             while (result.moveToNext()){
                 int id = result.getInt(0);
                 if(p_id == id){

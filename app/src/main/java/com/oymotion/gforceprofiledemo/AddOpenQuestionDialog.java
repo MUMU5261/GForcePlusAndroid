@@ -33,9 +33,16 @@ public class AddOpenQuestionDialog extends DialogFragment {
 
     GForceDatabaseOpenHelper dbHelper;
     SQLiteDatabase db;
+    int prj_id;
+    int id ;
+    int mode; //0:add;1:
 
-    public AddOpenQuestionDialog() {
+
+    public AddOpenQuestionDialog(int prj_id,int id) {
         super();
+        this.prj_id = prj_id;
+        this.id = id;
+        mode = (id == -1)? AddOpenQuestionDialog.Mode.ADD : AddOpenQuestionDialog.Mode.EDIT;
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -83,10 +90,14 @@ public class AddOpenQuestionDialog extends DialogFragment {
         tv_prompt = (TextView) rootView.findViewById(R.id.tv_prompt);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout\
+        if (mode == AddOpenQuestionDialog.Mode.EDIT) {
+            Question question = Question.getQuestion(db,id);
+            fillEditText(question);
+        }
 
         builder.setView(rootView)
                 // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton((mode == AddOpenQuestionDialog.Mode.ADD)? "add":"save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
@@ -94,9 +105,14 @@ public class AddOpenQuestionDialog extends DialogFragment {
                         if (question_con.isEmpty()) {
                             Toast.makeText(context, "Fields can't be empty", Toast.LENGTH_LONG).show();
                         }else{
-                            Question question = new Question(-1,question_con);
-                            int id_new = question.insertProperty(db);
-                            Log.i(TAG, "onClick: "+ id_new);
+                            Question question = new Question(prj_id,question_con,0);
+
+                            if(mode == AddOpenQuestionDialog.Mode.ADD){
+                                int id_new = question.insertQuestion(db);
+                                Log.i(TAG, "onClick: "+ id_new);
+                            }else{
+                                question.updateQuestion(db,id);
+                            }
                             listener.onDialogPositiveClick(AddOpenQuestionDialog.this);
                             AddOpenQuestionDialog.this.getDialog().dismiss();
                         }
@@ -111,9 +127,23 @@ public class AddOpenQuestionDialog extends DialogFragment {
         return builder.create();
     }
 
+    public void fillEditText(Question question) {
+        int id = question.getId();
+        int prjId = question.getPrj_id();
+        String content = question.getContent();
+        int isMandatory = question.getIsMandatory();
+        et_question.setText(content);
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();
         getDialog().setCanceledOnTouchOutside(false);
+    }
+
+    public class Mode {
+        public static final int ADD = 0;
+        public static final int EDIT = 1;
     }
 }

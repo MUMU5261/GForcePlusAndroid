@@ -57,7 +57,7 @@ public class LoginAsResearcherActivity extends AppCompatActivity {
                 return;
             } else {
                 Toast.makeText(this, "Login success.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(LoginAsResearcherActivity.this, ExperimentSettingActivity.class);
+                Intent intent = new Intent(LoginAsResearcherActivity.this, ProjectListActivity.class);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 //NEED TO BACK reLogin
                 startActivity(intent);
