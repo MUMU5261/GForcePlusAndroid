@@ -26,33 +26,77 @@
                 android:textSize="20dp"
                 android:textColor="@color/purple_700"
                 android:layout_marginBottom="5dp"/>
-            <TextView
-                android:id="@+id/tv_prj_id"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textSize="20dp"
-                android:textColor="@color/purple_700"
-                android:layout_marginBottom="5dp"
-                android:text="Project ID" />
-            <TextView
-                android:id="@+id/tv_prj_name"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Project ID: " />
+                <TextView
+                    android:id="@+id/tv_prj_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Project ID" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textSize="20dp"
-                android:textColor="@color/purple_700"
-                android:layout_marginBottom="5dp"
-                android:text="Project Name" />
-            <TextView
-                android:id="@+id/tv_researcher"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Project Name: " />
+                <TextView
+                    android:id="@+id/tv_prj_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Project Name" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textSize="20dp"
-                android:textColor="@color/purple_700"
-                android:layout_marginBottom="5dp"
-                android:text="Researcher" />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Researcher: " />
+
+                <TextView
+                    android:id="@+id/tv_researcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Researcher" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_change_current_project"
                 android:layout_width="match_parent"
@@ -97,7 +141,6 @@
             android:layout_gravity="center"
             android:text="ADD"
             android:width="@dimen/next_width"/>
-        <!--    click， show input information button-->
 
     </LinearLayout>
 

@@ -104,6 +104,31 @@ public class Project {
         }
     }
 
+    static Project getProject(SQLiteDatabase db, int prj_id) {
+        Project project = new Project(-1,null,null);
+        Cursor result = null;
+        try { 
+            result = db.query("Project",null,"prj_id = ?",new String[]{String.valueOf(prj_id)},null,null,null);
+            
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        if(result.getCount() == 0){
+            return null;
+        }else{
+            result.moveToNext();
+            int id = result.getInt(0);
+            int prjId = result.getInt(1);
+            String prj_name = result.getString(2);
+            String researcher = result.getString(3);
+            int state = result.getInt(4);
+            project = new Project(id,prj_id,prj_name,researcher,state);
+            result.close();
+            return project;
+        }
+        
+    }
+
     static ArrayList<Project> getProjectList(SQLiteDatabase db) {
         ArrayList<Project> projectList = new ArrayList<>();
         try {
@@ -124,6 +149,20 @@ public class Project {
         return projectList;
     }
 
+    public boolean updateProject(SQLiteDatabase db, int id) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put("prj_name", prj_name);
+            values.put("researcher", researcher);
+            db.update("Project", values, "prj_id=?", new String[]{String.valueOf(id)});//
+            values.clear();
+            return true;
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+            values.clear();
+            return false;
+        }
+    }
     public static boolean deleteProject(SQLiteDatabase db, int id) {
         ContentValues values = new ContentValues();
         try {
@@ -147,6 +186,7 @@ public class Project {
     static boolean isIDExist(SQLiteDatabase db, int prj_id){
         try {
             Cursor result = db.query("Project",new String[]{"prj_id"},null,null,null,null,null);
+//            Cursor result = db.query("Project",new String[]{"prj_id"},"state != ?", new String[]{String.valueOf(State.DELETED)},null,null,null);
             while (result.moveToNext()){
                 int id = result.getInt(0);
                 if(prj_id == id){

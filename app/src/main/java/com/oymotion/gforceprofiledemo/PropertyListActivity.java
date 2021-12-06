@@ -22,74 +22,73 @@ import butterknife.OnClick;
 /**
  * Created by Android Studio.
  * User: lilil
- * Date: 02/12/2021
- * Time: 20:22
+ * Date: 05/12/2021
+ * Time: 03:31
  * Description:
  */
-public class EditOpenQuestionsActivity extends AppCompatActivity implements AddOpenQuestionDialog.NoticeDialogListener{
+public class PropertyListActivity extends AppCompatActivity implements AddPropertyDialog.NoticeDialogListener {
+    private static final String TAG = "PropertyManageActivity";
 
-    private static final String TAG = "EditOpenQuestionsActivity";
-    @BindView(R.id.btn_add_question)
-    Button btn_add_question;
+    @BindView(R.id.btn_add_property)
+    Button btn_add;
 
-    private RecyclerView rv_openQuestionList;
-    private OpenQuestionListAdapter openQuestionListAdapter;
+    private RecyclerView rv_propertyList;
+    private PropertyListAdapter propertyListAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private AddOpenQuestionDialog addOpenQuestionDialog;
 
+    private AddPropertyDialog addPropertyDialog;
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
-    int prj_id =-1;
+    int prj_id = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_open_questions);
+        setContentView(R.layout.activity_project_list);
         ButterKnife.bind(this);
-        setTitle("Manage Open Question");
+        setTitle("Manage Properties");
+
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
             db = dbHelper.getWritableDatabase();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
 
+        btn_add = findViewById(R.id.btn_add_property);
         initData();
         initView();
-
     }
-
 
     private void initData() {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        openQuestionListAdapter = new OpenQuestionListAdapter(getData());
+        propertyListAdapter = new PropertyListAdapter(getData());
     }
 
     private void initView() {
-        rv_openQuestionList = (RecyclerView) findViewById(R.id.rv_open_question_list);
+        rv_propertyList = (RecyclerView) findViewById(R.id.rv_project_list);
         // 设置布局管理器
-        rv_openQuestionList.setLayoutManager(layoutManager);
+        rv_propertyList.setLayoutManager(layoutManager);
         // 设置adapter
-        rv_openQuestionList.setAdapter(openQuestionListAdapter);
+        rv_propertyList.setAdapter(propertyListAdapter);
     }
 
     @NotNull
-    private ArrayList<Question> getData() {
-        ArrayList<Question> data = new ArrayList<>();
-        data = Question.getQuestionList(db,prj_id);
+    private ArrayList<Property> getData() {
+        ArrayList<Property> data = new ArrayList<>();
+        data = Property.getPropertyList(db,prj_id);
         return data;
     }
 
-    @OnClick(R.id.btn_add_question)
-    public void onAddOpenQuestionClick() {
-        Log.i(TAG, "onAddClick: tetstt");
+    @OnClick(R.id.btn_add_property)
+    public void onAddClick() {
         FragmentManager fm = getSupportFragmentManager();
-        addOpenQuestionDialog = new AddOpenQuestionDialog();
-        addOpenQuestionDialog.show(fm,"fragment_add_open_question");
+        addPropertyDialog = new AddPropertyDialog();
+        addPropertyDialog.show(fm,"fragment_add_property");
 
     }
-
 
 
     @Override
@@ -105,16 +104,11 @@ public class EditOpenQuestionsActivity extends AppCompatActivity implements AddO
         super.onDestroy();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//    }
-
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i(TAG, "onDialogPositiveClick: ");
-        openQuestionListAdapter.updateData(getData());
+        propertyListAdapter.updateData(getData());
     }
 
     @Override

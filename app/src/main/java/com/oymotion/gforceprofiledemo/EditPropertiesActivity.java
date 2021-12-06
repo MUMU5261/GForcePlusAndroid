@@ -42,6 +42,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
+    int prj_id = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
     @NotNull
     private ArrayList<Property> getData() {
         ArrayList<Property> data = new ArrayList<>();
-        data = Property.getPropertyList(db);
+        data = Property.getPropertyList(db, prj_id);
         return data;
     }
 

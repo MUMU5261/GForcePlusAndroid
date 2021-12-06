@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,14 @@ public class AddProjectDialog extends DialogFragment {
     GForceDatabaseOpenHelper dbHelper;
     SQLiteDatabase db;
 
-    public AddProjectDialog() {
+    int prj_id;
+    int id ;
+    int mode; //0:add;1:
+
+    public AddProjectDialog(int prj_id) {
         super();
+        this.prj_id = prj_id;
+        mode = (prj_id == -1)? Mode.ADD : Mode.EDIT;
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -83,9 +90,15 @@ public class AddProjectDialog extends DialogFragment {
         et_prj_name = (EditText)rootView.findViewById(R.id.et_prj_name);
         et_researcher = (EditText)rootView.findViewById(R.id.et_researcher);
 
+        if (mode == Mode.EDIT) {
+            Project project = Project.getProject(db,prj_id);
+            fillEditText(project);
+            et_prj_id.setFocusable(false);
+        }
+
         builder.setView(rootView)
                 // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton((mode == Mode.ADD)? "add":"save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // sign in the user ...
@@ -96,18 +109,21 @@ public class AddProjectDialog extends DialogFragment {
                             Toast.makeText(context, "Fields can not be empty.", Toast.LENGTH_LONG).show();
                         }else{
                             int prj_id = Integer.valueOf(prj_id_str);
-                            if(Participant.isIDExist(db,Integer.valueOf(prj_id))){
+                            if(Project.isIDExist(db,Integer.valueOf(prj_id)) && mode == Mode.ADD){
                                 Toast.makeText(context, "Project ID Exist.", Toast.LENGTH_LONG).show();
                                 AddProjectDialog.this.getDialog().show();
                             }else{
                                 Project project = new Project(prj_id,prj_name_str,researcher_str);
                                 Log.i(TAG, "onClick: "+prj_id_str);
-                                project.insertProject(db);
+                                if(mode == Mode.ADD){
+                                    project.insertProject(db);
+                                }else{
+                                    project.updateProject(db,prj_id);
+                                }
                                 listener.onDialogPositiveClick(AddProjectDialog.this);
                                 AddProjectDialog.this.getDialog().dismiss();
                             }
                         }
-
                         Log.i(TAG, "onClick: "+prj_id_str);
                     }
                 })
@@ -120,9 +136,26 @@ public class AddProjectDialog extends DialogFragment {
         return builder.create();
     }
 
+    public void fillEditText(Project project) {
+        int id = project.getId();
+        int prj_id = project.getPrj_id();
+        String prj_name = project.getPrj_name();
+        String researcher = project.getResearcher();
+
+        et_prj_id.setText(String.valueOf(prj_id));
+        et_prj_name.setText(prj_name);
+        et_researcher.setText(researcher);
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         getDialog().setCanceledOnTouchOutside(false);
+    }
+
+    public class Mode {
+        public static final int ADD = 0;
+        public static final int EDIT = 1;
     }
 }

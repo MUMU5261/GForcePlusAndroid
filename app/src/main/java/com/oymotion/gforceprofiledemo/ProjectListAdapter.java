@@ -25,6 +25,8 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     private static final String TAG = "ProjectListAdapter";
 
     private List<Project> projectList;
+    private OnItemListener onItemListener;
+
 
     public ProjectListAdapter(ArrayList<Project> data) {
         this.projectList = data;
@@ -42,6 +44,10 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_project_list_item, parent, false);
         // 实例化viewholder
         ProjectListAdapter.ViewHolder viewHolder = new ProjectListAdapter.ViewHolder(v);
+
+        v.setOnClickListener(new OnItemTouchListener());
+        v.setOnLongClickListener(new OnItemTouchListener());
+
         return viewHolder;
     }
 
@@ -75,6 +81,37 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
             tv_project_name = (TextView) itemView.findViewById(R.id.tv_item_prj_name);
             tv_researcher = (TextView) itemView.findViewById(R.id.tv_item_researcher);
         }
+    }
+
+
+
+
+    public void setOnItemListener(OnItemListener listener){
+        this.onItemListener = listener;
+    }
+
+
+    class OnItemTouchListener implements View.OnClickListener,View.OnLongClickListener{
+
+        @Override
+        public void onClick(View v) {
+            if (onItemListener != null){
+                onItemListener.OnItemClickListener(v, v.getId());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (onItemListener != null){
+                onItemListener.OnItemLongClickListener(v,v.getId());
+            }
+            return true;
+        }
+    }
+
+    public interface OnItemListener{
+        void OnItemClickListener(View view, int position);
+        void OnItemLongClickListener(View view, int position);
     }
 }
 

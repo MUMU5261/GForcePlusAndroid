@@ -36,6 +36,8 @@ public class ExperimentSettingMenuActivity extends AppCompatActivity {
     @BindView(R.id.btn_experiment)
     Button btn_experiment;
 
+    int prj_id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,18 @@ public class ExperimentSettingMenuActivity extends AppCompatActivity {
         this.setTitle("Setting Menu");
 
 //        updatePreference();
+        Intent intent = getIntent();
+        if (intent != null) {
+            prj_id = intent.getIntExtra("prj_id",-1);
+            Log.i(TAG, "onCreate: "+prj_id);
+        }
 
     }
 
     @OnClick(R.id.btn_participant)
     public void onParticipantClick() {
         Intent intent = new Intent(ExperimentSettingMenuActivity.this,ParticipantManageActivity.class);
+        intent.putExtra("prj_id", prj_id);
         startActivity(intent);
         finish();
     }
@@ -61,6 +69,7 @@ public class ExperimentSettingMenuActivity extends AppCompatActivity {
 //        what is set flag
 //        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.putExtra("p_id",p_id);
+        intent.putExtra("prj_id", prj_id);
         startActivity(intent);
         finish();
     }

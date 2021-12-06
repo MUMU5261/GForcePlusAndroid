@@ -15,6 +15,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "GForceDatabaseOpenHelper";
     public static final String Create_Participant = "create table Participant ("
             + "id integer primary key autoincrement,"
+            + "prj_id integer,"
             + "p_id integer NOT NULL,"
             + "state integer default 0," // "0" : incomplete, "1":complete
             + "timestamp text NOT NULL)";
@@ -252,6 +253,8 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
         Toast.makeText(mContext,"create succeed", Toast.LENGTH_SHORT).show();
         Log.i(TAG,"Create database successful");
 
+
+
         String extra_device_name_r = "gForcePro+(6549)";
         String extra_mac_address_r = "A4:34:F1:89:65:49";
         String extra_device_name_l = "gForcePro+(529C)";
@@ -276,7 +279,6 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
 
         Device.insertDeviceInfo(db, 5, extra_device_name_l2, extra_mac_address_l2, 0);
         Device.insertDeviceInfo(db, 6, extra_device_name_r2, extra_mac_address_r2, 1);
-
 
         //extra_device_name_l:gForcePro+(622A)extra_mac_address_l:A4:34:F1:89:62:2A
         //extra_device_name_r:gForcePro+(64F0)extra_mac_address_r:A4:34:F1:89:64:F0

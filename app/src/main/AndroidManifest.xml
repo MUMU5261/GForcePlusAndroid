@@ -36,7 +36,7 @@
         <activity android:name=".InteractionActivity" />
         <activity android:name=".SetupDevicesActivity" />
         <activity
-            android:name=".EditOpenQuestionsActivity"
+            android:name=".ProjectListActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.GForceProfileDemo.NoActionBar">
             <intent-filter>
@@ -48,8 +48,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".DeviceActivity" />
         <activity android:name=".ExperimentSettingMenuActivity" />
-<!--        <activity android:name=".ParticipantManageActivity" android:label="Manage Participant"/>-->
+<!--        <activity android:name=".ParticiProjectListActivitypantManageActivity" android:label="Manage Participant"/>-->
         <activity android:name=".ExperimentSettingActivity" android:label="Experiment Setting" />
+        <activity android:name=".ParticipantManageActivity" android:label="Experiment Setting" />
 <!--        <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />-->
 <!--        <activity android:name=".EditOpenQuestionsActivity" android:label="Manage Question" />-->
     </application>
