@@ -72,6 +72,7 @@ public class InteractionActivity extends AppCompatActivity {
     int p_id;
     int e_id;
     int clt_id;
+    int prj_id;
 
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
@@ -247,46 +248,47 @@ public class InteractionActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_next)
     public void onNextClick() {
-//        switch (itr_type) {
-//            case Interaction.Type.FREE:
-//            case Interaction.Type.SMOOTH:
-//            case Interaction.Type.SOFT:
-//            case Interaction.Type.WARMTH:
-//            case Interaction.Type.THICKNESS:
+////        switch (itr_type) {
+////            case Interaction.Type.FREE:
+////            case Interaction.Type.SMOOTH:
+////            case Interaction.Type.SOFT:
+////            case Interaction.Type.WARMTH:
+////            case Interaction.Type.THICKNESS:
+////        }
+//        if (interaction.updateState(db, Interaction.State.FINISHED)) {
+//            app.setInteractionState(Interaction.State.FINISHED);
+//        } else {
+//            Toast.makeText(InteractionActivity.this, "Failed Exploration", Toast.LENGTH_LONG).show();
 //        }
-        if (interaction.updateState(db, Interaction.State.FINISHED)) {
-            app.setInteractionState(Interaction.State.FINISHED);
-        } else {
-            Toast.makeText(InteractionActivity.this, "Failed Exploration", Toast.LENGTH_LONG).show();
-        }
-
-        Intent intent;
-        switch (itr_type) {
-            case Interaction.Type.RELAX:
-                app.setInteractionState(Interaction.State.START);
-                app.setInteractionType(Interaction.Type.FIST);
-                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
-                break;
-            case Interaction.Type.FIST:
+//
+//        Intent intent;
+//        switch (itr_type) {
+//            case Interaction.Type.RELAX:
 //                app.setInteractionState(Interaction.State.START);
-//                app.setInteractionType(Interaction.Type.FREE);
-                intent = new Intent(InteractionActivity.this, ImagePickerActivity.class);
-                break;
-            case Interaction.Type.FREE:
-                app.setInteractionState(Interaction.State.START);
-                app.setInteractionType(Interaction.Type.SMOOTH);
-                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
-                break;
-            case Interaction.Type.ENJOYMENT:
-                intent = new Intent(InteractionActivity.this, SurveyEnjoymentActivity.class);//WENT TO ENJOYMENT SURVEY PAGE
-                Log.i(TAG, String.valueOf(itr_type));
-                break;
-            default:
-                intent = new Intent(InteractionActivity.this, SurveyActivity.class);
-                break;
-
-        }
-        startActivity(intent);
+//                app.setInteractionType(Interaction.Type.FIST);
+//                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+//                break;
+//            case Interaction.Type.FIST:
+////                app.setInteractionState(Interaction.State.START);
+////                app.setInteractionType(Interaction.Type.FREE);
+//                intent = new Intent(InteractionActivity.this, ImagePickerActivity.class);
+//                break;
+//            case Interaction.Type.FREE:
+//                app.setInteractionState(Interaction.State.START);
+//                app.setInteractionType(Interaction.Type.SMOOTH);
+//                intent = new Intent(InteractionActivity.this, InteractionActivity.class);
+//                break;
+//            case Interaction.Type.ENJOYMENT:
+//                intent = new Intent(InteractionActivity.this, SurveyEnjoymentActivity.class);//WENT TO ENJOYMENT SURVEY PAGE
+//                Log.i(TAG, String.valueOf(itr_type));
+//                break;
+//            default:
+//                intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+//                break;
+//
+//        }
+//        startActivity(intent);
+        finish();
     }
     @OnClick(R.id.btn_reStart)
     public void setBtn_reStart(){

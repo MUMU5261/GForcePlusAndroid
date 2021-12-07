@@ -1,10 +1,14 @@
 package com.oymotion.gforceprofiledemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -31,20 +35,62 @@ public class MaterialProfileActivity extends AppCompatActivity {
     private static final String TAG = "MaterialProfileActivity";
 
 
-    private RecyclerView rv_interactionList;
-    private InteractionListAdapter interactionListAdapter;
+    private RecyclerView rv_explorationList;
+    private ExplorationListAdapter explorationListAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
+    @BindView(R.id.tv_material_no)
+    TextView tv_material_no;
+
+
+    int prj_id;
+    int clt_id;
+//    int p_id;
+    int position;
+    int id_clicked;
+    Intent intent;
+    ArrayList<Exploration> explorationList = new ArrayList<>();
+
+
+    private MaterialListAdapter.OnItemListener onItemListener = new MaterialListAdapter.OnItemListener() {
+        @Override
+        public void OnItemClickListener(View view, int position) {
+
+            int childAdapterPosition = rv_explorationList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemClickListener: " +position+"child position:"+childAdapterPosition);
+            Intent intent = new Intent(MaterialProfileActivity.this, Interaction.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//            id_clicked = materialList.get(childAdapterPosition).getId();
+//            intent.putExtra("clt_id", id_clicked);
+//            startActivity(intent);
+        }
+
+        @Override
+        public void OnItemLongClickListener(View view, int position) {
+            int childAdapterPosition = rv_explorationList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemLongClickListener: "+childAdapterPosition+"property_size:"+explorationList.size());
+//
+//            id_clicked = materialList.get(childAdapterPosition).getId();
+//            Log.i(TAG, "OnItemLongClickListener: " +"pid: "+ id_clicked);
+//            FragmentManager fm = getSupportFragmentManager();
+//            popupDialog = new PopupDialog();
+//            popupDialog.show(fm,"fragment_edit_delete_material");
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_profile);
         ButterKnife.bind(this);
-        setTitle("Material no");
+        setTitle("Material Profile");
 
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
@@ -53,27 +99,39 @@ public class MaterialProfileActivity extends AppCompatActivity {
             Log.e(TAG, e.getMessage());
         }
 
+        updatePreference();//prj_id
+        intent = this.getIntent();
+        clt_id = intent.getIntExtra("clt_id",-1);
+        position = intent.getIntExtra("position",-1) +1;
+        tv_material_no.setText("Material" +position);
         initData();
         initView();
+
     }
 
     private void initData() {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        interactionListAdapter = new InteractionListAdapter(getData());
+        explorationListAdapter = new ExplorationListAdapter(getData());
     }
 
     private void initView() {
-        rv_interactionList = (RecyclerView) findViewById(R.id.rv_interaction_list);
+        rv_explorationList = (RecyclerView) findViewById(R.id.rv_exploration_list);
         // 设置布局管理器
-        rv_interactionList.setLayoutManager(layoutManager);
+        rv_explorationList.setLayoutManager(layoutManager);
         // 设置adapter
-        rv_interactionList.setAdapter(interactionListAdapter);
+        rv_explorationList.setAdapter(explorationListAdapter);
+    }
+
+    private void updatePreference() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        prj_id = preferences.getInt("prj_id",-1);
+
     }
 
     @NotNull
-    private ArrayList<Interaction> getData() {
-        ArrayList<Interaction> data = new ArrayList<>();
-        data = Interaction.getInteractionList(db);
+    private ArrayList<Exploration> getData() {
+        ArrayList<Exploration> data = new ArrayList<>();
+        data = Exploration.getExplorationList(db, clt_id);
         return data;
     }
 
@@ -82,17 +140,20 @@ public class MaterialProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(MaterialProfileActivity.this,ImagePickerActivity.class);
 //        what is set flag
 //        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("p_id",p_id);
+        intent.putExtra("clt_id",clt_id);
+        intent.putExtra("position",position);
         startActivity(intent);
         finish();
     }
 
     @OnClick(R.id.btn_answer_question)
     public void onAnswerQuestionClick() {
-        Intent intent = new Intent(MaterialProfileActivity.this,ExperimentSettingMenuActivity.class);
+        Intent intent = new Intent(MaterialProfileActivity.this,AnswerOpenQuestionActivity.class);
 //        what is set flag
 //        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.putExtra("p_id",p_id);
+        intent.putExtra("clt_id",clt_id);
+        intent.putExtra("position",position);
         startActivity(intent);
         finish();
     }
@@ -100,15 +161,15 @@ public class MaterialProfileActivity extends AppCompatActivity {
 
 
 //    private void configureResultList() {
-//        rv_interactionList.setHasFixedSize(true);
-//        rv_interactionList.setItemAnimator(null);
+//        rv_explorationList.setHasFixedSize(true);
+//        rv_explorationList.setItemAnimator(null);
 //        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(this);
-//        rv_interactionList.setLayoutManager(recyclerLayoutManager);
-//        interactionListAdapter = new ParticipantListAdapter();
-//        rv_interactionList.setAdapter(interactionListAdapter);
-//        rv_interactionList.setOnAdapterItemClickListener(view -> {
-//            final int childAdapterPosition = rv_interactionList.getChildAdapterPosition(view);
-//            final ScanResult itemAtPosition = interactionListAdapter.getItemAtPosition(childAdapterPosition);
+//        rv_explorationList.setLayoutManager(recyclerLayoutManager);
+//        explorationListAdapter = new ParticipantListAdapter();
+//        rv_explorationList.setAdapter(explorationListAdapter);
+//        rv_explorationList.setOnAdapterItemClickListener(view -> {
+//            final int childAdapterPosition = rv_explorationList.getChildAdapterPosition(view);
+//            final ScanResult itemAtPosition = explorationListAdapter.getItemAtPosition(childAdapterPosition);
 //            onAdapterItemClick(itemAtPosition);
 //
 //            //when selected, item view is highlighted

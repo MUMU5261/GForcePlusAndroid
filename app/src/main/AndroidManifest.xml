@@ -36,7 +36,7 @@
         <activity android:name=".InteractionActivity" />
         <activity android:name=".SetupDevicesActivity" />
         <activity
-            android:name=".ProjectListActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.GForceProfileDemo.NoActionBar">
             <intent-filter>
@@ -52,8 +52,11 @@
         <activity android:name=".ParticipantManageActivity" android:label="Manage Participants" />
         <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />
         <activity android:name=".EditOpenQuestionsActivity" android:label="Manage Question" />
-        <activity android:name=".LoginActivity" android:label="LogIn" />
+<!--        <activity android:name=".LoginActivity" android:label="LogIn" />-->
         <activity android:name=".LoginAsResearcherActivity" android:label="Researcher Login" />
+        <activity android:name=".MaterialListActivity" android:label="Material List" />
+        <activity android:name=".MaterialProfileActivity" android:label="Material profile" />
+        <activity android:name=".ProjectListActivity" android:label="Project List" />
     </application>
 
 </manifest>

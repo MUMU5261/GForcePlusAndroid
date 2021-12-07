@@ -72,7 +72,7 @@ public class InteractionListAdapter extends RecyclerView.Adapter<InteractionList
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tv_item_interaction = (TextView) itemView.findViewById(R.id.tv_item_interaction);
+            tv_item_interaction = (TextView) itemView.findViewById(R.id.tv_item_interaction_type);
             cb_state = (CheckBox) itemView.findViewById(R.id.cb_state);
         }
     }

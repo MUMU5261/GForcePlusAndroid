@@ -48,7 +48,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
     private SQLiteDatabase db;
 
     int prj_id = -1;
-    int id;
+    int id;//？？？？
     int id_clicked;
     ArrayList<Property> propertyList;
 
@@ -92,7 +92,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
         }
         Intent intent = this.getIntent();
         prj_id = intent.getIntExtra("prj_id", -1);
-        id = intent.getIntExtra("id", -1);
+        id = intent.getIntExtra("id", -1);//？？？？
 
         Log.i(TAG, "onCreate: "+"prj_id:"+prj_id+"id"+id);
         btn_add_property = findViewById(R.id.btn_add_property);

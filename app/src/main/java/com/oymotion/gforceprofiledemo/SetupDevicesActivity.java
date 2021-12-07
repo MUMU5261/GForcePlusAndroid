@@ -47,17 +47,6 @@ public class SetupDevicesActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences .Editor editor;
 
-
-//    //test buttons
-//    @BindView(R.id.btn_grab)
-//    Button btn_grab;
-//    @BindView(R.id.btn_rub)
-//    Button btn_rub;
-//    @BindView(R.id.btn_stroke)
-//    Button btn_stroke;
-//    @BindView(R.id.btn_scrape)
-//    Button btn_scrape;
-
     public static final String EXTRA_DEVICE_NAME = "extra_device_name";
     public static final String EXTRA_MAC_ADDRESS = "extra_mac_address";
 
@@ -653,22 +642,21 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
-        if(app.getInteractionType() != -1){
-            Intent intent = new Intent(SetupDevicesActivity.this,InteractionActivity.class);
+        if(app.getInteractionType() != Interaction.Type.ERROR){
+            Intent intent = new Intent(SetupDevicesActivity.this,MaterialListActivity.class);
             startActivity(intent);
         }else{
             try {
                 phone_id = 2;
                 armband_id_l = 5;
                 armband_id_r = 6;
-                experiment = new Experiment( p_id, phone_id, armband_id_l, armband_id_r);
+                experiment = new Experiment(p_id, phone_id, armband_id_l, armband_id_r);
                 int e_id =experiment.insertExperiment(db);
 //            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
-                Intent intent = new Intent(SetupDevicesActivity.this,Interaction.class);
+                Intent intent = new Intent(SetupDevicesActivity.this,MaterialListActivity.class);
 //            intent.putExtra("e_id", e_id);
                 app.setExperimentID(e_id);
                 app.setExperimentState(Experiment.State.START);
-
                 app.setInteractionType(Interaction.Type.RELAX);
 
                 startActivity(intent);

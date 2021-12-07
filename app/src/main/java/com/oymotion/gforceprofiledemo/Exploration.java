@@ -32,9 +32,9 @@ public class Exploration {
     ContentValues values = new ContentValues();
 
 
-    public Exploration(int p_id, int prj_id, int clt_id, int ppt_id, String ppt_name) {
-        this.p_id = p_id;
+    public Exploration(int prj_id, int p_id, int clt_id, int ppt_id, String ppt_name) {
         this.prj_id = prj_id;
+        this.p_id = p_id;
         this.clt_id = clt_id;
         this.ppt_id = ppt_id;
         this.ppt_name = ppt_name;
@@ -98,23 +98,23 @@ public class Exploration {
         return values;
     }
 
-    static ArrayList<Exploration> getExplorationList(SQLiteDatabase db) {
+    static ArrayList<Exploration> getExplorationList(SQLiteDatabase db, int clt_id) {
         ArrayList<Exploration> explorationList = new ArrayList<>();
         try {
-            Cursor result = db.query("Exploration",null,"state != ?",new String[]{String.valueOf(Project.State.DELETED)},null,null,null);
+            Cursor result = db.query("Exploration",null,"clt_id = ? and state != ?",new String[]{String.valueOf(clt_id),String.valueOf(Project.State.DELETED)},null,null,null);
             Log.i(TAG, "getExplorationList: "+result);
             while (result.moveToNext()){
                 Log.i(TAG, "getExplorationList: "+result.getColumnName(1));
                 int id = result.getInt(0);
                 int prj_id = result.getInt(1);
                 int p_id = result.getInt(2);
-                int clt_id = result.getInt(3);
+                int mclt_id = result.getInt(3);
                 int ppt_id = result.getInt(4);
                 String ppt_name = result.getString(5);
                 int rating = result.getInt(6);
                 int itr_id = result.getInt(7);
                 int state = result.getInt(8);
-                Exploration exploration = new Exploration(id,prj_id,p_id,clt_id,ppt_id,ppt_name,rating,itr_id,state);
+                Exploration exploration = new Exploration(id,prj_id,p_id,mclt_id,ppt_id,ppt_name,rating,itr_id,state);
                 explorationList.add(exploration);
             }
             result.close();
@@ -126,8 +126,10 @@ public class Exploration {
 
 
     public int insertExploration(SQLiteDatabase db) {
-        values.put("p_id", p_id);
+        Log.i(TAG, "insertExploration: ");
+
         values.put("prj_id",prj_id);
+        values.put("p_id", p_id);
         values.put("clt_id", clt_id);
         values.put("ppt_id", ppt_id);
         values.put("ppt_name", ppt_name);
@@ -170,10 +172,15 @@ public class Exploration {
     }
 
     public static ArrayList<Integer> createExplorationList(SQLiteDatabase db, int p_id, int prj_id, int clt_id, ArrayList<Property> propertyList){
+        Log.i(TAG, "createExplorationList: "+propertyList.size());
         ArrayList<Integer> explorationList = new ArrayList<>();
         int id;
+
+        Exploration free = new Exploration(prj_id,p_id,clt_id,-1,"Free");//insert exploration for free
+        free.insertExploration(db);
+
         for(int i = 0; i < propertyList.size(); i++){
-            Exploration exploration = new Exploration(p_id,prj_id,clt_id,propertyList.get(i).getId(),propertyList.get(i).getProperty());
+            Exploration exploration = new Exploration(prj_id,p_id,clt_id,propertyList.get(i).getId(),propertyList.get(i).getProperty());
             id = exploration.insertExploration(db);
             explorationList.add(id);
         }

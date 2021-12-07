@@ -6,7 +6,7 @@
     android:layout_height="@dimen/rv_item_height"
     android:layout_marginTop="@dimen/rv_item_margin">
     <TextView
-        android:id="@+id/tv_item_interaction_type"
+        android:id="@+id/tv_item_exploration_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/rv_left_margin"

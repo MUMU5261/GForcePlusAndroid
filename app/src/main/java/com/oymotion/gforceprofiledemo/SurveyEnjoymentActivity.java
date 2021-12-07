@@ -101,47 +101,47 @@ public class SurveyEnjoymentActivity extends AppCompatActivity {
 //        handler.post(runnable);
 
     }
-    @OnClick(R.id.btn_next)
-    public void onNextClick() {
-//        String enjoy_touch_str = et_enjoy_touch.getText().toString();
-//        if(enjoy_touch_str.isEmpty()){
-//            Toast.makeText(this, "The answer can not be null." + radioButton.getText(), Toast.LENGTH_LONG).show();
+//    @OnClick(R.id.btn_next)
+//    public void onNextClick() {
+////        String enjoy_touch_str = et_enjoy_touch.getText().toString();
+////        if(enjoy_touch_str.isEmpty()){
+////            Toast.makeText(this, "The answer can not be null." + radioButton.getText(), Toast.LENGTH_LONG).show();
+////            return;
+////        }
+//
+//        int radioButtonID = rg_liker.getCheckedRadioButtonId();
+//        if(radioButtonID == -1){
+//            Toast.makeText(this, "Please select the answer for second question" + radioButton.getText(), Toast.LENGTH_LONG).show();
 //            return;
 //        }
-
-        int radioButtonID = rg_liker.getCheckedRadioButtonId();
-        if(radioButtonID == -1){
-            Toast.makeText(this, "Please select the answer for second question" + radioButton.getText(), Toast.LENGTH_LONG).show();
-            return;
-        }
+////        radioButton = findViewById(radioButtonID);
+////        Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
+//        Clothes.updateQuality(db,clt_id,itr_type,likert);
+////        Clothes.updateEnjoyText(db,clt_id,enjoy_touch_str);
+//        Intent intentImg;
+//        Intent intentEnd;
+//        intentImg = new Intent(SurveyEnjoymentActivity.this,ImagePickerActivity.class);
+//        intentEnd = new Intent(SurveyEnjoymentActivity.this,EndActivity.class);
+//
+//        clt_count = app.getClothesCount();
+//        app.setClothesState(Clothes.State.FINISHED);
+//        if(clt_count == 6){
+//            startActivity(intentEnd);
+//        }else {
+//            app.updateClothesCount(clt_count);
+//            startActivity(intentImg);
+//        }
+//
+//        }
+//
+//    public void onRadioButtonClicked(View v) {
+//        int radioButtonID = rg_liker.getCheckedRadioButtonId();
 //        radioButton = findViewById(radioButtonID);
-//        Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
-        Clothes.updateQuality(db,clt_id,itr_type,likert);
-//        Clothes.updateEnjoyText(db,clt_id,enjoy_touch_str);
-        Intent intentImg;
-        Intent intentEnd;
-        intentImg = new Intent(SurveyEnjoymentActivity.this,ImagePickerActivity.class);
-        intentEnd = new Intent(SurveyEnjoymentActivity.this,EndActivity.class);
-
-        clt_count = app.getClothesCount();
-        app.setClothesState(Clothes.State.FINISHED);
-        if(clt_count == 6){
-            startActivity(intentEnd);
-        }else {
-            app.updateClothesCount(clt_count);
-            startActivity(intentImg);
-        }
-
-        }
-
-    public void onRadioButtonClicked(View v) {
-        int radioButtonID = rg_liker.getCheckedRadioButtonId();
-        radioButton = findViewById(radioButtonID);
-        String likertStr = (String) radioButton.getText();;
-        likert = Integer.valueOf(likertStr);
-        Log.i(TAG, "Selected Radio Button: " + radioButton.getText());
-        btn_next.setEnabled(true);
-    }
+//        String likertStr = (String) radioButton.getText();;
+//        likert = Integer.valueOf(likertStr);
+//        Log.i(TAG, "Selected Radio Button: " + radioButton.getText());
+//        btn_next.setEnabled(true);
+//    }
 
     @Override
     protected void onDestroy() {

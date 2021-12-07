@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Android Studio.
  * User: lilil
@@ -14,6 +16,16 @@ import android.util.Log;
  */
 public class Device {
     private static final String TAG = "Device";
+    private String device_name;
+    private String mac_address;
+    private int type;
+
+    Device (String device_name, String mac_address, int type){
+        this.device_name = device_name;
+        this.mac_address = mac_address;
+        this.type = type;
+    }
+
     public static boolean insertDeviceInfo(SQLiteDatabase db, int d_id, String name, String mac_address, int type){
         ContentValues values = new ContentValues();
         values.put("d_id",d_id);
@@ -40,5 +52,38 @@ public class Device {
             type = cursor.getInt(cursor.getColumnIndex("type"));
         }
         return type;
+    }
+
+
+    public static String getTAG() {
+        return TAG;
+    }
+
+    public String getDevice_name() {
+        return device_name;
+    }
+
+    public String getMac_address() {
+        return mac_address;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public boolean isSame(String mac_address) {
+        if(this.mac_address.equals(mac_address)){
+            return true;
+        }
+        return false;
+    }
+
+
+    // no need
+    public boolean isExist(Device bluetooth, ArrayList<Device> btList){
+        if (btList.contains(bluetooth)){
+            return true;
+        }
+        return false;
     }
 }

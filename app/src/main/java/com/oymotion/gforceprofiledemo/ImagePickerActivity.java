@@ -42,6 +42,7 @@ public class ImagePickerActivity extends AppCompatActivity {
     private static final String TAG = "ImagePickerActivity";
     int flag; // 0: take clothes image, 1: label image
 
+    Intent intent;
     @BindView(R.id.btn_next)
     Button btn_next;
     TextView tv_title;
@@ -58,14 +59,18 @@ public class ImagePickerActivity extends AppCompatActivity {
     String currentPhotoName;
 
     //information stored for image
-    Clothes clothes;
+
     int p_id;
     int e_id;
-    int clt_id = -1;
-    int clt_count = -1;
+
+//    int clt_count = -1;
     byte[] b_image;
     Bitmap imageBitmap = null;
-    MyApplication app;
+//    MyApplication app;
+
+    Clothes clothes;
+    int clt_id = -1;
+    int position = -1;
 
 
     @Override
@@ -74,6 +79,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_picker);
         ButterKnife.bind(this);
         this.setTitle("Taking Images");
+
+
+
         cover = findViewById(R.id.iv_cloth);
         example_image =  findViewById(R.id.iv_example);
         fab = findViewById(R.id.btn_take_pho);
@@ -81,29 +89,38 @@ public class ImagePickerActivity extends AppCompatActivity {
         tv_clt_No = findViewById(R.id.tv_clt_No);
         tv_title.setText(Html.fromHtml("Take a photo of the <font color='#EE0000'><b>CLOTHES</b></font> (see the example below).", Typeface.BOLD));
 //        cover.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.placeholder_image));
-        app = (MyApplication) getApplication();
-        flag = 0;
-        b_image = null;
-        btn_next.setEnabled(false);
-        p_id = Participant.getIDFromPreference(this);
-//        Intent intent = getIntent();
-//        if(intent != null){
-//            e_id = intent.getIntExtra("e_id",-1);
-//        }
+//        app = (MyApplication) getApplication();
 
-        app = (MyApplication) getApplication();
-        e_id = app.getExperimentID();
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
             db = dbHelper.getWritableDatabase();
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
-        clt_count = app.getClothesCount();
-        tv_clt_No.setText(String.valueOf(clt_count));
 
-        cover.setImageResource(R.mipmap.placeholder_image);
-        example_image.setImageResource(R.mipmap.example_clothes);
+        flag = 0;
+        b_image = null;
+        btn_next.setEnabled(false);
+        p_id = Participant.getIDFromPreference(this);
+
+        intent = this.getIntent();
+        clt_id = intent.getIntExtra("clt_id",-1);
+        position = intent.getIntExtra("position",-1);
+        clothes = Clothes.getClothes(db, clt_id);
+
+        tv_clt_No.setText(String.valueOf(position));
+        initCover();
+
+//        Intent intent = getIntent();
+//        if(intent != null){
+//            e_id = intent.getIntExtra("e_id",-1);
+//        }
+
+
+//        e_id = app.getExperimentID();
+
+//        clt_count = app.getClothesCount();
+
 
 
         ActivityResultLauncher<Intent> launcher =
@@ -183,9 +200,8 @@ public class ImagePickerActivity extends AppCompatActivity {
         if(flag == 0) {
             // create an instance of clothes and store image of clothes
             Log.i(TAG, "image of clothes");
-
-            clothes = new Clothes(-1,e_id, p_id, Clothes.State.START);
-            clt_id = clothes.insertClothes(db);
+//            clt_id = clothes.insertClothes(db);
+            clothes.addClothesImg(db, b_image);
             Log.i(TAG, "clt_id" + clt_id);
             currentPhotoName = createImageName();
             BitmapHelper.saveBitmap(currentPhotoName,imageBitmap,ImagePickerActivity.this);
@@ -193,22 +209,48 @@ public class ImagePickerActivity extends AppCompatActivity {
             setToLabelPicker();
             cover.setImageResource(R.mipmap.placeholder_image);
             fab.setText("Take photo");
+            btn_next.setText("Done");
         }else if (flag == 1) {
             // insert the image of the label of the clothes
             Log.i(TAG, "image of label");
             clothes.addLabelImg(db, b_image);
             currentPhotoName = createImageName();
             BitmapHelper.saveBitmap(currentPhotoName,imageBitmap,ImagePickerActivity.this);
-            Intent intent = new Intent(ImagePickerActivity.this, InteractionActivity.class);
+//            Intent intent = new Intent(ImagePickerActivity.this, MaterialProfileActivity.class);
 //            Intent intent = new Intent(ImagePickerActivity.this, EndActivity.class);
 
-            app.setClothesID(clt_id);
-            app.setClothesState(Clothes.State.START);
-            app.setInteractionType(Interaction.Type.FREE);
-            startActivity(intent);
+//            app.setClothesID(clt_id);
+//            app.setClothesState(Clothes.State.START);
+//            app.setInteractionType(Interaction.Type.FREE);
+//            startActivity(intent);
             //pass clt_id
+            finish();
         }
 
+    }
+
+    private void initCover(){
+        byte[] img;
+        if (flag == 0) {
+            example_image.setImageResource(R.mipmap.example_clothes);
+            img = clothes.getImg_cloth();
+            if (img == null) {
+                cover.setImageResource(R.mipmap.placeholder_image);
+            } else {
+                cover.setImageBitmap(BitmapHelper.getImageBitmap(img));
+                fab.setText("retake");
+//                btn_next.setEnabled(true);
+            }
+        }else if(flag == 1) {
+            example_image.setImageResource(R.mipmap.example_label);
+            img = clothes.getImg_label();
+            if (img == null) {
+                cover.setImageResource(R.mipmap.placeholder_image);
+            } else {
+                cover.setImageBitmap(BitmapHelper.getImageBitmap(img));
+                fab.setText("retake");
+            }
+        }
     }
 
     private void setToLabelPicker(){

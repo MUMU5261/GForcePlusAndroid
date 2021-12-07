@@ -68,7 +68,7 @@ public class ScanDevicesActivity extends AppCompatActivity {
 //    private String extra_mac_address_l;
 //    private String extra_device_name_r;
 //    private String extra_mac_address_r;
-    private List<Bluetooth> btList;
+    private List<Device> btList;
 
 
 
@@ -121,7 +121,7 @@ public class ScanDevicesActivity extends AppCompatActivity {
          */
         //set up the view background color of clicked item
         itemBackgroundColor = ContextCompat.getColor(ScanDevicesActivity.this, R.color.selected);
-        btList = new ArrayList<Bluetooth>();
+        btList = new ArrayList<Device>();
         count_selected = 0;
         nextButton.setEnabled(false);
 
@@ -185,11 +185,10 @@ public class ScanDevicesActivity extends AppCompatActivity {
     public void onNextClick() {
         if((btList.size() == 2)){
             final Intent intent = new Intent(this, SetupDevicesActivity.class);
-            intent.putExtra(SetupDevicesActivity.EXTRA_DEVICE_NAME_L, btList.get(0).getName());
-            intent.putExtra(SetupDevicesActivity.EXTRA_MAC_ADDRESS_L, btList.get(0).getMacAddress());
-            intent.putExtra(SetupDevicesActivity.EXTRA_DEVICE_NAME_R, btList.get(1).getName());
-            intent.putExtra(SetupDevicesActivity.EXTRA_MAC_ADDRESS_R, btList.get(1).getMacAddress());
-
+//            intent.putExtra(SetupDevicesActivity.EXTRA_DEVICE_NAME_L, btList.get(0).getName());
+//            intent.putExtra(SetupDevicesActivity.EXTRA_MAC_ADDRESS_L, btList.get(0).getMacAddress());
+//            intent.putExtra(SetupDevicesActivity.EXTRA_DEVICE_NAME_R, btList.get(1).getName());
+//            intent.putExtra(SetupDevicesActivity.EXTRA_MAC_ADDRESS_R, btList.get(1).getMacAddress());
             updateSharePreference();
 
             startActivity(intent);
@@ -204,10 +203,15 @@ public class ScanDevicesActivity extends AppCompatActivity {
         if((btList.size() == 2)){
             preferences = PreferenceManager.getDefaultSharedPreferences(this);
             editor = preferences.edit();
-            editor.putString("extra_device_name_l", btList.get(0).getName());
-            editor.putString("extra_mac_address_l", btList.get(0).getMacAddress());
-            editor.putString("extra_mac_address_r", btList.get(1).getName());
-            editor.putString("extra_device_name_r",  btList.get(1).getMacAddress());
+            for (Device d : btList) {
+                if(d.getType() == 0){
+                    editor.putString("extra_device_name_l", d.getDevice_name());
+                    editor.putString("extra_mac_address_l", d.getMac_address());
+                }else if(d.getType() == 1){
+                    editor.putString("extra_mac_address_r", d.getDevice_name());
+                    editor.putString("extra_device_name_r", d.getMac_address());
+                }
+            }
             editor.apply();
             editor.clear();
 
@@ -301,14 +305,13 @@ public class ScanDevicesActivity extends AppCompatActivity {
         String extra_device_name = scanResults.getBluetoothDevice().getName();
         String extra_mac_address = scanResults.getBluetoothDevice().getAddress();
         int hand = Device.checkDeviceLR(db, extra_mac_address);
-        if(!isExist(extra_mac_address)) {
+        if(!isSelected(extra_mac_address)) {
             if (hand == 0){
-
                 leftSelected.setBackground(getDrawable(R.drawable.round_purple));
             }else if(hand == 1){
                 rightSelected.setBackground(getDrawable(R.drawable.round_purple));
             }
-            btList.add(new Bluetooth(extra_device_name,extra_mac_address));
+            btList.add(new Device(extra_device_name,extra_mac_address,hand));
             count_selected ++;
         }
         if(count_selected == 2){
@@ -321,15 +324,13 @@ public class ScanDevicesActivity extends AppCompatActivity {
         scanToggleButton.setText(isScanning ? R.string.stop_scan : R.string.start_scan);
     }
 
-    private boolean isExist(String extra_mac_address) {
-        for(Bluetooth bluetooth : btList){
+    private boolean isSelected(String extra_mac_address) {
+        for(Device bluetooth : btList){
             if(bluetooth.isSame(extra_mac_address)){
                 return true;
             }
         }
         return false;
     }
-
-
 
 }

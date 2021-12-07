@@ -166,7 +166,6 @@ public class Property {
     }
     public static boolean deleteProperty(SQLiteDatabase db, int ppt_id) {
 
-
         ContentValues values = new ContentValues();
         try {
             values.put("state", State.DELETED);

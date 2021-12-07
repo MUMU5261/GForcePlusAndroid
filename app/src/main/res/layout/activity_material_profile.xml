@@ -10,6 +10,7 @@
     android:paddingBottom="16dp">
 
     <TextView
+        android:id="@+id/tv_material_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Material"
@@ -19,7 +20,7 @@
         android:layout_marginBottom="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_interaction_list"
+        android:id="@+id/rv_exploration_list"
         android:background="@drawable/round_corners_bg"
         android:layout_width="match_parent"
         android:layout_height="300dp"

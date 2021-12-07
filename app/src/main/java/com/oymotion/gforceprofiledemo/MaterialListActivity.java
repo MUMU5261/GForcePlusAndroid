@@ -1,12 +1,16 @@
 package com.oymotion.gforceprofiledemo;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
@@ -28,25 +32,62 @@ import butterknife.OnClick;
  * Time: 08:54
  * Description:
  */
-public class MaterialListActivity extends AppCompatActivity {
+public class MaterialListActivity extends AppCompatActivity implements PopupDialog.PopupDialogListener {
 
     private static final String TAG = "MaterialListActivity";
+    @BindView(R.id.btn_add_clothes)
+    Button btn_add_clothes;
 
     private RecyclerView rv_materialList;
     private MaterialListAdapter materialListAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+
+    private PopupDialog popupDialog;
+
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
-    private SharedPreferences .Editor editor;
+    private SharedPreferences.Editor editor;
     private SharedPreferences preferences;
 
-    int p_id;
+    MyApplication app;
+
     int prj_id;
+    int p_id;
+//    int clt_id;
+    int id_clicked;
+    ArrayList<Clothes> materialList = new ArrayList<>();
     ArrayList<Property> propertyList = new ArrayList<>();
     ArrayList<Exploration> explorationList = new ArrayList<>();
 
+    private MaterialListAdapter.OnItemListener onItemListener = new MaterialListAdapter.OnItemListener() {
+        @Override
+        public void OnItemClickListener(View view, int position) {
+
+            int childAdapterPosition = rv_materialList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemClickListener: " +position+"child position:"+childAdapterPosition);
+            Intent intent = new Intent(MaterialListActivity.this, MaterialProfileActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            id_clicked = materialList.get(childAdapterPosition).getId();
+            intent.putExtra("clt_id", id_clicked);
+            intent.putExtra("position", childAdapterPosition);
+            startActivity(intent);
+        }
+
+        @Override
+        public void OnItemLongClickListener(View view, int position) {
+            int childAdapterPosition = rv_materialList.getChildAdapterPosition(view);
+            Log.i(TAG, "OnItemLongClickListener: "+childAdapterPosition+"property_size:"+materialList.size());
+
+            id_clicked = materialList.get(childAdapterPosition).getId();
+            Log.i(TAG, "OnItemLongClickListener: " +"pid: "+ id_clicked);
+            FragmentManager fm = getSupportFragmentManager();
+            popupDialog = new PopupDialog();
+            popupDialog.show(fm,"fragment_edit_delete_material");
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +99,19 @@ public class MaterialListActivity extends AppCompatActivity {
         try {
             dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
             db = dbHelper.getWritableDatabase();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        updatePreference();
         initData();
         initView();
-        updatePreference();
-        propertyList = Property.getPropertyList(db,prj_id);
+
+        if(prj_id==-1){
+            btn_add_clothes.setEnabled(false);
+        }
+        propertyList = Property.getPropertyList(db, prj_id);
 
     }
 
@@ -77,7 +123,10 @@ public class MaterialListActivity extends AppCompatActivity {
 
     private void initData() {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        materialListAdapter = new MaterialListAdapter(getData());
+//        materialListAdapter = new MaterialListAdapter(getData());
+        materialList = getData();
+        materialListAdapter = new MaterialListAdapter(materialList);
+        materialListAdapter.setOnItemListener(onItemListener);
     }
 
     private void initView() {
@@ -91,17 +140,18 @@ public class MaterialListActivity extends AppCompatActivity {
     @NotNull
     private ArrayList<Clothes> getData() {
         ArrayList<Clothes> data = new ArrayList<>();
-        data = Clothes.getMaterialList(db,p_id);
+        data = Clothes.getMaterialList(db,prj_id,p_id);
+        Log.i(TAG, "getData: " + data.toString());
         return data;
     }
 
 
     @OnClick(R.id.btn_add_clothes)
-    public void onAddClothesClick(){
+    public void onAddClothesClick() {
         Clothes clothes = new Clothes(prj_id, p_id);
         int clt_id = clothes.insertClothes(db);
-        Exploration.createExplorationList(db,p_id,prj_id,clt_id,propertyList);
-
+        Exploration.createExplorationList(db, p_id, prj_id, clt_id, propertyList);
+        materialListAdapter.updateData(getData());
     }
 
 
@@ -109,14 +159,48 @@ public class MaterialListActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
     @Override
     protected void onStop() {
         super.onStop();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
 
+
+    @Override
+    public void onDialogEditClick(DialogFragment dialog) {
+        FragmentManager fm = getSupportFragmentManager();
+        //reuse add dialog to update
+        Log.i(TAG, "onDialogEditClick: "+prj_id+"-"+ id_clicked);
+        Intent intent = new Intent(MaterialListActivity.this, MaterialProfileActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("clt_id", id_clicked);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onDialogDeleteClick(DialogFragment dialog) {
+        new AlertDialog.Builder(this).setTitle("Delete Material " + id_clicked +"?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Clothes.deleteClothes(db,id_clicked);
+                        Log.i(TAG, "delete material: "+ id_clicked);
+                        materialList = getData();
+                        materialListAdapter.updateData(materialList);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
 }

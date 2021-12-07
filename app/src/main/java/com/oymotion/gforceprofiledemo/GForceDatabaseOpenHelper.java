@@ -31,19 +31,18 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public static final String Create_Clothes = "create table Clothes ("
             + "id integer primary key autoincrement,"
-            + "e_id integer,"
             + "prj_id integer,"
             + "p_id integer NOT NULL,"
-            + "state integer NOT NULL,"
             + "img_cloth blob,"
             + "img_label blob,"
-            + "c_soft int,"
-            + "c_warmth int,"
-            + "c_thickness int,"
-            + "c_smooth int,"
-            + "c_flexibility int," //added
-            + "c_enjoyment int,"
-            + "c_enjoy_touch text,"//added
+//            + "c_soft int,"
+//            + "c_warmth int,"
+//            + "c_thickness int,"
+//            + "c_smooth int,"
+//            + "c_flexibility int," //added
+//            + "c_enjoyment int,"
+//            + "c_description text,"//added
+            + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
     public static final String Create_Interaction = "create table Interaction ("
@@ -52,7 +51,8 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "e_id integer,"
             + "prj_id integer,"
             + "clt_id integer NOT NULL,"
-            + "type integer NOT NULL,"  //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
+            + "ppt_id integer DEFAULT -1,"
+            + "type integer NOT NULL,"
             + "state integer default 0," // "0" : setup, "1":doing, "2": finished "3":failed
             + "timestamp text NOT NULL)";
 
@@ -173,6 +173,8 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "prj_id integer NOT NULL,"
             + "prj_name text NOT NULL,"
             + "researcher text,"
+            + "explore_time integer DEFAULT 15,"
+            + "scale integer DEFAULT 7,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";
 
@@ -204,7 +206,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
             + "clt_id integer NOT NULL,"
             + "ppt_id integer NOT NULL,"
             + "ppt_name text NOT NULL,"
-            + "rating integer NOT NULL,"
+            + "rating integer DEFAULT -1,"
             + "itr_id integer,"
             + "state integer NOT NULL,"
             + "timestamp text NOT NULL)";

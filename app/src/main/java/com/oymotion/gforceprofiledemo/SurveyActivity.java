@@ -109,7 +109,7 @@ public class SurveyActivity extends AppCompatActivity {
         int radioButtonID = rg_liker.getCheckedRadioButtonId();
         radioButton = findViewById(radioButtonID);
         Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
-        Clothes.updateQuality(db,clt_id,itr_type,likert);
+//        Clothes.updateQuality(db,clt_id,itr_type,likert);
         Intent intentItr;
         intentItr = new Intent(SurveyActivity.this,InteractionActivity.class);
 

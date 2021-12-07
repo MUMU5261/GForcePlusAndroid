@@ -54,7 +54,7 @@ public class BitmapHelper {
     }
 
     // convert from byte array to bitmap
-    public static Bitmap getImage(byte[] image) {
+    public static Bitmap getImageBitmap(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
