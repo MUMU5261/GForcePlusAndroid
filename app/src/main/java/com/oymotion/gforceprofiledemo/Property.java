@@ -171,6 +171,7 @@ public class Property {
             values.put("state", State.DELETED);
             db.update("Property", values, "id=?", new String[]{String.valueOf(ppt_id)});//
             db.update("Exploration", values, "ppt_id=?", new String[]{String.valueOf(ppt_id)});//
+            db.update("Interaction", values, "type=?", new String[]{String.valueOf(ppt_id)});//
 //            db.update("Interaction", values, "p_id=?", new String[]{String.valueOf(prj_id)});
             values.clear();
             return true;

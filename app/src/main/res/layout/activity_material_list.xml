@@ -9,28 +9,58 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Material List"
-        android:layout_gravity="center"
-        android:textSize="25dp"
-        android:textColor="@color/purple_700"
-        android:layout_marginBottom="5dp"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_material_list"
-        android:background="@drawable/round_corners_bg"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scrollbars="vertical"/>
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <Button
+            android:id="@+id/btn_gather_relax"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:width="@dimen/next_width"
+            android:text="Gather baseline: Relax" />
 
-    <Button
-        android:id="@+id/btn_add_clothes"
+        <Button
+            android:id="@+id/btn_gather_fist"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Gather baseline: fist"
+            android:width="@dimen/next_width"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="ADD"
-        android:width="@dimen/next_width"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Material List"
+            android:layout_gravity="center"
+            android:textSize="25dp"
+            android:textColor="@color/purple_700"
+            android:layout_marginBottom="5dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_material_list"
+            android:background="@drawable/round_corners_bg"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scrollbars="vertical"/>
+
+        <Button
+            android:id="@+id/btn_add_clothes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="ADD"
+            android:width="@dimen/next_width"/>
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

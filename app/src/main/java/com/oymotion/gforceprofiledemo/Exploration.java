@@ -159,9 +159,23 @@ public class Exploration {
         }
     }
 
-    public boolean updateState(SQLiteDatabase db, int state) {
+    public static boolean updateState(SQLiteDatabase db, int state, int id) {
+        ContentValues values = new ContentValues();
         try {
             values.put("state", state);
+//        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
+            db.update("Exploration", values, "id=?", new String[]{String.valueOf(id)});
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean finishExploration(SQLiteDatabase db, int state, int id, int itr_id) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put("state", state);
+            values.put("itr_id", itr_id);
 //        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
             db.update("Exploration", values, "id=?", new String[]{String.valueOf(id)});
             return true;
@@ -176,7 +190,7 @@ public class Exploration {
         ArrayList<Integer> explorationList = new ArrayList<>();
         int id;
 
-        Exploration free = new Exploration(prj_id,p_id,clt_id,-1,"Free");//insert exploration for free
+        Exploration free = new Exploration(prj_id,p_id,clt_id,0,"Free");//insert exploration for free
         free.insertExploration(db);
 
         for(int i = 0; i < propertyList.size(); i++){

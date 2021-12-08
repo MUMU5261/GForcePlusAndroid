@@ -54,21 +54,28 @@ public class MaterialProfileActivity extends AppCompatActivity {
 //    int p_id;
     int position;
     int id_clicked;
+    int ppt_id;
+    String ppt_name;
     Intent intent;
     ArrayList<Exploration> explorationList = new ArrayList<>();
 
 
-    private MaterialListAdapter.OnItemListener onItemListener = new MaterialListAdapter.OnItemListener() {
+    private ExplorationListAdapter.OnItemListener onItemListener = new ExplorationListAdapter.OnItemListener() {
         @Override
         public void OnItemClickListener(View view, int position) {
 
             int childAdapterPosition = rv_explorationList.getChildAdapterPosition(view);
             Log.i(TAG, "OnItemClickListener: " +position+"child position:"+childAdapterPosition);
-            Intent intent = new Intent(MaterialProfileActivity.this, Interaction.class);
+            intent = new Intent(MaterialProfileActivity.this, InteractionActivity.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//            id_clicked = materialList.get(childAdapterPosition).getId();
-//            intent.putExtra("clt_id", id_clicked);
-//            startActivity(intent);
+            id_clicked = explorationList.get(childAdapterPosition).getId();
+            ppt_id = explorationList.get(childAdapterPosition).getPpt_id();
+            ppt_name = explorationList.get(childAdapterPosition).getPpt_name();
+            intent.putExtra("ppt_id", ppt_id);
+            intent.putExtra("ppt_name", ppt_name);
+            intent.putExtra("clt_id", id_clicked);
+            startActivity(intent);
+
         }
 
         @Override
@@ -111,7 +118,9 @@ public class MaterialProfileActivity extends AppCompatActivity {
 
     private void initData() {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        explorationListAdapter = new ExplorationListAdapter(getData());
+        explorationList = getData();
+        explorationListAdapter = new ExplorationListAdapter(explorationList);
+        explorationListAdapter.setOnItemListener(onItemListener);
     }
 
     private void initView() {

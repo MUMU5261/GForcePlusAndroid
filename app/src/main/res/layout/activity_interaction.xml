@@ -77,16 +77,23 @@
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_itr_statement"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="Please explore how soft is the material?"
-        android:textSize="20dp"
-        android:background="@drawable/linearlayout"
-        android:textColor="@color/black"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_itr_statement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="Please explore how soft is the material?"
+            android:textSize="20dp"
+            android:background="@drawable/linearlayout"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/btn_start_notifying"
         android:layout_width="128dip"
@@ -126,15 +133,21 @@
             android:layout_gravity="center"
             android:textSize="30dp"
             android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/tv_countdown_itr"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20S "
-            android:layout_gravity="center"
-            android:textSize="30dp"
-            android:textColor="@color/black"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_countdown_itr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0S"
+                android:layout_gravity="center"
+                android:textSize="30dp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -182,7 +195,7 @@
         android:id="@+id/btn_next"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/next_margin_big"
-        android:text="next"
+        android:text="Finish"
         android:layout_gravity="center"
         android:layout_width="@dimen/next_width"/>
     <Button

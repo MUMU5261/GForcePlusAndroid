@@ -1,8 +1,11 @@
 package com.oymotion.gforceprofiledemo;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -198,6 +201,24 @@ public class Project {
         }
         return false;
     }
+    public static int getIDFromPreference(Context context){
+        SharedPreferences preferences;
+        SharedPreferences .Editor editor;
+        int p_id = -1;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        p_id = preferences.getInt("prj_id",-1);
+        return p_id;
+    }
+    public static int getTimeFromPreference(Context context){
+        SharedPreferences preferences;
+        SharedPreferences .Editor editor;
+        int p_id = -1;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        p_id = preferences.getInt("explore_time",15);
+        return p_id;
+    }
+
+
     public class State {
         public static final int START = 0;
         public static final int COMPLETE = 1;

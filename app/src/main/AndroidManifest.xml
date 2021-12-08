@@ -52,7 +52,6 @@
         <activity android:name=".ParticipantManageActivity" android:label="Manage Participants" />
         <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />
         <activity android:name=".EditOpenQuestionsActivity" android:label="Manage Question" />
-<!--        <activity android:name=".LoginActivity" android:label="LogIn" />-->
         <activity android:name=".LoginAsResearcherActivity" android:label="Researcher Login" />
         <activity android:name=".MaterialListActivity" android:label="Material List" />
         <activity android:name=".MaterialProfileActivity" android:label="Material profile" />

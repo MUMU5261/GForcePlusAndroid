@@ -154,6 +154,25 @@ public class MaterialListActivity extends AppCompatActivity implements PopupDial
         materialListAdapter.updateData(getData());
     }
 
+    Intent intent;
+    @OnClick(R.id.btn_gather_relax)
+    public void onGatherRelaxClick() {
+        intent = new Intent(MaterialListActivity.this, InteractionActivity.class);
+        intent.putExtra("clt_id",-1);
+        intent.putExtra("ppt_name","Relax");
+        intent.putExtra("ppt_id",-2);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_gather_fist)
+    public void onGatherFistClick() {
+        intent = new Intent(MaterialListActivity.this, InteractionActivity.class);
+        intent.putExtra("clt_id",-1);
+        intent.putExtra("ppt_name","Fist");
+        intent.putExtra("ppt_id",-3);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onPause() {

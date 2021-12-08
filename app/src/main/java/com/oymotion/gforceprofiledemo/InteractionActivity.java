@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
+import android.text.PrecomputedText;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class InteractionActivity extends AppCompatActivity {
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
+    Intent intent;
     Handler handler;// if private or not
     //may need two handler, or use other way to listen state change, to improve the data collection rate
     Runnable runnable;
@@ -67,12 +69,16 @@ public class InteractionActivity extends AppCompatActivity {
     Resources res;
     String[] statementList;
 
-    int itr_type;
-    int itr_id;
+    int itr_id;//explore_id
+    int explore_id;//explore_id
+    String ppt_name;//explore_id
+    int itr_type;//explore_id
+    int ppt_id;//explore_id
     int p_id;
-    int e_id;
+//    int prj_id;
     int clt_id;
     int prj_id;
+    long explore_time;
 
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
@@ -109,17 +115,27 @@ public class InteractionActivity extends AppCompatActivity {
         db = dbHelper.getReadableDatabase();
 
         p_id = Participant.getIDFromPreference(this);
-        app = (MyApplication) getApplication();
-        itr_type = app.getInteractionType();
-        e_id = app.getExperimentID();
-        clt_id = app.getClothesID();
-        Log.i(TAG, "Initial Information: " + "p_id:" + p_id + "e_id:" + e_id + "itr_type:" + itr_type + "clt_id" + clt_id);
-        res = getResources();
-        statementList = res.getStringArray(R.array.itr_statement2);
-        String html = statementList[itr_type];
-        tv_itr_statement.setText(Html.fromHtml(html, Typeface.BOLD));
-        interaction = new Interaction(-99, p_id, clt_id, itr_type);
+        prj_id = Project.getIDFromPreference(this);
+        explore_time = Project.getTimeFromPreference(this) * 1000;
+        tv_countdown_itr.setText(String.valueOf(Project.getTimeFromPreference(this))+"S");
+
+//        itr_type = app.getInteractionType();
+//        clt_id = app.getClothesID();
+
+        intent = this.getIntent();
+        clt_id = intent.getIntExtra("clt_id",-1);
+        ppt_name = intent.getStringExtra("ppt_name");//
+        itr_type = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
+        itr_type = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
+
+        Log.i(TAG, "Initial Information: " + "prj_id:" + prj_id + "p_id:" + p_id + "itr_type:" + itr_type + "clt_id" + clt_id);
+
+        getPrompt();
+
+        //create new interaction
+        interaction = new Interaction(prj_id, p_id, clt_id, itr_type);
         itr_id = interaction.insertInteraction(db);
+
         if (itr_id != -1) {
             Log.i(TAG, "insert interaction success");
             Toast.makeText(InteractionActivity.this, "insert interaction success", Toast.LENGTH_LONG).show();
@@ -128,6 +144,8 @@ public class InteractionActivity extends AppCompatActivity {
             Toast.makeText(InteractionActivity.this, "insert interaction fail", Toast.LENGTH_LONG).show();
         }
 
+//set a transaction, if it's null, go connect
+        app = (MyApplication) getApplication();
 
         try {
             gForceProfile_l = app.getProfileLeft();
@@ -147,6 +165,28 @@ public class InteractionActivity extends AppCompatActivity {
         handler.post(runnable);
 
 
+    }
+
+    private void getPrompt() {
+        res = getResources();
+        statementList = res.getStringArray(R.array.itr_statement2);
+//        String html = statementList[itr_type];
+
+        String html;
+        switch (itr_type){
+            case 0:
+                html = statementList[2];
+                break;
+            case -2:
+                html = statementList[0];
+                break;
+            case -3:
+                html = statementList[1];
+                break;
+            default:
+                html = "Please explore how <b>" + ppt_name + "</b> the material is.";
+        }
+        tv_itr_statement.setText(Html.fromHtml(html, Typeface.BOLD));
     }
 
     @OnClick(R.id.btn_start_notifying)
@@ -226,10 +266,10 @@ public class InteractionActivity extends AppCompatActivity {
 //                    onStartClick();
 //                }
 //            };
-            countDownTimerExplore= new CountDownTimer(20000, 1000) {
+            countDownTimerExplore= new CountDownTimer(explore_time, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-                    tv_countdown_itr.setText(String.valueOf(millisUntilFinished / 1000));
+                    tv_countdown_itr.setText(String.valueOf(millisUntilFinished / 1000) +"S");
                     countExplore = true;
                 }
 
@@ -288,6 +328,9 @@ public class InteractionActivity extends AppCompatActivity {
 //
 //        }
 //        startActivity(intent);
+        if(itr_type >0){
+            Exploration.finishExploration(db, Exploration.State.FINISHED, explore_id, itr_id);
+        }
         finish();
     }
     @OnClick(R.id.btn_reStart)
@@ -339,7 +382,7 @@ public class InteractionActivity extends AppCompatActivity {
 
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", e_id);
+                    values.put("prj_id", prj_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
@@ -418,7 +461,7 @@ public class InteractionActivity extends AppCompatActivity {
                     }
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", e_id);
+                    values.put("prj_id", prj_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
@@ -467,7 +510,7 @@ public class InteractionActivity extends AppCompatActivity {
                         public void run() {
                             ContentValues values = new ContentValues();
                             values.put("p_id", p_id);
-                            values.put("e_id", e_id);
+                            values.put("prj_id", prj_id);
                             values.put("itr_id", itr_id);
                             values.put("itr_type", itr_type);
                             values.put("hand", hand);
@@ -505,7 +548,7 @@ public class InteractionActivity extends AppCompatActivity {
                     Log.i("DeviceActivity", " NTF_GYO_DATA:" + " gyo_x:" + gyo_x + " gyo_y:" + gyo_y + " gyo_z:" + gyo_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", e_id);
+                    values.put("prj_id", prj_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
@@ -542,7 +585,7 @@ public class InteractionActivity extends AppCompatActivity {
 
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", e_id);
+                    values.put("prj_id", prj_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);
@@ -577,7 +620,7 @@ public class InteractionActivity extends AppCompatActivity {
                     Log.i("DeviceActivity", "NTF_MAG_DATA: " + " mag_x:" + mag_x + " mag_y:" + mag_y + " mag_z:" + mag_z);
                     ContentValues values = new ContentValues();
                     values.put("p_id", p_id);
-                    values.put("e_id", e_id);
+                    values.put("prj_id", prj_id);
                     values.put("itr_id", itr_id);
                     values.put("itr_type", itr_type);
                     values.put("hand", hand);

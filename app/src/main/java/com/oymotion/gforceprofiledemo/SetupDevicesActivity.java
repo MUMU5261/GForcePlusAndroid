@@ -655,9 +655,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
 //            Intent intent = new Intent(SetupDevicesActivity.this,ImagePickerActivity.class);
                 Intent intent = new Intent(SetupDevicesActivity.this,MaterialListActivity.class);
 //            intent.putExtra("e_id", e_id);
-                app.setExperimentID(e_id);
-                app.setExperimentState(Experiment.State.START);
-                app.setInteractionType(Interaction.Type.RELAX);
+//                app.setExperimentID(e_id);
+//                app.setExperimentState(Experiment.State.START);
+//                app.setInteractionType(Interaction.Type.RELAX);
 
                 startActivity(intent);
                 Log.i(TAG, "jump to image picker");

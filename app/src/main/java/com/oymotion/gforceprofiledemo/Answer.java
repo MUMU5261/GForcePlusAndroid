@@ -37,6 +37,7 @@ public class Answer {
         this.prj_id = prj_id;
         this.clt_id = clt_id;
         this.ppt_id = ppt_id;
+        this.qst_id = qst_id;
         this.content = content;
     }
 

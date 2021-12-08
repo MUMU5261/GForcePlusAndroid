@@ -125,8 +125,8 @@ public class Interaction {
 
     public class Type {
         public static final int ERROR = -1 ;
-        public static final int RELAX = 0 ;
-        public static final int FIST = 1;
+        public static final int RELAX = -2 ;
+        public static final int FIST = -3;
         public static final int FREE = 2;
         public static final int SMOOTH = 3;
         public static final int THICKNESS = 4;

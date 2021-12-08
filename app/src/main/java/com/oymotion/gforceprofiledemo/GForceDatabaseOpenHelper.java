@@ -48,11 +48,10 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_Interaction = "create table Interaction ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
             + "prj_id integer,"
             + "clt_id integer NOT NULL,"
-            + "ppt_id integer DEFAULT -1,"
-            + "type integer NOT NULL,"
+            + "expl_id integer NOT NULL,"
+            + "type integer NOT NULL,"// ppt_id if 0:Free, -2:relax, -3:fist
             + "state integer default 0," // "0" : setup, "1":doing, "2": finished "3":failed
             + "timestamp text NOT NULL)";
 

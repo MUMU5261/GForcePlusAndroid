@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 editor.apply();
                 Toast.makeText(this, "Login success.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(LoginActivity.this, MaterialListActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ScanDevicesActivity.class);
 //                Intent intent = new Intent(LoginActivity.this, ScanDevicesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("p_id", p_id);
