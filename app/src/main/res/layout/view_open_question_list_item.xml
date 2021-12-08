@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/rv_item_height"
-    android:layout_marginTop="@dimen/rv_item_margin">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/rv_item_margin"
+    android:layout_marginBottom ="@dimen/rv_item_margin">
     <TextView
         android:id="@+id/tv_item_open_question"
         android:layout_width="wrap_content"

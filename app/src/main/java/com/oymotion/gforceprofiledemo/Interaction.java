@@ -12,9 +12,10 @@ public class Interaction {
     int id;
     int p_id;
     int prj_id;
-    int itr_type;
     int rating;
     int clt_id;
+    int ppt_id;
+    int itr_type;
     int state;
 
     ContentValues values = new ContentValues();
@@ -29,10 +30,11 @@ public class Interaction {
         this.state = state;
     }
 
-    public Interaction(int prj_id, int p_id, int clt_id, int itr_type) {
+    public Interaction(int prj_id, int p_id, int clt_id, int ppt_id, int itr_type) {
         this.prj_id = prj_id;
         this.p_id = p_id;
         this.clt_id = clt_id;
+        this.ppt_id = ppt_id;
         this.itr_type = itr_type;
     }
 
@@ -90,6 +92,7 @@ public class Interaction {
         values.put("p_id", p_id);
         values.put("prj_id",prj_id);
         values.put("clt_id", clt_id);
+        values.put("ppt_id", ppt_id);
         values.put("type", itr_type);
         values.put("state", State.START);
         values.put("timestamp", DatabaseUtil.getTimestamp());

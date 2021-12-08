@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
-import android.text.PrecomputedText;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,8 +39,8 @@ public class InteractionActivity extends AppCompatActivity {
 //    Button btn_start_notifying;
     @BindView(R.id.btn_start_notifying)
     Button btn_start_notifying;
-    @BindView(R.id.btn_next)
-    Button btn_next;
+    @BindView(R.id.btn_finish)
+    Button btn_finish;
     @BindView(R.id.btn_reConnect)
     Button btn_reConnect;
     @BindView(R.id.btn_reStart)
@@ -80,6 +79,7 @@ public class InteractionActivity extends AppCompatActivity {
     int prj_id;
     long explore_time;
 
+
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
 
@@ -107,7 +107,7 @@ public class InteractionActivity extends AppCompatActivity {
         tv_countdown_itr = this.findViewById(R.id.tv_countdown_itr);
         tv_itr_statement = this.findViewById(R.id.tv_itr_statement);
         btn_start_notifying.setEnabled(false);
-        btn_next.setEnabled(false);
+        btn_finish.setEnabled(false);
         btn_reStart.setEnabled(false);
         btn_reConnect.setEnabled(false);
 
@@ -116,24 +116,27 @@ public class InteractionActivity extends AppCompatActivity {
 
         p_id = Participant.getIDFromPreference(this);
         prj_id = Project.getIDFromPreference(this);
-        explore_time = Project.getTimeFromPreference(this) * 1000;
-        tv_countdown_itr.setText(String.valueOf(Project.getTimeFromPreference(this))+"S");
+        explore_time = Project.getExploreTime(db,prj_id) * 1000;
+        tv_countdown_itr.setText(String.valueOf(Project.getExploreTime(db,prj_id))+"S");
 
-//        itr_type = app.getInteractionType();
-//        clt_id = app.getClothesID();
 
         intent = this.getIntent();
         clt_id = intent.getIntExtra("clt_id",-1);
         ppt_name = intent.getStringExtra("ppt_name");//
+        ppt_id = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
         itr_type = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
-        itr_type = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
+        explore_id = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
+
+
+//        itr_type = app.getInteractionType();
+//        clt_id = app.getClothesID();
 
         Log.i(TAG, "Initial Information: " + "prj_id:" + prj_id + "p_id:" + p_id + "itr_type:" + itr_type + "clt_id" + clt_id);
 
         getPrompt();
 
         //create new interaction
-        interaction = new Interaction(prj_id, p_id, clt_id, itr_type);
+        interaction = new Interaction(prj_id, p_id, clt_id, ppt_id, itr_type);
         itr_id = interaction.insertInteraction(db);
 
         if (itr_id != -1) {
@@ -276,7 +279,7 @@ public class InteractionActivity extends AppCompatActivity {
                 public void onFinish() {
                     tv_countdown_itr.setText("Done!");
                     onStartClick();
-                    btn_next.setEnabled(true);
+                    btn_finish.setEnabled(true);
                     btn_reStart.setEnabled(true);
                     countExplore = false;
                     this.cancel();
@@ -286,7 +289,7 @@ public class InteractionActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.btn_next)
+    @OnClick(R.id.btn_finish)
     public void onNextClick() {
 ////        switch (itr_type) {
 ////            case Interaction.Type.FREE:
@@ -328,11 +331,22 @@ public class InteractionActivity extends AppCompatActivity {
 //
 //        }
 //        startActivity(intent);
-        if(itr_type >0){
+        Log.i(TAG, "onNextClick: "+"itr_type"+itr_type);
+        if(itr_type > 0){
             Exploration.finishExploration(db, Exploration.State.FINISHED, explore_id, itr_id);
+            intent.putExtra("ppt_id", ppt_id);
+            intent.putExtra("ppt_name", ppt_name);
+            intent.putExtra("explore_id", explore_id);
+            intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+            startActivity(intent);
+            finish();
+
+        }else {
+            finish();
         }
-        finish();
+
     }
+
     @OnClick(R.id.btn_reStart)
     public void setBtn_reStart(){
         if (interaction.updateState(db, Interaction.State.FAILED)) {

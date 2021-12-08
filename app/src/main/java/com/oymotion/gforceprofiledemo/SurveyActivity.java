@@ -3,19 +3,15 @@ package com.oymotion.gforceprofiledemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,30 +20,35 @@ import butterknife.OnClick;
 public class SurveyActivity extends AppCompatActivity {
     private static final String TAG = "SurveyActivity";
 
-    @BindView(R.id.btn_next)
+    @BindView(R.id.btn_next_survey)
     Button btn_next;
 
+    @BindView(R.id.rg_likert)
     RadioGroup rg_liker;
 //    RadioButton nan,nv ;
-    RadioButton radioButton;
+    RadioButton tempButton;
 
 
     TextView tv_question;
     TextView tv_low;
     TextView tv_high;
 
+
     private GForceDatabaseOpenHelper dbHelper;
     private SQLiteDatabase db;
 
-    Resources res;
-    String[] questionList;
-    String[] wordPairList;
-    MyApplication app;
+    int rating;
+    int scale;
 
-    int itr_type;
+    int itr_id;//explore_id
+    int explore_id;//explore_id
+    int itr_type;//explore_id
+    int ppt_id;//explore_id
+    int p_id;
     int clt_id;
-    int likert;
-    int clt_count;
+    int prj_id;
+    Property property;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,66 +66,76 @@ public class SurveyActivity extends AppCompatActivity {
         db = dbHelper.getReadableDatabase();
 
 
+        rating = -1;
+        prj_id = Project.getIDFromPreference(this);
+        scale = Project.getSurveyScale(db,prj_id);
 
-        app = (MyApplication) getApplication();
-        itr_type = app.getInteractionType();
-        clt_id = app.getClothesID();
-        likert = -1;
+        Intent intent = this.getIntent();
+        ppt_id = intent.getIntExtra("ppt_id",1);
+        ppt_id = intent.getIntExtra("explore_id",1);
+        itr_type = intent.getIntExtra("ppt_id",1);
+        property = Property.getProperty(db, ppt_id);
 
-        res = getResources();
-        questionList = res.getStringArray(R.array.survey2);
-        tv_question.setText(Html.fromHtml(questionList[itr_type], Typeface.BOLD));
-        String low = "low";
-        String high = "high";
-        switch (itr_type){
-            case Interaction.Type.SMOOTH:
-                wordPairList = res.getStringArray(R.array.smooth);
-                break;
-            case Interaction.Type.THICKNESS:
-                wordPairList = res.getStringArray(R.array.thick);
-                break;
-            case Interaction.Type.WARMTH:
-                wordPairList = res.getStringArray(R.array.warm);
-                break;
-            case Interaction.Type.FLEXIBILITY:
-                wordPairList = res.getStringArray(R.array.flexible);
-                break;
-            case Interaction.Type.SOFTNESS:
-                wordPairList = res.getStringArray(R.array.soft);
-                break;
-            case Interaction.Type.ENJOYMENT:
-                wordPairList = new String[]{"a", "b"};
-                break;
-        }
-//        hide for version2
-//        tv_low.setText(wordPairList[0]);
-//        tv_high.setText(wordPairList[1]);
+        initQuestion();
+        initRadioGroup();
+        rg_liker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton tempButton = findViewById(checkedId);// 通过RadioGroup的findViewById方法，找到ID为checkedID的RadioButton
+                String ratingStr = tempButton.getText().toString();;
+                rating = Integer.valueOf(ratingStr);
+                Log.i(TAG, "Selected Radio Button: " + tempButton.getText().toString());
+                btn_next.setEnabled(true);
+            }
+        });
 
         Log.i(TAG, "Initial Information: " + "clt_id:" + clt_id +  "itr_type:" + itr_type);
         btn_next.setEnabled(false);
     }
 
-    @OnClick(R.id.btn_next)
+    private void initQuestion() {
+
+        String ppt_name = property.getProperty();
+        String polar_low = property.getPolarLow();
+        String polar_high = property.getPolarHigh();
+        String html = "How much do you feel <b>" + ppt_name + "</b> ?.";
+        tv_question.setText(Html.fromHtml(html, Typeface.BOLD));
+        tv_low.setText(polar_low);
+        tv_high.setText(polar_high);
+    }
+
+    private void initRadioGroup(){
+        for(int i = 1; i <= scale; i++){
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(String.valueOf(i));
+            rg_liker.addView(radioButton);
+        }
+    }
+
+
+    @OnClick(R.id.btn_next_survey)
     public void onNextClick() {
-        int radioButtonID = rg_liker.getCheckedRadioButtonId();
-        radioButton = findViewById(radioButtonID);
-        Toast.makeText(this, "Selected Radio Button: " + radioButton.getText(), Toast.LENGTH_LONG).show();
+//        int radioButtonID = rg_liker.getCheckedRadioButtonId();
+//        tempButton = findViewById(radioButtonID);
+//        Toast.makeText(this, "Selected Radio Button: " + tempButton.getText(), Toast.LENGTH_LONG).show();
 //        Clothes.updateQuality(db,clt_id,itr_type,likert);
-        Intent intentItr;
-        intentItr = new Intent(SurveyActivity.this,InteractionActivity.class);
+//        Intent intentItr;
+//        intentItr = new Intent(SurveyActivity.this,InteractionActivity.class);
+//
+//        clt_count = app.getClothesCount();
+//        app.setInteractionState(Interaction.State.START);
 
-        clt_count = app.getClothesCount();
-        app.setInteractionState(Interaction.State.START);
 
-        switch (itr_type) {
-            case Interaction.Type.SMOOTH:
-                app.setInteractionType(Interaction.Type.THICKNESS);
-                startActivity(intentItr);
-                break;
-            case Interaction.Type.THICKNESS:
-                app.setInteractionType(Interaction.Type.ENJOYMENT);
-                startActivity(intentItr);
-                break;
+//        switch (itr_type) {
+//            case Interaction.Type.SMOOTH:
+//                app.setInteractionType(Interaction.Type.THICKNESS);
+//                startActivity(intentItr);
+//                break;
+//            case Interaction.Type.THICKNESS:
+//                app.setInteractionType(Interaction.Type.ENJOYMENT);
+//                startActivity(intentItr);
+//                break;
 //            case Interaction.Type.WARMTH:
 //                app.setInteractionType(Interaction.Type.FLEXIBILITY);
 //                startActivity(intentItr);
@@ -150,15 +161,16 @@ public class SurveyActivity extends AppCompatActivity {
 //                break;
 
                 //default
+        Exploration.updateRating(db, rating, explore_id);
+        finish();
         }
-    }
 
-    public void onRadioButtonClicked(View v) {
-        int radioButtonID = rg_liker.getCheckedRadioButtonId();
-        radioButton = findViewById(radioButtonID);
-        String likertStr = (String) radioButton.getText();;
-        likert = Integer.valueOf(likertStr);
-        Log.i(TAG, "Selected Radio Button: " + radioButton.getText());
-        btn_next.setEnabled(true);
-    }
+//    public void onRadioButtonClicked(View v) {
+//        int radioButtonID = rg_liker.getCheckedRadioButtonId();
+//        tempButton = findViewById(radioButtonID);
+//        String likertStr = (String) tempButton.getText();;
+//        rating = Integer.valueOf(likertStr);
+//        Log.i(TAG, "Selected Radio Button: " + tempButton.getText());
+//        btn_next.setEnabled(true);
+//    }
 }

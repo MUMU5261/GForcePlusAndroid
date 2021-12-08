@@ -73,7 +73,8 @@ public class MaterialProfileActivity extends AppCompatActivity {
             ppt_name = explorationList.get(childAdapterPosition).getPpt_name();
             intent.putExtra("ppt_id", ppt_id);
             intent.putExtra("ppt_name", ppt_name);
-            intent.putExtra("clt_id", id_clicked);
+            intent.putExtra("clt_id", clt_id);
+            intent.putExtra("explore_id", id_clicked);
             startActivity(intent);
 
         }
@@ -157,7 +158,7 @@ public class MaterialProfileActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_answer_question)
     public void onAnswerQuestionClick() {
-        Intent intent = new Intent(MaterialProfileActivity.this,AnswerOpenQuestionActivity.class);
+        Intent intent = new Intent(MaterialProfileActivity.this,AnswerDesignQuestionActivity.class);
 //        what is set flag
 //        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 //        intent.putExtra("p_id",p_id);

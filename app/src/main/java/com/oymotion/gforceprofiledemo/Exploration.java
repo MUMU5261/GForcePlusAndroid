@@ -171,6 +171,20 @@ public class Exploration {
             return false;
         }
     }
+
+    public static boolean updateRating(SQLiteDatabase db, int rating, int id) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put("rating", rating);
+//        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
+            db.update("Exploration", values, "id=?", new String[]{String.valueOf(id)});
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean finishExploration(SQLiteDatabase db, int state, int id, int itr_id) {
         ContentValues values = new ContentValues();
         try {

@@ -31,7 +31,7 @@
         <activity android:name=".ImagePickerActivity" />
         <activity android:name=".InstructionActivity" />
         <activity android:name=".test2" />
-        <activity android:name=".SurveyActivity" />
+<!--        <activity android:name=".SurveyActivity" />-->
         <activity android:name=".SurveyEnjoymentActivity" />
         <activity android:name=".InteractionActivity" />
         <activity android:name=".SetupDevicesActivity" />
@@ -48,6 +48,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".DeviceActivity" />
         <activity android:name=".ExperimentSettingMenuActivity" />
+        <activity android:name=".SurveyActivity" />
         <activity android:name=".ExperimentSettingActivity" android:label="Experiment Setting" />
         <activity android:name=".ParticipantManageActivity" android:label="Manage Participants" />
         <activity android:name=".EditPropertiesActivity" android:label="Manage Properties" />
@@ -56,6 +57,7 @@
         <activity android:name=".MaterialListActivity" android:label="Material List" />
         <activity android:name=".MaterialProfileActivity" android:label="Material profile" />
         <activity android:name=".ProjectListActivity" android:label="Project List" />
+        <activity android:name=".AnswerDesignQuestionActivity" android:label="Answer Question" />
     </application>
 
 </manifest>

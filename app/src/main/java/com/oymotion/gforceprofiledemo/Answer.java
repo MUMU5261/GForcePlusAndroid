@@ -61,9 +61,103 @@ public class Answer {
         this.state = state;
     }
 
+    public static String getTAG() {
+        return TAG;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getPrj_id() {
+        return prj_id;
+    }
+
+    public int getP_id() {
+        return p_id;
+    }
+
+    public int getClt_id() {
+        return clt_id;
+    }
+
+    public int getPpt_id() {
+        return ppt_id;
+    }
+
+    public int getQst_id() {
+        return qst_id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getState() {
+        return state;
+    }
 
     public ContentValues getValues() {
         return values;
+    }
+
+    static Answer getQuestionAnswer(SQLiteDatabase db, int qst_id, int clt_id) {
+        Answer Answer;
+        Cursor result = null;
+        try {
+            result = db.query("Answer",null,"qst_id = ? and clt_id = ?",new String[]{String.valueOf(qst_id),String.valueOf(clt_id)},null,null,null);
+
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        if(result.getCount() == 0){
+            return null;
+        }else{
+            result.moveToNext();
+            int id = result.getInt(0);
+            int prj_id = result.getInt(1);
+            int p_id = result.getInt(2);
+            int mclt_id = result.getInt(3);
+            int ppt_id = result.getInt(4);
+            int mqst_id = result.getInt(5);
+            String content = result.getString(6);
+            int state = result.getInt(7);
+
+            Answer = new Answer(id,prj_id,p_id,clt_id,ppt_id,mqst_id,content,state);
+
+            result.close();
+            return Answer;
+        }
+
+    }
+
+    static Answer getExplorationAnswer(SQLiteDatabase db, int ppt_id) {
+        Answer Answer;
+        Cursor result = null;
+        try {
+            result = db.query("Answer",null,"ppt_id = ?",new String[]{String.valueOf(ppt_id)},null,null,null);
+
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        if(result.getCount() == 0){
+            return null;
+        }else{
+            result.moveToNext();
+            int id = result.getInt(0);
+            int prj_id = result.getInt(1);
+            int p_id = result.getInt(2);
+            int clt_id = result.getInt(3);
+            int mppt_id = result.getInt(4);
+            int mqst_id = result.getInt(5);
+            String content = result.getString(6);
+            int state = result.getInt(7);
+
+            Answer = new Answer(id,prj_id,p_id,clt_id,mppt_id,mqst_id,content,state);
+
+            result.close();
+            return Answer;
+        }
     }
 
     static ArrayList<Answer> getAnswerList(SQLiteDatabase db, int prjId) {
@@ -126,11 +220,12 @@ public class Answer {
         }
     }
 
-    public boolean updateContent(SQLiteDatabase db, String content) {
+    public static boolean updateContent(SQLiteDatabase db, int clt_id, int qst_id, String content) {
+        ContentValues values = new ContentValues();
         try {
             values.put("content", content);
 //        values.put("timestamp", DatabaseUtil.getTimestamp());//may need a update time
-            db.update("Answer", values, "id=?", new String[]{String.valueOf(id)});
+            db.update("Answer", values, "clt_id = ? AND qst_id =?", new String[]{String.valueOf(clt_id),String.valueOf(qst_id)});
             return true;
         } catch (Exception e) {
             e.printStackTrace();

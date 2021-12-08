@@ -166,6 +166,23 @@ public class Project {
             return false;
         }
     }
+
+    // update exploration time and scale
+    public static boolean updateProjectTimeScale(SQLiteDatabase db, int id,int explore_time, int scale) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put("explore_time", explore_time);
+            values.put("scale", scale);
+            db.update("Project", values, "prj_id=?", new String[]{String.valueOf(id)});//
+            values.clear();
+            return true;
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+            values.clear();
+            return false;
+        }
+    }
+
     public static boolean deleteProject(SQLiteDatabase db, int id) {
         ContentValues values = new ContentValues();
         try {
@@ -209,13 +226,45 @@ public class Project {
         p_id = preferences.getInt("prj_id",-1);
         return p_id;
     }
-    public static int getTimeFromPreference(Context context){
-        SharedPreferences preferences;
-        SharedPreferences .Editor editor;
-        int p_id = -1;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        p_id = preferences.getInt("explore_time",15);
-        return p_id;
+//    need restructure, get from database
+    public static int getExploreTime(SQLiteDatabase db, int prj_id){
+
+        Project project = new Project(-1,null,null);
+        Cursor result = null;
+        try {
+            result = db.query("Project",null,"prj_id = ?",new String[]{String.valueOf(prj_id)},null,null,null);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        if(result.getCount() == 0){
+            return 15;
+        }else{
+            result.moveToNext();
+            int explore_time = result.getInt(result.getColumnIndex("explore_time"));
+//            int scale = result.getInt(result.getColumnIndex("scale"));
+            return explore_time;
+        }
+
+    }
+    public static int getSurveyScale(SQLiteDatabase db, int prj_id){
+
+        Project project = new Project(-1,null,null);
+        Cursor result = null;
+        try {
+            result = db.query("Project",null,"prj_id = ?",new String[]{String.valueOf(prj_id)},null,null,null);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        if(result.getCount() == 0){
+            return 7;
+        }else{
+            result.moveToNext();
+//            int explore_time = result.getInt(result.getColumnIndex("explore_time"));
+            int scale = result.getInt(result.getColumnIndex("scale"));
+            return scale;
+        }
     }
 
 
