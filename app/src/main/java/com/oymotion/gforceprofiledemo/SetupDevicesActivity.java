@@ -72,6 +72,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
     int armband_id_l;
     int armband_id_r;
 
+    int itr_state;
+
 
     private GForceProfile.BluetoothDeviceStateEx state_l = GForceProfile.BluetoothDeviceStateEx.disconnected;
     private GForceProfile.BluetoothDeviceStateEx state_r = GForceProfile.BluetoothDeviceStateEx.disconnected;
@@ -642,9 +644,8 @@ public class SetupDevicesActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_next1)
     public void onNextClick(){
-        if(app.getInteractionType() != Interaction.Type.ERROR){
-            Intent intent = new Intent(SetupDevicesActivity.this,MaterialListActivity.class);
-            startActivity(intent);
+        if(itr_state == Interaction.State.CONNECT_ERROR){
+            finish();
         }else{
             try {
                 phone_id = 2;
@@ -802,6 +803,9 @@ public class SetupDevicesActivity extends AppCompatActivity {
                 "extra_mac_address_r:" + extra_mac_address_r);
         itr_type = 99;
         p_id = Participant.getIDFromPreference(this);
+
+        Intent intent = this.getIntent();
+        itr_state = intent.getIntExtra("itr_state", -1);
 
         // create a method to get from database;
 

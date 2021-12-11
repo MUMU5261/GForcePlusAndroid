@@ -99,6 +99,55 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Explore Time: " />
+
+                <TextView
+                    android:id="@+id/tv_explore_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Explore Time" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="Rating Scale: " />
+
+                <TextView
+                    android:id="@+id/tv_scale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:textSize="20dp"
+                    android:textColor="@color/purple_700"
+                    android:layout_marginBottom="5dp"
+                    android:text="scale" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

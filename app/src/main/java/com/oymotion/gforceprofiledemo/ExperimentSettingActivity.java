@@ -1,11 +1,12 @@
 package com.oymotion.gforceprofiledemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.DropBoxManager;
 import android.preference.PreferenceManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class ExperimentSettingActivity extends AppCompatActivity {
 
 
 //    int clothesNo;
-    int exploreTime;
+    int explore_time;
     int scale;
 
     private SharedPreferences preferences;
@@ -69,21 +70,28 @@ public class ExperimentSettingActivity extends AppCompatActivity {
         dbHelper = new GForceDatabaseOpenHelper(this, "GForce.db", null, 1);
         db = dbHelper.getReadableDatabase();
 ////        et_cloth_number.setFocusable(false);
-        et_explore_time.setFocusable(false);
-        et_rating_scale.setFocusable(false);
-
-        intent = getIntent();
-        prj_id = intent.getIntExtra("prj_id", -1);
-
+        init();
         updatePreference();
 
+    }
+
+    private void init() {
+        et_explore_time.setFocusable(false);
+        et_rating_scale.setFocusable(false);
+        intent = getIntent();
+        prj_id = intent.getIntExtra("prj_id", -1);
+        Project project = Project.getProject(db, prj_id);
+        explore_time = project.getExplore_time();
+        scale = project.getScale();
+        et_explore_time.setText(String.valueOf(explore_time));
+        et_rating_scale.setText(String.valueOf(scale));
     }
 
     private void updatePreference() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 //        clothesNo = preferences.getInt("clothes_no", 3);
-        exploreTime = preferences.getInt("explore_time", 15);
+        explore_time = preferences.getInt("explore_time", 15);
         scale = preferences.getInt("scale", 7);
 
 //        et_cloth_number.setFocusableInTouchMode(false);
@@ -96,11 +104,11 @@ public class ExperimentSettingActivity extends AppCompatActivity {
     }
     private void writePreference() {
         editor = preferences.edit();
-        editor.putInt("explore_time", exploreTime);
+        editor.putInt("explore_time", explore_time);
         editor.putInt("scale", scale);
         editor.apply();
         editor.clear();
-        Project.updateProjectTimeScale(db,prj_id,exploreTime,scale);
+        Project.updateProjectTimeScale(db,prj_id, explore_time,scale);
     }
 
 
@@ -116,6 +124,12 @@ public class ExperimentSettingActivity extends AppCompatActivity {
                 Toast.makeText(this, "Field can't be empty",Toast.LENGTH_LONG).show();
                 return;
             }else{
+//                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                // 隐藏软键盘
+                imm.hideSoftInputFromWindow(this.getWindow().getDecorView().getWindowToken(), 0);
+
                 isEditing = false;
                 btn_edit.setText("Edit");
 //                et_cloth_number.setFocusableInTouchMode(false);
@@ -126,7 +140,7 @@ public class ExperimentSettingActivity extends AppCompatActivity {
                 et_explore_time.setFocusable(false);
                 et_rating_scale.setFocusable(false);
 //                clothesNo = Integer.valueOf(clothesNo_str);
-                exploreTime = Integer.valueOf(exploreTime_str);
+                explore_time = Integer.valueOf(exploreTime_str);
                 scale = Integer.valueOf(rating_str);
                 writePreference();
 
@@ -154,7 +168,6 @@ public class ExperimentSettingActivity extends AppCompatActivity {
         intent = new Intent(ExperimentSettingActivity.this,EditPropertiesActivity.class);
         intent.putExtra("prj_id", prj_id);
         startActivity(intent);
-        finish();
     }
 
     @OnClick(R.id.btn_open_question_edit)
@@ -162,7 +175,6 @@ public class ExperimentSettingActivity extends AppCompatActivity {
         intent = new Intent(ExperimentSettingActivity.this,EditOpenQuestionsActivity.class);
         intent.putExtra("prj_id", prj_id);
         startActivity(intent);
-        finish();
     }
 
 

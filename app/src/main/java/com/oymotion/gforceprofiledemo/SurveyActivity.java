@@ -19,6 +19,7 @@ import butterknife.OnClick;
 
 public class SurveyActivity extends AppCompatActivity {
     private static final String TAG = "SurveyActivity";
+    
 
     @BindView(R.id.btn_next_survey)
     Button btn_next;
@@ -52,6 +53,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
         ButterKnife.bind(SurveyActivity.this);
@@ -71,11 +73,14 @@ public class SurveyActivity extends AppCompatActivity {
         scale = Project.getSurveyScale(db,prj_id);
 
         Intent intent = this.getIntent();
-        ppt_id = intent.getIntExtra("ppt_id",1);
-        ppt_id = intent.getIntExtra("explore_id",1);
-        itr_type = intent.getIntExtra("ppt_id",1);
-        property = Property.getProperty(db, ppt_id);
 
+        ppt_id = intent.getIntExtra("ppt_id",-1);
+        explore_id = intent.getIntExtra("explore_id",-1);
+        itr_type = intent.getIntExtra("ppt_id",-1);
+        Log.i(TAG, "onCreate: ppt_id"+ppt_id);
+        property = Property.getProperty(db, ppt_id);
+        Log.i(TAG, "onCreate: property"+property.toString());
+        Log.i(TAG, "onCreate: ppt_id"+ppt_id);
         initQuestion();
         initRadioGroup();
         rg_liker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -95,6 +100,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void initQuestion() {
+        Log.i(TAG, "initQuestion: ");
 
         String ppt_name = property.getProperty();
         String polar_low = property.getPolarLow();

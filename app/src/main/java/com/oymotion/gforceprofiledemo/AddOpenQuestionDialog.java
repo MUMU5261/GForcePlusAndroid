@@ -34,15 +34,15 @@ public class AddOpenQuestionDialog extends DialogFragment {
     GForceDatabaseOpenHelper dbHelper;
     SQLiteDatabase db;
     int prj_id;
-    int id ;
+    int qst_id;
     int mode; //0:add;1:
 
 
-    public AddOpenQuestionDialog(int prj_id,int id) {
+    public AddOpenQuestionDialog(int prj_id,int qst_id) {
         super();
         this.prj_id = prj_id;
-        this.id = id;
-        mode = (id == -1)? AddOpenQuestionDialog.Mode.ADD : AddOpenQuestionDialog.Mode.EDIT;
+        this.qst_id = qst_id;
+        mode = (qst_id == -1)? AddOpenQuestionDialog.Mode.ADD : AddOpenQuestionDialog.Mode.EDIT;
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -91,7 +91,7 @@ public class AddOpenQuestionDialog extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout\
         if (mode == AddOpenQuestionDialog.Mode.EDIT) {
-            Question question = Question.getQuestion(db,id);
+            Question question = Question.getQuestion(db, qst_id);
             fillEditText(question);
         }
 
@@ -108,10 +108,10 @@ public class AddOpenQuestionDialog extends DialogFragment {
                             Question question = new Question(prj_id,question_con,0);
 
                             if(mode == AddOpenQuestionDialog.Mode.ADD){
-                                int id_new = question.insertQuestion(db);
-                                Log.i(TAG, "onClick: "+ id_new);
+                                int new_qst_id = question.insertQuestion(db);
+                                Log.i(TAG, "onClick: "+ new_qst_id);
                             }else{
-                                question.updateQuestion(db,id);
+                                question.updateQuestion(db,qst_id);
                             }
                             listener.onDialogPositiveClick(AddOpenQuestionDialog.this);
                             AddOpenQuestionDialog.this.getDialog().dismiss();

@@ -25,7 +25,7 @@
         android:scaleX="2"
         android:scaleY="2"
         android:layout_marginRight="@dimen/rv_right_margin"
-
         android:checked="false"
-        android:layout_gravity="right"/>
+        android:layout_gravity="right"
+        android:enabled="false"/>
 </LinearLayout>

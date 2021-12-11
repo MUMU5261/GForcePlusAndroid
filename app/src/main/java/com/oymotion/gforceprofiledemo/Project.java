@@ -28,6 +28,8 @@ public class Project {
     String prj_name;
     String researcher;
     int state = 0;
+    int explore_time;
+    int scale;
 
 
     public Project( int prj_id, String prj_name, String researcher) {
@@ -36,11 +38,13 @@ public class Project {
         this.researcher = researcher;
     }
 
-    public Project(int id, int prj_id, String prj_name, String researcher, int state) {
+    public Project(int id, int prj_id, String prj_name, String researcher, int explore_time, int scale, int state) {
         this.id = id;
         this.prj_id = prj_id;
         this.prj_name = prj_name;
         this.researcher = researcher;
+        this.explore_time = explore_time;
+        this.scale = scale;
         this.state = state;
     }
 
@@ -55,9 +59,16 @@ public class Project {
     public int getState() {
         return state;
     }
-
     public int getId() {
         return id;
+    }
+
+    public int getExplore_time() {
+        return explore_time;
+    }
+
+    public int getScale() {
+        return scale;
     }
 
     public int insertProject(SQLiteDatabase db){
@@ -124,8 +135,10 @@ public class Project {
             int prjId = result.getInt(1);
             String prj_name = result.getString(2);
             String researcher = result.getString(3);
-            int state = result.getInt(4);
-            project = new Project(id,prj_id,prj_name,researcher,state);
+            int explore_time  = result.getInt(result.getColumnIndex("explore_time"));
+            int  scale = result.getInt(result.getColumnIndex("scale"));
+            int state = result.getInt(result.getColumnIndex("state"));
+            project = new Project(id,prj_id,prj_name,researcher,explore_time,scale,state);
             result.close();
             return project;
         }
@@ -141,8 +154,10 @@ public class Project {
                 int prj_id = result.getInt(1);
                 String prj_name = result.getString(2);
                 String researcher = result.getString(3);
-                int state = result.getInt(4);
-                Project project = new Project(id,prj_id,prj_name,researcher,state);
+                int explore_time  = result.getInt(result.getColumnIndex("explore_time"));
+                int  scale = result.getInt(result.getColumnIndex("scale"));
+                int state = result.getInt(result.getColumnIndex("state"));
+                Project project = new Project(id,prj_id,prj_name,researcher,explore_time,scale,state);
                 projectList.add(project);
             }
             result.close();

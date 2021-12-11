@@ -17,7 +17,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
@@ -30,7 +29,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/header_text_size"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:text="Please add properties that you plan to include in experiment."
                     android:textColor="@color/black"/>
             </LinearLayout>
@@ -44,36 +43,27 @@
                     android:id="@+id/tv_item_property"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/rv_left_margin"
-                    android:layout_gravity="center"
+                    android:layout_gravity="left"
                     android:textSize="@dimen/header_text_size"
                     android:text="Property"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight= "1"
-                    android:textSize="@dimen/text_size"/>
+
                 <TextView
                     android:id="@+id/tv_item_polar_low"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/rv_left_margin"
-                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/margin_property_item"
+                    android:layout_gravity="left"
                     android:textSize="@dimen/header_text_size"
-                    android:text="low"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight= "1"
-                    android:textSize="@dimen/text_size"/>
+                    android:text="Low"/>
+
                 <TextView
                     android:id="@+id/tv_item_polar_high"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/rv_left_margin"
-                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/margin_property_item"
+                    android:layout_gravity="left"
                     android:textSize="@dimen/header_text_size"
-                    android:text="hight"/>
+                    android:text="High"/>
             </LinearLayout>
 
             <LinearLayout

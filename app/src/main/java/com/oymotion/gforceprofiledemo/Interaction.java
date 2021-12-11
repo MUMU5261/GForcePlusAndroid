@@ -14,28 +14,29 @@ public class Interaction {
     int prj_id;
     int rating;
     int clt_id;
-    int ppt_id;
-    int itr_type;
+    int expl_id;//exploration_id,
+    int type;//property id, ppt_id
     int state;
 
     ContentValues values = new ContentValues();
 
 
-    public Interaction(int id, int prj_id, int p_id, int clt_id, int type, int state) {
+    public Interaction(int id, int prj_id, int p_id, int clt_id, int expl_id, int type, int state) {
         this.id = id;
-        this.p_id = p_id;
         this.prj_id = prj_id;
-        this.itr_type = type;
+        this.p_id = p_id;
         this.clt_id = clt_id;
+        this.expl_id = expl_id;
+        this.type = type;
         this.state = state;
     }
 
-    public Interaction(int prj_id, int p_id, int clt_id, int ppt_id, int itr_type) {
+    public Interaction(int prj_id, int p_id, int clt_id, int expl_id, int ppt_id) {
         this.prj_id = prj_id;
         this.p_id = p_id;
         this.clt_id = clt_id;
-        this.ppt_id = ppt_id;
-        this.itr_type = itr_type;
+        this.expl_id = expl_id;
+        this.type = ppt_id;
     }
 
 
@@ -48,7 +49,7 @@ public class Interaction {
     }
 
     public int getType() {
-        return itr_type;
+        return type;
     }
 
     public int getRating() {
@@ -71,14 +72,16 @@ public class Interaction {
             Log.i(TAG, "getInteractionList: "+result);
             while (result.moveToNext()){
                 Log.i(TAG, "getInteractionList: "+result.getColumnName(1));
-                int id = result.getInt(0);
-                int p_id = result.getInt(1);
-                int e_id = result.getInt(2);
-                int clt_id = result.getInt(3);
-                int type = result.getInt(4);
-                int state = result.getInt(5);
-                Interaction interaction = new Interaction(id,e_id,p_id,clt_id,type,state);
+                int id = result.getInt(result.getColumnIndex("id"));
+                int p_id = result.getInt(result.getColumnIndex("p_id"));
+                int prj_id = result.getInt(result.getColumnIndex("prj_id"));
+                int clt_id = result.getInt(result.getColumnIndex("clt_id"));
+                int expl_id = result.getInt(result.getColumnIndex("expl_id"));
+                int type = result.getInt(result.getColumnIndex("type"));//itr_type = ppt_id
+                int state = result.getInt(result.getColumnIndex("state"));
+                Interaction interaction = new Interaction(id,prj_id,p_id,clt_id,expl_id,type,state);
                 interactionList.add(interaction);
+
             }
             result.close();
         } catch (NumberFormatException e) {
@@ -92,8 +95,8 @@ public class Interaction {
         values.put("p_id", p_id);
         values.put("prj_id",prj_id);
         values.put("clt_id", clt_id);
-        values.put("ppt_id", ppt_id);
-        values.put("type", itr_type);
+        values.put("expl_id", expl_id);
+        values.put("type", type);
         values.put("state", State.START);
         values.put("timestamp", DatabaseUtil.getTimestamp());
         try {
@@ -144,6 +147,7 @@ public class Interaction {
         public static final int FINISHED = 1;
         public static final int DELETED = 2;
         public static final int FAILED = 3;
+        public static final int CONNECT_ERROR = 4;
 
     }
 }

@@ -15,7 +15,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "GForceDatabaseOpenHelper";
     public static final String Create_Participant = "create table Participant ("
             + "id integer primary key autoincrement,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "p_id integer NOT NULL,"
             + "state integer default 0," // "0" : incomplete, "1":complete
             + "timestamp text NOT NULL)";
@@ -31,7 +31,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public static final String Create_Clothes = "create table Clothes ("
             + "id integer primary key autoincrement,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "p_id integer NOT NULL,"
             + "img_cloth blob,"
             + "img_label blob,"
@@ -47,8 +47,8 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public static final String Create_Interaction = "create table Interaction ("
             + "id integer primary key autoincrement,"
+            + "prj_id integer NOT NULL,"
             + "p_id integer NOT NULL,"
-            + "prj_id integer,"
             + "clt_id integer NOT NULL,"
             + "expl_id integer NOT NULL,"
             + "type integer NOT NULL,"// ppt_id if 0:Free, -2:relax, -3:fist
@@ -58,8 +58,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_EMG = "create table EMG ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL,"
             + "hand integer NOT NULL," //0: left, 1:right
@@ -79,8 +78,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_Quaternion = "create table Quaternion ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
@@ -96,8 +94,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_ACC = "create table Acceletor ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
@@ -112,8 +109,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_Gyro = "create table Gyroscope ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
@@ -128,8 +124,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_Mag = "create table Magnetometer ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right
@@ -144,8 +139,7 @@ public class GForceDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String Create_Euler_Angle = "create table Euler_Angle ("
             + "id integer primary key autoincrement,"
             + "p_id integer NOT NULL,"
-            + "e_id integer,"
-            + "prj_id integer,"
+            + "prj_id integer NOT NULL,"
             + "itr_id integer NOT NULL,"
             + "itr_type integer NOT NULL," //0: smoothness, 1:warmth, 2:softness, 3:thickness 4:free
             + "hand integer NOT NULL," //0: left, 1:right

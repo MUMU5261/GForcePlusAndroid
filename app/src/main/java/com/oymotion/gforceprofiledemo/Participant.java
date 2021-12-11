@@ -81,11 +81,11 @@ public class Participant {
         }
     }
 
-    public static boolean updateState(SQLiteDatabase db, int p_id, int state){
+    public static boolean updateState(SQLiteDatabase db, int prj_id, int p_id, int state){
         ContentValues values = new ContentValues();
         try {
             values.put("state", state);
-            db.update("Participant", values, "p_id=?", new String[]{String.valueOf(p_id)});//
+            db.update("Participant", values, "prj_id=? and p_id=?", new String[]{String.valueOf(prj_id),String.valueOf(p_id)});//
             values.clear();
             return true;
         } catch (NumberFormatException e) {
@@ -114,16 +114,17 @@ public class Participant {
         return participantList;
     }
 
-    public static boolean deleteParticipant(SQLiteDatabase db, int p_id) {
+    public static boolean deleteParticipant(SQLiteDatabase db, int prj_id, int p_id) {
 
         ContentValues values = new ContentValues();
         try {
             values.put("state", State.DELETED);
-            db.update("Participant", values, "p_id=?", new String[]{String.valueOf(p_id)});//
-            db.update("Answer", values, "p_id=?", new String[]{String.valueOf(p_id)});//
-            db.update("Exploration", values, "p_id=?", new String[]{String.valueOf(p_id)});//
-            db.update("Clothes", values, "p_id=?", new String[]{String.valueOf(p_id)});//
-            db.update("Interaction", values, "p_id=?", new String[]{String.valueOf(p_id)});//
+            String state_str = String.valueOf(State.DELETED);
+            db.update("Participant", values, "prj_id = ? and p_id=? and state != ?", new String[]{String.valueOf(prj_id), String.valueOf(p_id),state_str});//
+            db.update("Answer", values, "prj_id = ? and p_id=? and state != ?", new String[]{String.valueOf(prj_id),String.valueOf(p_id),state_str});//
+            db.update("Exploration", values, "prj_id = ? and p_id=? and state != ?", new String[]{String.valueOf(prj_id),String.valueOf(p_id),state_str});//
+            db.update("Clothes", values, "prj_id = ? and p_id=? and state != ?", new String[]{String.valueOf(prj_id),String.valueOf(p_id),state_str});//
+            db.update("Interaction", values, "prj_id = ? and p_id=? and state != ?", new String[]{String.valueOf(prj_id),String.valueOf(p_id),state_str});//
 
             values.clear();
             return true;
@@ -134,11 +135,11 @@ public class Participant {
         }
     }
 
-    public boolean updateParticipant(SQLiteDatabase db, int id) {
+    public static boolean updateParticipant(SQLiteDatabase db, int prj_id, int id, int new_p_id) {
         ContentValues values = new ContentValues();
         try {
-            values.put("p_id", p_id);
-            db.update("Participant", values, "p_id=? and state != ?", new String[]{String.valueOf(id),String.valueOf(State.DELETED)});//
+            values.put("p_id", new_p_id);
+            db.update("Participant", values, "prj_id = ? and p_id = ? and state != ?", new String[]{String.valueOf(prj_id),String.valueOf(id),String.valueOf(State.DELETED)});//
             values.clear();
             return true;
         } catch (NumberFormatException e) {
@@ -148,11 +149,11 @@ public class Participant {
         }
     }
 
-    static Participant getParticipant(SQLiteDatabase db, int p_id) {
-        Participant participant = new Participant(-1,-1,-1);
+    static Participant getParticipant(SQLiteDatabase db, int prj_id, int p_id) {
+        Participant participant;
         Cursor result = null;
         try {
-            result = db.query("Participant",null,"p_id = ?",new String[]{String.valueOf(p_id)},null,null,null);
+            result = db.query("Participant",null,"prj_id = ? and p_id = ? and state != ?",new String[]{String.valueOf(prj_id),String.valueOf(p_id),String.valueOf(State.DELETED)},null,null,null);
 
         } catch (NumberFormatException e) {
             Log.e(TAG, e.getMessage());
@@ -161,11 +162,11 @@ public class Participant {
             return null;
         }else{
             result.moveToNext();
-            int id = result.getInt(0);
-            int mp_id = result.getInt(1);
-            int prj_id = result.getInt(2);
-            int state = result.getInt(3);
-            participant = new Participant(id,mp_id,prj_id,state);
+            int id = result.getInt(result.getColumnIndex("id"));
+            int mp_id = result.getInt(result.getColumnIndex("p_id"));
+            int mprj_id = result.getInt(result.getColumnIndex("prj_id"));
+            int state = result.getInt(result.getColumnIndex("state"));
+            participant = new Participant(id,mp_id,mprj_id,state);
             result.close();
             return participant;
         }

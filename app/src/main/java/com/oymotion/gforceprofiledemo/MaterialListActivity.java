@@ -151,7 +151,8 @@ public class MaterialListActivity extends AppCompatActivity implements PopupDial
         Clothes clothes = new Clothes(prj_id, p_id);
         int clt_id = clothes.insertClothes(db);
         Exploration.createExplorationList(db, p_id, prj_id, clt_id, propertyList);
-        materialListAdapter.updateData(getData());
+        materialList = getData();
+        materialListAdapter.updateData(materialList);
     }
 
     Intent intent;
@@ -208,6 +209,8 @@ public class MaterialListActivity extends AppCompatActivity implements PopupDial
         new AlertDialog.Builder(this).setTitle("Delete Material " + id_clicked +"?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
+
+
                     public void onClick(DialogInterface dialog, int which) {
                         Clothes.deleteClothes(db,id_clicked);
                         Log.i(TAG, "delete material: "+ id_clicked);

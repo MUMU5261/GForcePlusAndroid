@@ -46,6 +46,10 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
     TextView tv_prj_name;
     @BindView(R.id.tv_researcher)
     TextView tv_researcher;
+    @BindView(R.id.tv_explore_time)
+    TextView tv_explore_time;
+    @BindView(R.id.tv_scale)
+    TextView tv_scale;
 
     private RecyclerView rv_projectList;
     private ProjectListAdapter projectListAdapter;
@@ -169,6 +173,8 @@ public class ProjectListActivity extends AppCompatActivity implements AddProject
             tv_prj_id.setText(String.valueOf(project.getPrj_id()));
             tv_prj_name.setText(project.getPrj_name());
             tv_researcher.setText(project.getResearcher());
+            tv_explore_time.setText(String.valueOf(project.getExplore_time()));
+            tv_scale.setText(String.valueOf(project.getScale()));
         }
 
     }

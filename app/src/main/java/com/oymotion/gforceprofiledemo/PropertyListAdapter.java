@@ -29,6 +29,7 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
 
     public PropertyListAdapter(ArrayList<Property> data) {
         this.propertyList = data;
+        notifyDataSetChanged();
     }
 
     public void updateData(ArrayList<Property> data) {
@@ -42,6 +43,7 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
         // 实例化展示的view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_property_list_item, parent, false);
         // 实例化viewholder
+
         ViewHolder viewHolder = new ViewHolder(v);
 
         v.setOnClickListener(new PropertyListAdapter.OnItemTouchListener());

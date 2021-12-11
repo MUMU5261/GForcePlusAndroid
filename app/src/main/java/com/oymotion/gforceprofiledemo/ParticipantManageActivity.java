@@ -152,7 +152,8 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int p_id) {
         Log.i(TAG, "onDialogPositiveClick: ");
-        participantListAdapter.updateData(getData());
+        participantList = getData();
+        participantListAdapter.updateData(participantList);
     }
 
     @Override
@@ -178,7 +179,7 @@ public class ParticipantManageActivity extends AppCompatActivity implements AddP
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Participant.deleteParticipant(db, p_id_clicked);
+                        Participant.deleteParticipant(db, prj_id, p_id_clicked);
                         Log.i(TAG, "delete participant: "+p_id_clicked);
                         participantList = getData();
                         participantListAdapter.updateData(participantList);

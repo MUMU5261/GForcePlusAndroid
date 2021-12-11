@@ -39,22 +39,23 @@ public class AddPropertyDialog extends DialogFragment{
     SQLiteDatabase db;
 
     int prj_id = -1;
-    int id;
+    int mid;
     int mode; //0:add;1:
 
 
     public AddPropertyDialog(int prj_id, int id) {
         super();
         this.prj_id = prj_id;
-        this.id = id;
+        this.mid = id;
         mode = (id == -1)? AddProjectDialog.Mode.ADD : AddProjectDialog.Mode.EDIT;
+        Log.i(TAG, "AddPropertyDialog: mode:"+mode+"prj_id"+prj_id+"id"+id);
     }
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogPositiveClick(DialogFragment dialog, int id);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -97,7 +98,7 @@ public class AddPropertyDialog extends DialogFragment{
         tv_prompt = (TextView) rootView.findViewById(R.id.tv_prompt);
 
         if (mode == AddPropertyDialog.Mode.EDIT) {
-            Property property =  Property.getProperty(db,id);
+            Property property =  Property.getProperty(db,mid);
             fillEditText(property);
         }
 
@@ -118,14 +119,16 @@ public class AddPropertyDialog extends DialogFragment{
                                 Toast.makeText(context, "Fields can't be empty", Toast.LENGTH_LONG).show();
                             }else{
                                 Property property = new Property(prj_id,property_name,polarLow,polarHigh);
+                                int update_id = mid;
 
-                                if(mode == AddPropertyDialog.Mode.ADD){
-                                    int id_new = property.insertProperty(db);
-                                    Log.i(TAG, "onClick: "+ id_new);
+                                if(mode == Mode.ADD){
+                                    int insert_id = property.insertProperty(db);
+                                    Log.i(TAG, "onClick: insert new property:"+ insert_id);
                                 }else{
-                                    property.updateProperty(db,id);
+                                    boolean result = property.updateProperty(db,mid);
+                                    Log.i(TAG, "onClick: update result:" + result+"id:"+update_id);
                                 }
-                                listener.onDialogPositiveClick(AddPropertyDialog.this);
+                                listener.onDialogPositiveClick(AddPropertyDialog.this, id);
                                 AddPropertyDialog.this.getDialog().dismiss();
                             }
 

@@ -48,7 +48,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
     private SQLiteDatabase db;
 
     int prj_id = -1;
-    int id;//？？？？
+    int id;
     int id_clicked;
     ArrayList<Property> propertyList;
 
@@ -92,7 +92,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
         }
         Intent intent = this.getIntent();
         prj_id = intent.getIntExtra("prj_id", -1);
-        id = intent.getIntExtra("id", -1);//？？？？
+//        id = intent.getIntExtra("id", -1);//？？？？
 
         Log.i(TAG, "onCreate: "+"prj_id:"+prj_id+"id"+id);
         btn_add_property = findViewById(R.id.btn_add_property);
@@ -127,9 +127,9 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
 
     @OnClick(R.id.btn_add_property)
     public void onAddPropertyClick() {
-        Log.i(TAG, "onAddClick: tetstt");
+        Log.i(TAG, "onAddClick: "+"prj_id:"+prj_id+"id"+id);
         FragmentManager fm = getSupportFragmentManager();
-        addPropertyDialog = new AddPropertyDialog(prj_id,-1);
+        addPropertyDialog = new AddPropertyDialog(prj_id, -1);
         addPropertyDialog.show(fm,"fragment_add_property");
     }
 
@@ -149,9 +149,11 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
 
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog, int id) {
         Log.i(TAG, "onDialogPositiveClick: ");
-        propertyListAdapter.updateData(getData());
+        propertyList = getData();
+        propertyListAdapter.updateData(propertyList);
+        this.id = id;
     }
 
     @Override
@@ -164,7 +166,7 @@ public class EditPropertiesActivity extends AppCompatActivity implements AddProp
     public void onDialogEditClick(DialogFragment dialog) {
         FragmentManager fm = getSupportFragmentManager();
         //reuse add dialog to update
-        Log.i(TAG, "onDialogEditClick: "+prj_id+"-"+ id_clicked);
+        Log.i(TAG, "onDialogEditClick: prj_id:"+prj_id+"clicked_id:"+ id_clicked);
         addPropertyDialog = new AddPropertyDialog(prj_id, id_clicked);
         addPropertyDialog.show(fm,"fragment_add_property");
     }

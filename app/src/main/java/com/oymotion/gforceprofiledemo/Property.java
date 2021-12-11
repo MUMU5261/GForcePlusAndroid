@@ -124,6 +124,7 @@ public class Property {
             String state = result.getString(5);
             property = new Property(mId,prj_id,ppt_name,polar_low,polar_high);
             result.close();
+            Log.i(TAG, "getProperty: " +property.toString()+"id:"+id);
             return property;
 
         }

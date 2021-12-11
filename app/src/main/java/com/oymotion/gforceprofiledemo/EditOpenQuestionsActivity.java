@@ -147,7 +147,8 @@ public class EditOpenQuestionsActivity extends AppCompatActivity implements AddO
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i(TAG, "onDialogPositiveClick: ");
-        openQuestionListAdapter.updateData(getData());
+        questionList = getData();
+        openQuestionListAdapter.updateData(questionList);
     }
 
     @Override

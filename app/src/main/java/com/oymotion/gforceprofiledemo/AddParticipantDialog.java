@@ -47,6 +47,7 @@ public class AddParticipantDialog extends DialogFragment {
         this.p_id = p_id;
         this.prj_id = prj_id;
         mode = (p_id == -1)? AddProjectDialog.Mode.ADD : AddProjectDialog.Mode.EDIT;
+        Log.i(TAG, "AddParticipantDialog: mode:"+mode);
     }
 
     /* The activity that creates an instance of this dialog fragment must
@@ -95,7 +96,7 @@ public class AddParticipantDialog extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout\
         if (mode == AddParticipantDialog.Mode.EDIT) {
-            Participant participant = Participant.getParticipant(db,p_id);
+            Participant participant = Participant.getParticipant(db,prj_id,p_id);
             fillEditText(participant);
         }
         builder.setView(rootView)
@@ -106,21 +107,21 @@ public class AddParticipantDialog extends DialogFragment {
                         // sign in the user ...
                         String id_str = et_p_id.getText().toString();
                         if (!id_str.isEmpty()) {
-                            int p_id = Integer.valueOf(id_str);
-                            if(Participant.isIDExist(db,prj_id,p_id) && mode == AddProjectDialog.Mode.ADD){
+                            int new_p_id = Integer.valueOf(id_str);
+                            if(Participant.isIDExist(db,prj_id,new_p_id) && mode == AddProjectDialog.Mode.ADD){
                                 Toast.makeText(context, "Participant ID Exist.", Toast.LENGTH_LONG).show();
                                 AddParticipantDialog.this.getDialog().show();
                             }else{
-                                Participant participant = new Participant(p_id,prj_id,0);
-                                Log.i(TAG, "onClick: "+p_id);
+                                Participant participant = new Participant(new_p_id,prj_id,0);
+                                Log.i(TAG, "onClick: "+new_p_id);
 
                                 if(mode == AddProjectDialog.Mode.ADD){
                                     participant.insertParticipant(db);
                                 }else{
-                                    participant.updateParticipant(db,p_id);
+                                    participant.updateParticipant(db,prj_id,p_id,new_p_id);
                                 }
 
-                                listener.onDialogPositiveClick(AddParticipantDialog.this, p_id);
+                                listener.onDialogPositiveClick(AddParticipantDialog.this, new_p_id);
                                 AddParticipantDialog.this.getDialog().dismiss();
                             }
                         } else {

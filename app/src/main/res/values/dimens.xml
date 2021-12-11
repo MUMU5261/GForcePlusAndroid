@@ -26,6 +26,8 @@
     <dimen name="question_answer_text_size">18dp</dimen>
 
     <dimen name="header_text_size">20dp</dimen>
+    <dimen name="margin_property_item">80dp</dimen>
+
 
 
 

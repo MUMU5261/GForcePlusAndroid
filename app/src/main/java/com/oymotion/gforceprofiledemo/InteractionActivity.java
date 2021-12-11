@@ -69,10 +69,10 @@ public class InteractionActivity extends AppCompatActivity {
     String[] statementList;
 
     int itr_id;//explore_id
-    int explore_id;//explore_id
+    int expl_id;//explore_id
     String ppt_name;//explore_id
-    int itr_type;//explore_id
-    int ppt_id;//explore_id
+    int itr_type;//ppt_id
+    int ppt_id;//ppt_id
     int p_id;
 //    int prj_id;
     int clt_id;
@@ -122,21 +122,22 @@ public class InteractionActivity extends AppCompatActivity {
 
         intent = this.getIntent();
         clt_id = intent.getIntExtra("clt_id",-1);
-        ppt_name = intent.getStringExtra("ppt_name");//
         ppt_id = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
+        expl_id = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
+
+        ppt_name = intent.getStringExtra("ppt_name");//
         itr_type = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
-        explore_id = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
 
 
 //        itr_type = app.getInteractionType();
 //        clt_id = app.getClothesID();
 
-        Log.i(TAG, "Initial Information: " + "prj_id:" + prj_id + "p_id:" + p_id + "itr_type:" + itr_type + "clt_id" + clt_id);
+        Log.i(TAG, "Initial Information: " + "prj_id:" + prj_id + "p_id:" + p_id + "ppt_id"+ppt_id +"itr_type:" + itr_type + "clt_id" + clt_id);
 
         getPrompt();
 
         //create new interaction
-        interaction = new Interaction(prj_id, p_id, clt_id, ppt_id, itr_type);
+        interaction = new Interaction(prj_id, p_id, clt_id, expl_id, ppt_id); //expl_id:exploration id ppt_id = property id
         itr_id = interaction.insertInteraction(db);
 
         if (itr_id != -1) {
@@ -332,12 +333,15 @@ public class InteractionActivity extends AppCompatActivity {
 //        }
 //        startActivity(intent);
         Log.i(TAG, "onNextClick: "+"itr_type"+itr_type);
+        Exploration.finishExploration(db, Exploration.State.FINISHED, expl_id, itr_id);
         if(itr_type > 0){
-            Exploration.finishExploration(db, Exploration.State.FINISHED, explore_id, itr_id);
-            intent.putExtra("ppt_id", ppt_id);
+//            Exploration.finishExploration(db, Exploration.State.FINISHED, expl_id, itr_id);
+            interaction.updateState(db, Interaction.State.FINISHED);
+            intent.putExtra("ppt_id", itr_type);
             intent.putExtra("ppt_name", ppt_name);
-            intent.putExtra("explore_id", explore_id);
+            intent.putExtra("explore_id", expl_id);
             intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+            Log.i(TAG, "onNextClick: ppt_id"+ppt_id);
             startActivity(intent);
             finish();
 
@@ -360,6 +364,8 @@ public class InteractionActivity extends AppCompatActivity {
     @OnClick(R.id.btn_reConnect)
     public void setBtn_reConnect(){
         Intent intent = new Intent(InteractionActivity.this, SetupDevicesActivity.class);
+        intent.putExtra("itr_state", Interaction.State.CONNECT_ERROR);
+
         startActivity(intent);
     }
 
