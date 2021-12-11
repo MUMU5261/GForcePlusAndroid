@@ -60,6 +60,7 @@ public class InteractionActivity extends AppCompatActivity {
     private SQLiteDatabase db;
 
     Intent intent;
+
     Handler handler;// if private or not
     //may need two handler, or use other way to listen state change, to improve the data collection rate
     Runnable runnable;
@@ -120,7 +121,7 @@ public class InteractionActivity extends AppCompatActivity {
         tv_countdown_itr.setText(String.valueOf(Project.getExploreTime(db,prj_id))+"S");
 
 
-        intent = this.getIntent();
+        Intent intent = this.getIntent();
         clt_id = intent.getIntExtra("clt_id",-1);
         ppt_id = intent.getIntExtra("ppt_id",-1);//-2:Relax; -3:Fist,0:Free
         expl_id = intent.getIntExtra("explore_id",-1);//-2:Relax; -3:Fist,0:Free
@@ -332,22 +333,19 @@ public class InteractionActivity extends AppCompatActivity {
 //
 //        }
 //        startActivity(intent);
-        Log.i(TAG, "onNextClick: "+"itr_type"+itr_type);
+        Log.i(TAG, "onNextClick: "+"itr_type: "+itr_type);
         Exploration.finishExploration(db, Exploration.State.FINISHED, expl_id, itr_id);
         if(itr_type > 0){
 //            Exploration.finishExploration(db, Exploration.State.FINISHED, expl_id, itr_id);
             interaction.updateState(db, Interaction.State.FINISHED);
-            intent.putExtra("ppt_id", itr_type);
+            intent = new Intent(InteractionActivity.this, SurveyActivity.class);
+            intent.putExtra("ppt_id1", itr_type);
             intent.putExtra("ppt_name", ppt_name);
             intent.putExtra("explore_id", expl_id);
-            intent = new Intent(InteractionActivity.this, SurveyActivity.class);
-            Log.i(TAG, "onNextClick: ppt_id"+ppt_id);
+            Log.i(TAG, "onNextClick: ppt_id: "+ppt_id);
             startActivity(intent);
-            finish();
-
-        }else {
-            finish();
         }
+        finish();
 
     }
 
@@ -359,7 +357,14 @@ public class InteractionActivity extends AppCompatActivity {
             Toast.makeText(InteractionActivity.this, "Fail to update state failed ", Toast.LENGTH_SHORT).show();
         }
         Intent intent = new Intent(InteractionActivity.this,InteractionActivity.class);
+        intent.putExtra("clt_id",clt_id);
+        intent.putExtra("ppt_id",ppt_id);//-2:Relax; -3:Fist,0:Free
+        intent.putExtra("explore_id",expl_id);//-2:Relax; -3:Fist,0:Free
+        intent.putExtra("ppt_name",ppt_name);//
+
         startActivity(intent);
+        finish();
+
     }
     @OnClick(R.id.btn_reConnect)
     public void setBtn_reConnect(){

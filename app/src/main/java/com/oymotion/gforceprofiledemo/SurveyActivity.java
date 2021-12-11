@@ -74,7 +74,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
 
-        ppt_id = intent.getIntExtra("ppt_id",-1);
+        ppt_id = intent.getIntExtra("ppt_id1",-1);
         explore_id = intent.getIntExtra("explore_id",-1);
         itr_type = intent.getIntExtra("ppt_id",-1);
         Log.i(TAG, "onCreate: ppt_id"+ppt_id);
