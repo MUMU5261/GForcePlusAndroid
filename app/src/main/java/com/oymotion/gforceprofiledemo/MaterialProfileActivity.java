@@ -227,4 +227,12 @@ public class MaterialProfileActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        explorationList = getData();
+        explorationListAdapter.updateData(explorationList);
+
+
+    }
 }
